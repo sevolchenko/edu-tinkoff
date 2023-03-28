@@ -2,7 +2,7 @@ package ru.tinkoff.edu.java.linkparser.concreteparser;
 
 import ru.tinkoff.edu.java.linkparser.concreteparser.parseresult.ParseResult;
 
-import java.net.URL;
+import java.net.URI;
 
 public sealed abstract class ConcreteParser<R extends ParseResult> permits GitHubParser, StackOverflowParser {
 
@@ -16,6 +16,6 @@ public sealed abstract class ConcreteParser<R extends ParseResult> permits GitHu
         this(null);
     }
 
-    public abstract ParseResult parse(final URL url);
+    public abstract ParseResult parse(final URI url);
 
 }

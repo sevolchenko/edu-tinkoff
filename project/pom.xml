@@ -28,6 +28,7 @@
         <spring-cloud.version>2022.0.0</spring-cloud.version>
         <jetbrains-annotations.version>23.1.0</jetbrains-annotations.version>
         <junit.version>4.13.2</junit.version>
+        <springdoc.version>2.0.2</springdoc.version>
     </properties>
 
     <dependencies>
@@ -62,6 +63,12 @@
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
             </dependency>
 
         </dependencies>

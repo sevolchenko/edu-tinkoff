@@ -3,7 +3,7 @@ package ru.tinkoff.edu.java.linkparser.concreteparser;
 import ru.tinkoff.edu.java.linkparser.concreteparser.parseresult.ParseResult;
 import ru.tinkoff.edu.java.linkparser.concreteparser.parseresult.StackOverflowParseResult;
 
-import java.net.URL;
+import java.net.URI;
 
 public final class StackOverflowParser extends ConcreteParser<StackOverflowParseResult> {
 
@@ -19,7 +19,7 @@ public final class StackOverflowParser extends ConcreteParser<StackOverflowParse
     }
 
     @Override
-    public ParseResult parse(final URL url) {
+    public ParseResult parse(final URI url) {
         if (HOST_NAME.equals(url.getHost())) {
             String[] parts = url.getPath().split("/");
             for (int partIdx = 0; partIdx < REQUIRED_PARTS.length; partIdx++) {

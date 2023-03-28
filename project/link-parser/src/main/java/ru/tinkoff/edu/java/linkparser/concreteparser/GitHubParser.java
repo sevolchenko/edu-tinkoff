@@ -3,7 +3,7 @@ package ru.tinkoff.edu.java.linkparser.concreteparser;
 import ru.tinkoff.edu.java.linkparser.concreteparser.parseresult.GitHubParseResult;
 import ru.tinkoff.edu.java.linkparser.concreteparser.parseresult.ParseResult;
 
-import java.net.URL;
+import java.net.URI;
 
 public final class GitHubParser extends ConcreteParser<GitHubParseResult> {
 
@@ -18,7 +18,7 @@ public final class GitHubParser extends ConcreteParser<GitHubParseResult> {
     }
 
     @Override
-    public ParseResult parse(final URL url) {
+    public ParseResult parse(final URI url) {
         if (HOST_NAME.equals(url.getHost())) {
             String[] parts = url.getPath().split("/");
             String username = parts[1];
