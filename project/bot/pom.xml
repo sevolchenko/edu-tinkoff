@@ -13,6 +13,10 @@
     <artifactId>bot</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <java-telegram-bot-api.vesion>6.5.0</java-telegram-bot-api.vesion>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -55,6 +59,17 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.pengrad</groupId>
+            <artifactId>java-telegram-bot-api</artifactId>
+            <version>${java-telegram-bot-api.vesion}</version>
         </dependency>
     </dependencies>
 

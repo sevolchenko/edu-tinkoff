@@ -1,5 +1,4 @@
 app:
-  test: 'aaa'
   scheduler:
     interval: PT10S
 springdoc:

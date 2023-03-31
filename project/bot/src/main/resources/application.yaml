@@ -1,5 +1,5 @@
 app:
-  test: 'aaa'
+  bot-token: ${BOT_TOKEN}
 springdoc:
   swagger-ui:
     path: '/swagger-ui'
