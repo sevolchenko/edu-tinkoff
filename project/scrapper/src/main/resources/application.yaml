@@ -1,6 +1,8 @@
 app:
   scheduler:
     interval: PT10S
+#  client:
+#    gitHubClientUrl: 'www.github.com'
 springdoc:
   swagger-ui:
     path: '/swagger-ui'

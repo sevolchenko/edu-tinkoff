@@ -9,7 +9,7 @@ import ru.tinkoff.edu.java.scrapper.scheduler.Scheduler;
 
 @Validated
 @EnableScheduling
-@ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "app")
 public record ApplicationConfig(@NotNull Scheduler scheduler) {
 
     @Bean
