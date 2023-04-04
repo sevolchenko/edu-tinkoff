@@ -29,32 +29,32 @@ public class ScrapperExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
                                                                   WebRequest request) {
-        return buildApiErrorResponse(ex, "Bad request", HttpStatus.BAD_REQUEST);
+        return buildApiErrorResponse(ex, "Неправильный запрос", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<Object> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
-        return buildApiErrorResponse(ex, "Bad arguments", HttpStatus.BAD_REQUEST);
+        return buildApiErrorResponse(ex, "Неправильные параметры запроса", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoSuchChatException.class)
     protected ResponseEntity<Object> handleNoSuchChatException(NoSuchChatException ex) {
-        return buildApiErrorResponse(ex, "No chat found", HttpStatus.NOT_FOUND);
+        return buildApiErrorResponse(ex, "Чат не найден", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AlreadyRegisteredChatException.class)
     protected ResponseEntity<Object> handleAlreadyRegisteredChatException(AlreadyRegisteredChatException ex) {
-        return buildApiErrorResponse(ex, "Chat already exists", HttpStatus.CONFLICT);
+        return buildApiErrorResponse(ex, "Чат уже существует", HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(NoSuchLinkException.class)
     protected ResponseEntity<Object> handleNoSuchLinkException(NoSuchLinkException ex) {
-        return buildApiErrorResponse(ex, "No link found", HttpStatus.NOT_FOUND);
+        return buildApiErrorResponse(ex, "Ссылка не найдена", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AlreadyAddedLinkException.class)
     protected ResponseEntity<Object> handleAlreadyAddedLinkException(AlreadyAddedLinkException ex) {
-        return buildApiErrorResponse(ex, "Link already added", HttpStatus.CONFLICT);
+        return buildApiErrorResponse(ex, "Ссылка уже добавлена", HttpStatus.CONFLICT);
     }
 
     private ResponseEntity<Object> buildApiErrorResponse(Exception ex, String description, HttpStatus status) {

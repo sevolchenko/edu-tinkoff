@@ -3,8 +3,9 @@ package ru.tinkoff.edu.java.bot.dto.request;
 import org.springframework.lang.NonNull;
 
 import java.net.URI;
+import java.util.List;
 
 public record LinkUpdateRequest(@NonNull Integer id,
                                 @NonNull URI url,
                                 @NonNull String description,
-                                @NonNull Integer[] tgChatIds) {}
+                                @NonNull List<Integer> tgChatIds) {}

@@ -26,7 +26,6 @@ public class GitHubClient implements IGitHubClient {
                 .retrieve()
                 .bodyToMono(GitHubRepositoryResponse.class)
                 .block();
-        Objects.requireNonNull(response);
         return response;
     }
 }
