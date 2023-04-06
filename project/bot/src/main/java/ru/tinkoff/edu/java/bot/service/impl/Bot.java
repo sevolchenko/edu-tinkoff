@@ -29,7 +29,8 @@ public class Bot implements IBot {
     @Override
     public int process(List<Update> updates) {
         updates.forEach(update -> {
-            log.info(String.format("Bot received update %d from chat %d, message: %s", update.updateId(), update.message().chat().id(), update.message().text()));
+            log.info(String.format("Bot received update %d from chat %d, message: %s",
+                    update.updateId(), update.message().chat().id(), update.message().text()));
 
             execute(userMessageProcessor.process(update));
         });

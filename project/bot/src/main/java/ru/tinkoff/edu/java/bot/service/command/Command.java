@@ -12,7 +12,8 @@ public sealed interface Command permits HelpCommand, StartCommand, TrackCommand,
     SendMessage handle(Update update);
 
     default boolean supports(Update update) {
-        return update.message().text().startsWith(command());
+        String text = update.message().text();
+        return command().equals(text.split(" ")[0]);
     }
 
     default BotCommand toApiCommand() {

@@ -14,7 +14,7 @@ public class TgChatController {
     private void registerChatById(@PathVariable Long id) {
         log.info(String.format("Register chat by id %d called", id));
 
-        if (id.equals(0L)) { // todo: Выброс исключения при существовании чата
+        if (id.equals(0L)) {
             throw new AlreadyRegisteredChatException(String.format("Chat with id %d already registered", id));
         }
     }

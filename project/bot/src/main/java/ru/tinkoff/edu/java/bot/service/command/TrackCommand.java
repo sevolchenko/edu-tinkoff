@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.IScrapperClient;
 import ru.tinkoff.edu.java.bot.client.dto.request.AddLinkRequest;
 import ru.tinkoff.edu.java.bot.client.dto.response.LinkResponse;
+import ru.tinkoff.edu.java.bot.util.UrlUtils;
 
 import java.net.URI;
 
@@ -38,7 +39,7 @@ public final class TrackCommand implements Command {
                         "После команды через пробел нужно указать ссылку, которую нужно отследить");
             }
 
-            URI link = URI.create(message.substring(spacePos + 1));
+            URI link = UrlUtils.create(message.substring(spacePos + 1));
 
             LinkResponse linkResponse = scrapperClient.addLink(update.message().chat().id(),
                     new AddLinkRequest(link));
@@ -47,7 +48,8 @@ public final class TrackCommand implements Command {
                     String.format("Ссылка %s успешно добавлена к отслеживаемым!\n" +
                             "Мы пришлем уведомление, когда по адресу произойдут изменения :)", linkResponse.link()));
         } catch (IllegalArgumentException e) {
-            return new SendMessage(update.message().chat().id(), "Ссылка указана неверно");
+            return new SendMessage(update.message().chat().id(), "Ссылка указана неверно")
+                    .disableWebPagePreview(true);
         }
     }
 }

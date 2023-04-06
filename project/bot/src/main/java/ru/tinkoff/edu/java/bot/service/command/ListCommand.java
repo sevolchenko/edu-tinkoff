@@ -37,6 +37,7 @@ public final class ListCommand implements Command {
             sb.append("\n- ");
             sb.append(linkResponse.link().toString());
         });
-        return new SendMessage(update.message().chat().id(), sb.toString());
+        return new SendMessage(update.message().chat().id(), sb.toString())
+                .disableWebPagePreview(true);
     }
 }

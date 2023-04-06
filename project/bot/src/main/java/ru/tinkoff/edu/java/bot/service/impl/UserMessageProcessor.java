@@ -37,7 +37,8 @@ public class UserMessageProcessor implements IUserMessageProcessor {
     @Override
     public SendMessage process(Update update) {
 
-        try{
+        try {
+
             var supportsCommands = commands().stream()
                     .filter(command -> command.supports(update))
                     .toList();
@@ -51,16 +52,27 @@ public class UserMessageProcessor implements IUserMessageProcessor {
             }
 
             if (supportsCommands.size() > 1) {
+                StringBuffer sb = new StringBuffer();
+                supportsCommands.forEach(command -> {
+                    sb.append("[");
+                    sb.append(command.getClass().getName());
+                    sb.append("]");
+                });
+                log.error(String.format("Processing update %d failed: message %s can be handled by several commands: %s",
+                        update.updateId(), update.message().text(), sb));
+
                 throw new IllegalArgumentException(String.format("Неизвестная команда: %s", update.message().text()));
             }
 
             return supportsCommands.get(0).handle(update);
 
         } catch (HttpClientException e) {
-            log.warn(String.format("Exception %s thrown: %s", e.getClass().getName(), e.getApiErrorResponse().description()));
+            log.warn(String.format("Exception %s thrown: %s", e.getClass().getName(), e.getApiErrorResponse().exceptionMessage()));
 
             return new SendMessage(update.message().chat().id(),
-                    String.format("Произошла ошибка: %s", e.getApiErrorResponse().description()));
+                    //String.format("Произошла ошибка: %s", e.getApiErrorResponse().description()));
+                    e.getApiErrorResponse().description());
+
         } catch (Exception e) {
             log.warn(String.format("Exception %s thrown: %s", e.getClass().getName(), e.getMessage()));
 

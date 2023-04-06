@@ -16,6 +16,8 @@ public sealed abstract class ConcreteParser<R extends ParseResult> permits GitHu
         this(null);
     }
 
+    public abstract boolean supports(URI url);
+
     public abstract ParseResult parse(final URI url);
 
 }

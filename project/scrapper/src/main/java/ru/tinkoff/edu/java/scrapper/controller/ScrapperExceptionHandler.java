@@ -13,10 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.tinkoff.edu.java.scrapper.dto.response.ApiErrorResponse;
-import ru.tinkoff.edu.java.scrapper.exception.AlreadyAddedLinkException;
-import ru.tinkoff.edu.java.scrapper.exception.AlreadyRegisteredChatException;
-import ru.tinkoff.edu.java.scrapper.exception.NoSuchChatException;
-import ru.tinkoff.edu.java.scrapper.exception.NoSuchLinkException;
+import ru.tinkoff.edu.java.scrapper.exception.*;
 
 import java.util.Arrays;
 
@@ -55,6 +52,11 @@ public class ScrapperExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AlreadyAddedLinkException.class)
     protected ResponseEntity<Object> handleAlreadyAddedLinkException(AlreadyAddedLinkException ex) {
         return buildApiErrorResponse(ex, "Ссылка уже добавлена", HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NotSupportedLinkException.class)
+    protected ResponseEntity<Object> handleNotSupportedLinkException(NotSupportedLinkException ex) {
+        return buildApiErrorResponse(ex, "Ссылки с этого домена не поддерживаются", HttpStatus.CONFLICT);
     }
 
     private ResponseEntity<Object> buildApiErrorResponse(Exception ex, String description, HttpStatus status) {
