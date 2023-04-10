@@ -22,7 +22,7 @@ public class LinksController {
 
     @GetMapping
     public ListLinkResponse getLinks(@RequestHeader("Tg-Chat-Id") Long id) {
-        log.info(String.format("Get Links by id %d called", id));
+        log.info("Get Links by id {} called", id);
 
         return new ListLinkResponse(null, null);
     }
@@ -30,7 +30,7 @@ public class LinksController {
     @PostMapping
     public LinkResponse addLink(@RequestHeader("Tg-Chat-Id") Long id,
                                 @RequestBody AddLinkRequest request) {
-        log.info(String.format("Add Link %s by id %d called", request.link(), id));
+        log.info("Add Link {} by id {} called", request.link(), id);
 
         if (!linkService.supports(request.link())) {
             throw new NotSupportedLinkException(String.format("Link %s is not supported yet", request.link()));
@@ -46,7 +46,7 @@ public class LinksController {
     @DeleteMapping
     public LinkResponse deleteLink(@RequestHeader("Tg-Chat-Id") Long id,
                                 @RequestBody RemoveLinkRequest request) {
-        log.info(String.format("Delete Link %s by id %d called", request.link(), id));
+        log.info("Delete Link {} by id {} called", request.link(), id);
 
         if (request.link().toString().equals("doesnt exists")) { // todo: Выброс исключения, если ссылка не отслеживается
             throw new NoSuchLinkException(String.format("Link has not added to id %d yet: %s", id, request.link()));

@@ -16,18 +16,7 @@ import java.util.List;
 @Slf4j
 public class UserMessageProcessor implements IUserMessageProcessor {
 
-    private final List<Command> commands;
-
-//    public UserMessageProcessor(IScrapperClient scrapperClient) {
-//        this.scrapperClient = scrapperClient;
-//        commands = List.of(
-//                new StartCommand(this.scrapperClient),
-//                new HelpCommand(),
-//                new TrackCommand(this.scrapperClient),
-//                new UntrackCommand(this.scrapperClient),
-//                new ListCommand(this.scrapperClient)
-//        );
-//    }
+    private final List<? extends Command> commands;
 
     @Override
     public List<? extends Command> commands() {
@@ -44,7 +33,7 @@ public class UserMessageProcessor implements IUserMessageProcessor {
                     .toList();
 
             if (supportsCommands.size() == 0) {
-                log.warn(String.format("Processing update %d failed: unknown message: %s", update.updateId(), update.message().text()));
+                log.warn("Processing update {} failed: unknown message: {}", update.updateId(), update.message().text());
 
                 return new SendMessage(update.message().chat().id(),
                         "Извини, бот умеет общаться только через известные ему команды\n" +
@@ -58,8 +47,8 @@ public class UserMessageProcessor implements IUserMessageProcessor {
                     sb.append(command.getClass().getName());
                     sb.append("]");
                 });
-                log.error(String.format("Processing update %d failed: message %s can be handled by several commands: %s",
-                        update.updateId(), update.message().text(), sb));
+                log.error("Processing update {} failed: message {} can be handled by several commands: {}",
+                        update.updateId(), update.message().text(), sb);
 
                 throw new IllegalArgumentException(String.format("Неизвестная команда: %s", update.message().text()));
             }
@@ -67,14 +56,14 @@ public class UserMessageProcessor implements IUserMessageProcessor {
             return supportsCommands.get(0).handle(update);
 
         } catch (HttpClientException e) {
-            log.warn(String.format("Exception %s thrown: %s", e.getClass().getName(), e.getApiErrorResponse().exceptionMessage()));
+            log.warn("Exception {} thrown: {}", e.getClass().getName(), e.getApiErrorResponse().exceptionMessage());
 
             return new SendMessage(update.message().chat().id(),
                     //String.format("Произошла ошибка: %s", e.getApiErrorResponse().description()));
                     e.getApiErrorResponse().description());
 
         } catch (Exception e) {
-            log.warn(String.format("Exception %s thrown: %s", e.getClass().getName(), e.getMessage()));
+            log.warn("Exception {} thrown: {}", e.getClass().getName(), e.getMessage());
 
             return new SendMessage(update.message().chat().id(), "Произошла ошибка, попробуйте еще раз...");
         }

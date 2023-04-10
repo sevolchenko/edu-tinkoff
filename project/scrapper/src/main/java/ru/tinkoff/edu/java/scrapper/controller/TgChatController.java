@@ -12,7 +12,7 @@ public class TgChatController {
 
     @PostMapping("/{id}")
     private void registerChatById(@PathVariable Long id) {
-        log.info(String.format("Register chat by id %d called", id));
+        log.info("Register chat by id {} called", id);
 
         if (id.equals(0L)) {
             throw new AlreadyRegisteredChatException(String.format("Chat with id %d already registered", id));
@@ -21,7 +21,7 @@ public class TgChatController {
 
     @DeleteMapping("/{id}")
     private void deleteChatById(@PathVariable Long id) {
-        log.info(String.format("Delete chat by id %d called", id));
+        log.info("Delete chat by id {} called", id);
 
         if (id.equals(0L)) { // todo: Выброс исключения при отсутствии чата
             throw new NoSuchChatException(String.format("There is no chat with id %d", id));

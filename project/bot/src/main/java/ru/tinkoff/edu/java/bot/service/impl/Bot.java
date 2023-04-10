@@ -21,7 +21,7 @@ public class Bot implements IBot {
 
     @Override
     public <T extends BaseRequest<T, R>, R extends BaseResponse> void execute(BaseRequest<T, R> request) {
-        log.info(String.format("Bot executed request %s", request.getParameters().toString()));
+        log.info("Bot executed request {}", request.getParameters().toString());
 
         telegramBot.execute(request);
     }
@@ -29,8 +29,8 @@ public class Bot implements IBot {
     @Override
     public int process(List<Update> updates) {
         updates.forEach(update -> {
-            log.info(String.format("Bot received update %d from chat %d, message: %s",
-                    update.updateId(), update.message().chat().id(), update.message().text()));
+            log.info("Bot received update {} from chat {}, message: {}",
+                    update.updateId(), update.message().chat().id(), update.message().text());
 
             execute(userMessageProcessor.process(update));
         });

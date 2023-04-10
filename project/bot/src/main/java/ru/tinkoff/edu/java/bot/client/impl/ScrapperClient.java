@@ -50,7 +50,7 @@ public class ScrapperClient implements IScrapperClient {
 
     @Override
     public void registerChatById(Long id) {
-        log.info(String.format("Register chat by id %d called", id));
+        log.info("Register chat by id {} called", id);
 
         String path = "/tg-chat/{id}";
         webClient.post()
@@ -64,7 +64,7 @@ public class ScrapperClient implements IScrapperClient {
 
     @Override
     public void deleteChatById(Long id) {
-        log.info(String.format("Delete chat by id %d called", id));
+        log.info("Delete chat by id {} called", id);
 
         String path = "/tg-chat/{id}";
         webClient.delete()
@@ -78,7 +78,7 @@ public class ScrapperClient implements IScrapperClient {
 
     @Override
     public ListLinkResponse getLinks(Long id) {
-        log.info(String.format("Get links by id %d called", id));
+        log.info("Get links by id {} called", id);
 
         String path = "/links";
         return webClient.get()
@@ -91,7 +91,7 @@ public class ScrapperClient implements IScrapperClient {
 
     @Override
     public LinkResponse addLink(Long id, AddLinkRequest linkRequest) {
-        log.info(String.format("Add link %s by id %d called", linkRequest.link(), id));
+        log.info("Add link {} by id {} called", linkRequest.link(), id);
 
         String path = "/links";
         return webClient.post()
@@ -106,7 +106,7 @@ public class ScrapperClient implements IScrapperClient {
 
     @Override
     public LinkResponse deleteLink(Long id, RemoveLinkRequest linkRequest) {
-        log.info(String.format("Delete link %s by id %d called", linkRequest.link(), id));
+        log.info("Delete link {} by id {} called", linkRequest.link(), id);
 
         String path = "/links";
         return webClient.method(HttpMethod.DELETE)
