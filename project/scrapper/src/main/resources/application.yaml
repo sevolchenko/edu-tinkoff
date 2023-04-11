@@ -3,6 +3,19 @@ app:
     interval: PT10S
 #  client:
 #    gitHubClientUrl: 'www.github.com'
+spring:
+  jpa:
+    show-sql: true
+    database: postgresql
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/scrapper
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+#
+#  liquibase:
+#    change-log: "./migrations/master.xml"
+
 springdoc:
   swagger-ui:
     path: '/swagger-ui'
