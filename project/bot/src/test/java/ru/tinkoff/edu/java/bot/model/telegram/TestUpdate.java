@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.model;
+package ru.tinkoff.edu.java.bot.model.telegram;
 
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;

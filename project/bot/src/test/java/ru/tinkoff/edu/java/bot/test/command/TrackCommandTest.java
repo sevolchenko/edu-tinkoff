@@ -7,9 +7,9 @@ import org.mockito.Mockito;
 import ru.tinkoff.edu.java.bot.client.IScrapperClient;
 import ru.tinkoff.edu.java.bot.client.dto.request.AddLinkRequest;
 import ru.tinkoff.edu.java.bot.client.dto.response.LinkResponse;
-import ru.tinkoff.edu.java.bot.model.TestChat;
-import ru.tinkoff.edu.java.bot.model.TestMessage;
-import ru.tinkoff.edu.java.bot.model.TestUpdate;
+import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
+import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
+import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.TrackCommand;
 import ru.tinkoff.edu.java.bot.util.UrlUtils;
 

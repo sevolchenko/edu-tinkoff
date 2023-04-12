@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.tinkoff.edu.java.bot.client.IScrapperClient;
-import ru.tinkoff.edu.java.bot.model.TestChat;
-import ru.tinkoff.edu.java.bot.model.TestMessage;
-import ru.tinkoff.edu.java.bot.model.TestUpdate;
+import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
+import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
+import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.ListCommand;
 
 import static org.hamcrest.MatcherAssert.assertThat;
