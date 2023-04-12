@@ -4,7 +4,8 @@ import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 
-public sealed interface Command permits HelpCommand, StartCommand, TrackCommand, UntrackCommand, ListCommand {
+//public sealed interface Command permits HelpCommand, StartCommand, TrackCommand, UntrackCommand, ListCommand {
+public interface Command {
     String command();
 
     String description();

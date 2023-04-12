@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.model;
+package ru.tinkoff.edu.java.bot.model.service;
 
 import ru.tinkoff.edu.java.bot.client.impl.ScrapperClient;
 

@@ -2,11 +2,14 @@ package ru.tinkoff.edu.java.bot.test;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.tinkoff.edu.java.bot.client.IScrapperClient;
+import org.mockito.Mockito;
 import ru.tinkoff.edu.java.bot.model.TestChat;
 import ru.tinkoff.edu.java.bot.model.TestMessage;
-import ru.tinkoff.edu.java.bot.model.TestScrapperClient;
 import ru.tinkoff.edu.java.bot.model.TestUpdate;
+import ru.tinkoff.edu.java.bot.model.service.command.TestListCommand;
+import ru.tinkoff.edu.java.bot.model.service.command.TestStartCommand;
+import ru.tinkoff.edu.java.bot.model.service.command.TestTrackCommand;
+import ru.tinkoff.edu.java.bot.model.service.command.TestUntrackCommand;
 import ru.tinkoff.edu.java.bot.service.IUserMessageProcessor;
 import ru.tinkoff.edu.java.bot.service.command.*;
 import ru.tinkoff.edu.java.bot.service.impl.UserMessageProcessor;
@@ -20,8 +23,6 @@ import static ru.tinkoff.edu.java.bot.test.data.TestListLinkResponseData.randomI
 
 public class UserMessageProcessorTest {
 
-    private IScrapperClient scrapperClient;
-
     private HelpCommand helpCommand;
     private StartCommand startCommand;
     private TrackCommand trackCommand;
@@ -34,16 +35,11 @@ public class UserMessageProcessorTest {
 
     @BeforeEach
     public void setup() {
-
-        scrapperClient = new TestScrapperClient();
-
-        helpCommand = new HelpCommand();
-        startCommand = new StartCommand(scrapperClient);
-        trackCommand = new TrackCommand(scrapperClient);
-        untrackCommand = new UntrackCommand(scrapperClient);
-        listCommand = new ListCommand(scrapperClient);
-
-
+        helpCommand = Mockito.spy(HelpCommand.class);
+        startCommand = Mockito.spy(TestStartCommand.class);
+        trackCommand = Mockito.spy(TestTrackCommand.class);
+        untrackCommand = Mockito.spy(TestUntrackCommand.class);
+        listCommand = Mockito.spy(TestListCommand.class);
 
         this.commands = List.of(
                 helpCommand,
@@ -111,21 +107,104 @@ public class UserMessageProcessorTest {
         assertThat(text, equalTo("Извини, бот умеет общаться только через известные ему команды\n" +
                 "Для просмотра введи /help"));
     }
+    @Test
+    void testProcessCallsStartCommand() {
+        // given
+        Long chatId = randomId();
 
-    // команды надо сделать Mock
-//    @Test
-//    void testProcessCallsStartCommand() {
-//        // given
-//        Long chatId = randomId();
-//
-//        var update = new TestUpdate(new TestMessage("/start", new TestChat(chatId)));
-//
-//        // when
-//        var res = userMessageProcessor.process(update);
-//
-//
-//        // then
-//        verify(startCommand).handle(update);
-//    }
+        var update = new TestUpdate(new TestMessage("/start", new TestChat(chatId)));
+
+        // when
+        var res = userMessageProcessor.process(update);
+
+
+        // then
+        assertThat(res, is(notNullValue()));
+
+        var parameters = res.getParameters();
+        assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
+
+        verify(startCommand).handle(update);
+    }
+
+    @Test
+    void testProcessCallsHelpCommand() {
+        // given
+        Long chatId = randomId();
+
+        var update = new TestUpdate(new TestMessage("/help", new TestChat(chatId)));
+
+        // when
+        var res = userMessageProcessor.process(update);
+
+
+        // then
+        assertThat(res, is(notNullValue()));
+
+        var parameters = res.getParameters();
+        assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
+
+        verify(helpCommand).handle(update);
+    }
+
+    @Test
+    void testProcessCallsTrackCommand() {
+        // given
+        Long chatId = randomId();
+
+        var update = new TestUpdate(new TestMessage("/track", new TestChat(chatId)));
+
+        // when
+        var res = userMessageProcessor.process(update);
+
+
+        // then
+        assertThat(res, is(notNullValue()));
+
+        var parameters = res.getParameters();
+        assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
+
+        verify(trackCommand).handle(update);
+    }
+
+    @Test
+    void testProcessCallsUntrackCommand() {
+        // given
+        Long chatId = randomId();
+
+        var update = new TestUpdate(new TestMessage("/untrack", new TestChat(chatId)));
+
+        // when
+        var res = userMessageProcessor.process(update);
+
+
+        // then
+        assertThat(res, is(notNullValue()));
+
+        var parameters = res.getParameters();
+        assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
+
+        verify(untrackCommand).handle(update);
+    }
+
+    @Test
+    void testProcessCallsListCommand() {
+        // given
+        Long chatId = randomId();
+
+        var update = new TestUpdate(new TestMessage("/list", new TestChat(chatId)));
+
+        // when
+        var res = userMessageProcessor.process(update);
+
+
+        // then
+        assertThat(res, is(notNullValue()));
+
+        var parameters = res.getParameters();
+        assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
+
+        verify(listCommand).handle(update);
+    }
 
 }
