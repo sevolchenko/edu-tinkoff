@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static ru.tinkoff.edu.java.bot.test.data.TestListLinkResponseData.*;
 
-public class LinkCommandTest {
+public class ListCommandTest {
 
     private ListCommand listCommand;
 
