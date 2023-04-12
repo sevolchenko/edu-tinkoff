@@ -7,7 +7,6 @@ import liquibase.database.core.PostgresDatabase;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.DirectoryResourceAccessor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -28,8 +27,8 @@ public abstract class IntegrationEnvironment {
     static {
         DB_CONTAINER = new PostgreSQLContainer<>("postgres:15-alpine")
                 .withDatabaseName("scrapper")
-                .withUsername("sergey") // todo: как спрятать данные?
-                .withPassword("pass"); // todo: write pass
+                .withUsername("user")
+                .withPassword("password");
         DB_CONTAINER.start();
     }
 
