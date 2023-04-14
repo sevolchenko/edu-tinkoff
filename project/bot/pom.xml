@@ -14,7 +14,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <java-telegram-bot-api.vesion>6.5.0</java-telegram-bot-api.vesion>
+        <java-telegram-bot-api.version>6.5.0</java-telegram-bot-api.version>
     </properties>
 
     <dependencies>
@@ -67,10 +67,51 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.pengrad</groupId>
             <artifactId>java-telegram-bot-api</artifactId>
-            <version>${java-telegram-bot-api.vesion}</version>
+            <version>${java-telegram-bot-api.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

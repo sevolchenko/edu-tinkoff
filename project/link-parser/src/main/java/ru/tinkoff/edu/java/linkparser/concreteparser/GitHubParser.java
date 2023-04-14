@@ -18,8 +18,13 @@ public final class GitHubParser extends ConcreteParser<GitHubParseResult> {
     }
 
     @Override
+    public boolean supports(URI url) {
+        return HOST_NAME.equals(url.getHost());
+    }
+
+    @Override
     public ParseResult parse(final URI url) {
-        if (HOST_NAME.equals(url.getHost())) {
+        if (supports(url)) {
             String[] parts = url.getPath().split("/");
             String username = parts[1];
             String repository = parts[2];

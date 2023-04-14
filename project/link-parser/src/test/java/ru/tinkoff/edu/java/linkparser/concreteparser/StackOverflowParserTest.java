@@ -1,74 +1,190 @@
 package ru.tinkoff.edu.java.linkparser.concreteparser;
 
-import org.junit.Assert;
-import org.junit.Test;
-import ru.tinkoff.edu.java.linkparser.concreteparser.parseresult.ParseResult;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import ru.tinkoff.edu.java.linkparser.concreteparser.parseresult.StackOverflowParseResult;
 
 import java.net.URI;
 
-public class StackOverflowParserTest {
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
+class StackOverflowParserTest {
+    
+    private StackOverflowParser stackOverflowParser;
+    
+    @BeforeEach
+    void setup() {
+        stackOverflowParser = new StackOverflowParser();
+    }
 
     @Test
-    public void test1() {
-        StackOverflowParser stackOverflowParser = new StackOverflowParser();
-
+    void testParseValidGitHub() {
+        // given
         URI url = URI.create("https://github.com/sanyarnd/tinkoff-java-course-2022/");
-        ParseResult res = stackOverflowParser.parse(url);
 
-        Assert.assertNull(res);
+        // when
+        var res = stackOverflowParser.parse(url);
+
+        // then
+        assertThat(res, is(nullValue()));
     }
 
     @Test
-    public void test2() {
-        StackOverflowParser stackOverflowParser = new StackOverflowParser();
-
+    void testParseValidStackOverflow() {
+        // given
         URI url = URI.create("https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c");
-        ParseResult res = stackOverflowParser.parse(url);
 
-        ParseResult excepted = new StackOverflowParseResult(1642028);
+        // when
+        var res = stackOverflowParser.parse(url);
 
-        Assert.assertEquals(excepted, res);
+        // then
+        var excepted = new StackOverflowParseResult(1642028);
+        assertThat(res, is(equalTo(excepted)));
     }
 
     @Test
-    public void test3() {
-        StackOverflowParser stackOverflowParser = new StackOverflowParser();
-
+    void testParseInvalidStackOverflow() {
+        // given
         URI url = URI.create("https://stackoverflow.com/search?q=unsupported%20link");
-        ParseResult res = stackOverflowParser.parse(url);
 
-        Assert.assertNull(res);
+        // when
+        var res = stackOverflowParser.parse(url);
+
+        // then
+        assertThat(res, is(nullValue()));
     }
 
     @Test
-    public void test4() {
-        StackOverflowParser stackOverflowParser = new StackOverflowParser();
-
+    void testParseUnsupportedGoogle() {
+        // given
         URI url = URI.create("https://google.com");
-        ParseResult res = stackOverflowParser.parse(url);
 
-        Assert.assertNull(res);
+        // when
+        var res = stackOverflowParser.parse(url);
+
+        // then
+        assertThat(res, is(nullValue()));
     }
 
     @Test
-    public void test5() {
-        StackOverflowParser stackOverflowParser = new StackOverflowParser();
-
+    void testParseUnsupportedLocalHost() {
+        // given
         URI url = URI.create("http://localhost:8080");
-        ParseResult res = stackOverflowParser.parse(url);
 
-        Assert.assertNull(res);
+        // when
+        var res = stackOverflowParser.parse(url);
+
+        // then
+        assertThat(res, is(nullValue()));
     }
 
     @Test
-    public void test6() {
-        StackOverflowParser stackOverflowParser = new StackOverflowParser();
-
+    void testParseValidGitHub2() {
+        // given
         URI url = URI.create("https://github.com/sevolchenko/online-store/");
-        ParseResult res = stackOverflowParser.parse(url);
 
-        Assert.assertNull(res);
+        // when
+        var res = stackOverflowParser.parse(url);
+
+        // then
+        assertThat(res, is(nullValue()));
+    }
+
+    @Test
+    void testParseInvalidLink1() {
+        // given
+        URI url = URI.create("www.vk.com");
+
+        // when
+        var res = stackOverflowParser.parse(url);
+
+        // then
+        assertThat(res, is(nullValue()));
+    }
+
+    @Test
+    void testParseInvalidLink2() {
+        // given
+        URI url = URI.create("invalid");
+
+        // when
+        var res = stackOverflowParser.parse(url);
+
+        // then
+        assertThat(res, is(nullValue()));
+    }
+
+    @Test
+    void testParseInvalidLink3() {
+        // given
+        URI url = URI.create("www.github.com");
+
+        // when
+        var res = stackOverflowParser.parse(url);
+
+        // then
+        assertThat(res, is(nullValue()));
+    }
+
+    @Test
+    void testSupportsGitHubLink() {
+        // given
+        URI url = URI.create("https://github.com/sanyarnd/tinkoff-java-course-2022/");
+
+        // when
+        var res = stackOverflowParser.supports(url);
+
+        // then
+        assertThat(res, is(false));
+    }
+
+    @Test
+    void testSupportsStackOverflowLink() {
+        // given
+        URI url = URI.create("https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c");
+
+        // when
+        var res = stackOverflowParser.supports(url);
+
+        // then
+        assertThat(res, is(true));
+    }
+
+    @Test
+    void testSupportsGoogleLink() {
+        // given
+        URI url = URI.create("https://google.com");
+
+        // when
+        var res = stackOverflowParser.supports(url);
+
+        // then
+        assertThat(res, is(false));
+    }
+
+    @Test
+    void testSupportsInvalidLink1() {
+        // given
+        URI url = URI.create("vk.com");
+
+        // when
+        var res = stackOverflowParser.supports(url);
+
+        // then
+        assertThat(res, is(false));
+    }
+
+    @Test
+    void testSupportsInvalidLink2() {
+        // given
+        URI url = URI.create("invalid");
+
+        // when
+        var res = stackOverflowParser.supports(url);
+
+        // then
+        assertThat(res, is(false));
     }
 
 }

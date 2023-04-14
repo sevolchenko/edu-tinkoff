@@ -31,7 +31,6 @@ public class StackOverflowClient implements IStackOverflowClient {
                 .bodyToMono(StackOverflowQuestionsResponse.class)
                 .flatMap(response -> Mono.justOrEmpty(response.items().stream().findFirst()))
                 .block();
-        Objects.requireNonNull(responseBody);
         return responseBody;
     }
 

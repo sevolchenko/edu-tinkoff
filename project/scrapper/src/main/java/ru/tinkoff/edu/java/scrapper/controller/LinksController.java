@@ -1,38 +1,56 @@
 package ru.tinkoff.edu.java.scrapper.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.tinkoff.edu.java.scrapper.dto.request.AddLinkRequest;
+import ru.tinkoff.edu.java.scrapper.dto.request.RemoveLinkRequest;
 import ru.tinkoff.edu.java.scrapper.dto.response.LinkResponse;
 import ru.tinkoff.edu.java.scrapper.dto.response.ListLinkResponse;
-import ru.tinkoff.edu.java.scrapper.dto.response.RemoveLinkRequest;
 import ru.tinkoff.edu.java.scrapper.exception.AlreadyAddedLinkException;
 import ru.tinkoff.edu.java.scrapper.exception.NoSuchLinkException;
+import ru.tinkoff.edu.java.scrapper.exception.NotSupportedLinkException;
+import ru.tinkoff.edu.java.scrapper.service.LinkService;
 
+@Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/links")
 public class LinksController {
 
+    private final LinkService linkService;
+
     @GetMapping
-    public ListLinkResponse getLinks(@RequestHeader("Tg-Chat-Id") Integer id) {
+    public ListLinkResponse getLinks(@RequestHeader("Tg-Chat-Id") Long id) {
+        log.info("Get Links by id {} called", id);
+
         return new ListLinkResponse(null, null);
     }
 
     @PostMapping
-    public LinkResponse addLink(@RequestHeader("Tg-Chat-Id") Integer id,
-                                @RequestBody AddLinkRequest link) {
-        // todo: Проверить ссылку на валидность
-        if (link.equals("exists")) { // todo: Выброс исключения, если ссылка уже отслеживается
-            throw new AlreadyAddedLinkException(String.format("Link already added: %s", link));
+    public LinkResponse addLink(@RequestHeader("Tg-Chat-Id") Long id,
+                                @RequestBody AddLinkRequest request) {
+        log.info("Add Link {} by id {} called", request.link(), id);
+
+        if (!linkService.supports(request.link())) {
+            throw new NotSupportedLinkException(String.format("Link %s is not supported yet", request.link()));
         }
-        return new LinkResponse(null, null);
+
+        if (request.link().toString().equals("exists")) { // todo: Выброс исключения, если ссылка уже отслеживается
+            throw new AlreadyAddedLinkException(String.format("Link already added to id %d: %s", id, request.link()));
+        }
+
+        return new LinkResponse(id, request.link());
     }
 
     @DeleteMapping
-    public LinkResponse deleteLink(@RequestHeader("Tg-Chat-Id") Integer id,
-                                @RequestBody RemoveLinkRequest link) {
-        if (link.equals("doesnt exists")) { // todo: Выброс исключения, если ссылка не отслеживается
-            throw new NoSuchLinkException(String.format("Link has not added yet: %s", link));
+    public LinkResponse deleteLink(@RequestHeader("Tg-Chat-Id") Long id,
+                                @RequestBody RemoveLinkRequest request) {
+        log.info("Delete Link {} by id {} called", request.link(), id);
+
+        if (request.link().toString().equals("doesnt exists")) { // todo: Выброс исключения, если ссылка не отслеживается
+            throw new NoSuchLinkException(String.format("Link has not added to id %d yet: %s", id, request.link()));
         }
-        return new LinkResponse(null, null);
+        return new LinkResponse(id, request.link());
     }
 }

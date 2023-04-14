@@ -19,8 +19,13 @@ public final class StackOverflowParser extends ConcreteParser<StackOverflowParse
     }
 
     @Override
+    public boolean supports(URI url) {
+        return HOST_NAME.equals(url.getHost());
+    }
+
+    @Override
     public ParseResult parse(final URI url) {
-        if (HOST_NAME.equals(url.getHost())) {
+        if (supports(url)) {
             String[] parts = url.getPath().split("/");
             for (int partIdx = 0; partIdx < REQUIRED_PARTS.length; partIdx++) {
                 if (!REQUIRED_PARTS[partIdx].equals(parts[partIdx + 1])) {
