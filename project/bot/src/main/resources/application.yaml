@@ -4,4 +4,4 @@ springdoc:
   swagger-ui:
     path: '/swagger-ui'
 server:
-  port: 8081
+  port: ${BOT_PORT}

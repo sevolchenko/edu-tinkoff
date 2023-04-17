@@ -11,6 +11,7 @@ import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.UntrackCommand;
+import ru.tinkoff.edu.java.bot.service.text.TextProvider.UntrackTextProvider;
 import ru.tinkoff.edu.java.bot.util.UrlUtils;
 
 import java.net.URI;
@@ -139,7 +140,7 @@ public class UntrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo("После команды через пробел нужно указать ссылку, которую нужно удалить из отслеживаемых")));
+        assertThat(text, is(equalTo(UntrackTextProvider.buildNoLinkErrorText())));
 
     }
 
@@ -163,7 +164,7 @@ public class UntrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo("Ссылка указана неверно")));
+        assertThat(text, is(equalTo(UntrackTextProvider.buildInvalidLinkText())));
 
     }
 
@@ -186,7 +187,7 @@ public class UntrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo("Ссылка указана неверно")));
+        assertThat(text, is(equalTo(UntrackTextProvider.buildInvalidLinkText())));
 
     }
 
@@ -213,8 +214,7 @@ public class UntrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo(String.format("Ссылка %s успешно удалена из отслеживаемых!\n" +
-                "Мы больше не пришлем уведомление :(", link))));
+        assertThat(text, is(equalTo(UntrackTextProvider.buildSuccessfullyRemovedLinkText(link.toString()))));
 
     }
 
@@ -240,8 +240,7 @@ public class UntrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo(String.format("Ссылка %s успешно удалена из отслеживаемых!\n" +
-                "Мы больше не пришлем уведомление :(", link))));
+        assertThat(text, is(equalTo(UntrackTextProvider.buildSuccessfullyRemovedLinkText(link.toString()))));
 
     }
 

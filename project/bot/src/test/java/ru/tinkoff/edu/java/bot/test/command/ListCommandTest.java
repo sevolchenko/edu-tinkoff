@@ -8,6 +8,7 @@ import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.ListCommand;
+import ru.tinkoff.edu.java.bot.service.text.TextProvider.ListTextProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -136,11 +137,9 @@ public class ListCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, startsWith("Вот список ссылок, которые ты отслеживаешь"));
-        assertThat(text, containsString(String.format("(всего %d)", list.size())));
-        assertThat(text, stringContainsInOrder(list.links().stream()
-                .map(linkResponse -> "\n- " + linkResponse.link().toString())
-                .toList()));
+        assertThat(text, is(equalTo(ListTextProvider.buildLinksListText(list.links().stream()
+                .map(linkResponse -> linkResponse.link().toString())
+                .toList()))));
 
         assertThat(parameters.get("disable_web_page_preview"), is(true));
 
@@ -169,11 +168,9 @@ public class ListCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, startsWith("Вот список ссылок, которые ты отслеживаешь"));
-        assertThat(text, containsString(String.format("(всего %d)", list.size())));
-        assertThat(text, stringContainsInOrder(list.links().stream()
-                .map(linkResponse -> "\n- " + linkResponse.link().toString())
-                .toList()));
+        assertThat(text, is(equalTo(ListTextProvider.buildLinksListText(list.links().stream()
+                .map(linkResponse -> linkResponse.link().toString())
+                .toList()))));
 
         assertThat(parameters.get("disable_web_page_preview"), is(true));
 
@@ -202,7 +199,7 @@ public class ListCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, equalTo("Ты еще не отслеживаешь ни одной ссылки"));
+        assertThat(text, is(equalTo(ListTextProvider.buildEmptyLinksText())));
 
     }
 

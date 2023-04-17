@@ -13,6 +13,7 @@ import ru.tinkoff.edu.java.bot.model.service.command.TestUntrackCommand;
 import ru.tinkoff.edu.java.bot.service.IUserMessageProcessor;
 import ru.tinkoff.edu.java.bot.service.command.*;
 import ru.tinkoff.edu.java.bot.service.impl.UserMessageProcessor;
+import ru.tinkoff.edu.java.bot.service.text.TextProvider.BotTextProvider;
 
 import java.util.List;
 
@@ -82,8 +83,7 @@ public class UserMessageProcessorTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, equalTo("Извини, бот умеет общаться только через известные ему команды\n" +
-                "Для просмотра введи /help"));
+        assertThat(text, equalTo(BotTextProvider.buildUnknownMessageText()));
     }
 
     @Test
@@ -104,8 +104,7 @@ public class UserMessageProcessorTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, equalTo("Извини, бот умеет общаться только через известные ему команды\n" +
-                "Для просмотра введи /help"));
+        assertThat(text, equalTo(BotTextProvider.buildUnknownMessageText()));
     }
     @Test
     void testProcessCallsStartCommand() {

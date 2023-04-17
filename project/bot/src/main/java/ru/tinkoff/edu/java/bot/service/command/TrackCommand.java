@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.IScrapperClient;
 import ru.tinkoff.edu.java.bot.client.dto.request.AddLinkRequest;
 import ru.tinkoff.edu.java.bot.client.dto.response.LinkResponse;
+import ru.tinkoff.edu.java.bot.service.text.TextProvider.TrackTextProvider;
 import ru.tinkoff.edu.java.bot.util.UrlUtils;
 
 import java.net.URI;
@@ -35,8 +36,8 @@ public class TrackCommand implements Command {
             int spacePos = message.indexOf(' ');
 
             if (spacePos == -1) {
-                return new SendMessage(update.message().chat().id(),
-                        "После команды через пробел нужно указать ссылку, которую нужно отследить");
+                var text = TrackTextProvider.buildNoLinkErrorText();
+                return new SendMessage(update.message().chat().id(), text);
             }
 
             URI link = UrlUtils.create(message.substring(spacePos + 1));
@@ -44,11 +45,11 @@ public class TrackCommand implements Command {
             LinkResponse linkResponse = scrapperClient.addLink(update.message().chat().id(),
                     new AddLinkRequest(link));
 
-            return new SendMessage(update.message().chat().id(),
-                    String.format("Ссылка %s успешно добавлена к отслеживаемым!\n" +
-                            "Мы пришлем уведомление, когда по адресу произойдут изменения :)", linkResponse.link()));
+            var text = TrackTextProvider.buildSuccessfullyAddedLinkText(linkResponse.link().toString());
+            return new SendMessage(update.message().chat().id(), text);
         } catch (IllegalArgumentException e) {
-            return new SendMessage(update.message().chat().id(), "Ссылка указана неверно")
+            var text = TrackTextProvider.buildInvalidLinkText();
+            return new SendMessage(update.message().chat().id(), text)
                     .disableWebPagePreview(true);
         }
     }
