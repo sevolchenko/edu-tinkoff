@@ -13,7 +13,7 @@ import java.net.URI;
 
 @RequiredArgsConstructor
 @Component
-public final class TrackCommand implements Command {
+public class TrackCommand implements Command {
 
     private final IScrapperClient scrapperClient;
 

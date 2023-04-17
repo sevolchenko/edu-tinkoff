@@ -13,7 +13,7 @@ import java.net.URI;
 
 @RequiredArgsConstructor
 @Component
-public final class UntrackCommand implements Command {
+public class UntrackCommand implements Command {
 
     private final IScrapperClient scrapperClient;
 

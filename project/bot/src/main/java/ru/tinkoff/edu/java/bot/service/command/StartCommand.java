@@ -8,7 +8,7 @@ import ru.tinkoff.edu.java.bot.client.IScrapperClient;
 
 @RequiredArgsConstructor
 @Component
-public final class StartCommand implements Command {
+public class StartCommand implements Command {
 
     private final IScrapperClient scrapperClient;
 

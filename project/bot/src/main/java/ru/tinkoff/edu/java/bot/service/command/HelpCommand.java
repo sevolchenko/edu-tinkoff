@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public final class HelpCommand implements Command {
+public class HelpCommand implements Command {
 
     private List<BotCommand> botCommands;
 
