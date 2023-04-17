@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import ru.tinkoff.edu.java.bot.service.text.TextProvider.HelpTextProvider;
 
 import java.util.List;
 
@@ -32,14 +33,7 @@ public class HelpCommand implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        StringBuffer sb = new StringBuffer("Вот список доступных команд:");
-
-        botCommands.forEach(command -> {
-            sb.append("\n");
-            sb.append(command.command());
-            sb.append(" - ");
-            sb.append(command.description());
-        });
-        return new SendMessage(update.message().chat().id(), sb.toString());
+        var text = HelpTextProvider.buildHelpText(botCommands);
+        return new SendMessage(update.message().chat().id(), text);
     }
 }

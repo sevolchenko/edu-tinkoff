@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.IScrapperClient;
+import ru.tinkoff.edu.java.bot.service.text.TextProvider.ListTextProvider;
 
 @RequiredArgsConstructor
 @Component
@@ -27,17 +28,14 @@ public class ListCommand implements Command {
         var linkResponses = scrapperClient.getLinks(update.message().chat().id());
 
         if (linkResponses.size() == null || linkResponses.size() == 0) {
-            return new SendMessage(update.message().chat().id(), "Ты еще не отслеживаешь ни одной ссылки");
+            var text = ListTextProvider.buildEmptyLinksText();
+            return new SendMessage(update.message().chat().id(), text);
         }
 
-        StringBuffer sb = new StringBuffer(String.format("Вот список ссылок, которые ты отслеживаешь (всего %d):",
-                linkResponses.size()));
-
-        linkResponses.links().forEach(linkResponse -> {
-            sb.append("\n- ");
-            sb.append(linkResponse.link().toString());
-        });
-        return new SendMessage(update.message().chat().id(), sb.toString())
+        var text = ListTextProvider.buildLinksListText(linkResponses.links().stream()
+                .map(linkResponse -> linkResponse.link().toString())
+                .toList());
+        return new SendMessage(update.message().chat().id(), text)
                 .disableWebPagePreview(true);
     }
 }

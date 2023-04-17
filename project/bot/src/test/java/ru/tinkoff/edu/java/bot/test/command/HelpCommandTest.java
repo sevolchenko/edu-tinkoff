@@ -1,32 +1,31 @@
 package ru.tinkoff.edu.java.bot.test.command;
 
+import com.pengrad.telegrambot.model.BotCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import ru.tinkoff.edu.java.bot.client.IScrapperClient;
 import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
-import ru.tinkoff.edu.java.bot.service.command.StartCommand;
-import ru.tinkoff.edu.java.bot.service.text.TextProvider.StartTextProvider;
+import ru.tinkoff.edu.java.bot.service.command.HelpCommand;
+import ru.tinkoff.edu.java.bot.service.text.TextProvider.HelpTextProvider;
+import ru.tinkoff.edu.java.bot.test.data.TestBotCommandsList;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
 import static ru.tinkoff.edu.java.bot.test.data.TestListLinkResponseData.randomId;
 
-public class StartCommandTest {
+public class HelpCommandTest {
 
-    private StartCommand startCommand;
-
-    private IScrapperClient scrapperClient;
+    private HelpCommand helpCommand;
+    private final List<BotCommand> botCommands = TestBotCommandsList.BOT_COMMANDS;
 
     @BeforeEach
     public void setup() {
 
-        this.scrapperClient = Mockito.mock(IScrapperClient.class);
-        this.startCommand = new StartCommand(scrapperClient);
+        this.helpCommand = new HelpCommand();
+        helpCommand.setBotCommands(botCommands);
 
     }
 
@@ -35,10 +34,10 @@ public class StartCommandTest {
         // given
 
         // when
-        var res = startCommand.command();
+        var res = helpCommand.command();
 
         // then
-        assertThat(res, is(equalTo("/start")));
+        assertThat(res, is(equalTo("/help")));
     }
 
     @Test
@@ -46,20 +45,20 @@ public class StartCommandTest {
         // given
 
         // when
-        var res = startCommand.description();
+        var res = helpCommand.description();
 
         // then
-        assertThat(res, is(equalTo("зарегистрировать пользователя")));
+        assertThat(res, is(equalTo("вывести окно с командами")));
     }
 
 
     @Test
     void testSupportsValidCommand() {
         // given
-        var update = new TestUpdate(new TestMessage("/start"));
+        var update = new TestUpdate(new TestMessage("/help"));
 
         // when
-        var res = startCommand.supports(update);
+        var res = helpCommand.supports(update);
 
         // then
         assertThat(res, is(true));
@@ -68,10 +67,10 @@ public class StartCommandTest {
     @Test
     void testSupportsValidCommand2() {
         // given
-        var update = new TestUpdate(new TestMessage("/start aaa"));
+        var update = new TestUpdate(new TestMessage("/help aaa"));
 
         // when
-        var res = startCommand.supports(update);
+        var res = helpCommand.supports(update);
 
         // then
         assertThat(res, is(true));
@@ -83,7 +82,7 @@ public class StartCommandTest {
         var update = new TestUpdate(new TestMessage("/hello"));
 
         // when
-        var res = startCommand.supports(update);
+        var res = helpCommand.supports(update);
 
         // then
         assertThat(res, is(false));
@@ -95,7 +94,7 @@ public class StartCommandTest {
         var update = new TestUpdate(new TestMessage("Any message"));
 
         // when
-        var res = startCommand.supports(update);
+        var res = helpCommand.supports(update);
 
         // then
         assertThat(res, is(false));
@@ -107,25 +106,23 @@ public class StartCommandTest {
         var update = new TestUpdate(new TestMessage(""));
 
         // when
-        var res = startCommand.supports(update);
+        var res = helpCommand.supports(update);
 
         // then
         assertThat(res, is(false));
     }
 
-
     @Test
-    void testHandleCommandWithValidListResponse() {
+    void testHandleCommandWithValidCommandsList() {
 
         // given
         Long chatId = randomId();
 
-        var update = new TestUpdate(new TestMessage("/start", new TestChat(chatId)));
-        doNothing().when(scrapperClient).registerChatById(anyLong());
+        var update = new TestUpdate(new TestMessage("/help", new TestChat(chatId)));
 
 
         // when
-        var res = startCommand.handle(update);
+        var res = helpCommand.handle(update);
 
 
         // then
@@ -135,10 +132,9 @@ public class StartCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, equalTo(StartTextProvider.buildStartMessage()));
-
-        assertThat(parameters.get("disable_web_page_preview"), is(true));
+        assertThat(text, equalTo(HelpTextProvider.buildHelpText(botCommands)));
 
     }
+
 
 }

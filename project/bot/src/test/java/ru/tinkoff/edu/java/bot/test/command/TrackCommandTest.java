@@ -12,6 +12,7 @@ import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.TrackCommand;
 import ru.tinkoff.edu.java.bot.util.UrlUtils;
+import ru.tinkoff.edu.java.bot.service.text.TextProvider.TrackTextProvider;
 
 import java.net.URI;
 
@@ -139,7 +140,7 @@ public class TrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo("После команды через пробел нужно указать ссылку, которую нужно отследить")));
+        assertThat(text, is(equalTo(TrackTextProvider.buildNoLinkErrorText())));
 
     }
 
@@ -163,7 +164,7 @@ public class TrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo("Ссылка указана неверно")));
+        assertThat(text, is(equalTo(TrackTextProvider.buildInvalidLinkText())));
 
     }
 
@@ -186,7 +187,7 @@ public class TrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo("Ссылка указана неверно")));
+        assertThat(text, is(equalTo(TrackTextProvider.buildInvalidLinkText())));
 
     }
 
@@ -213,8 +214,7 @@ public class TrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo(String.format("Ссылка %s успешно добавлена к отслеживаемым!\n" +
-                "Мы пришлем уведомление, когда по адресу произойдут изменения :)", link))));
+        assertThat(text, is(equalTo(TrackTextProvider.buildSuccessfullyAddedLinkText(link.toString()))));
 
     }
 
@@ -240,8 +240,7 @@ public class TrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo(String.format("Ссылка %s успешно добавлена к отслеживаемым!\n" +
-                "Мы пришлем уведомление, когда по адресу произойдут изменения :)", link))));
+        assertThat(text, is(equalTo(TrackTextProvider.buildSuccessfullyAddedLinkText(link.toString()))));
 
     }
 

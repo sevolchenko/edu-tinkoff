@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.exception.HttpClientException;
 import ru.tinkoff.edu.java.bot.service.IUserMessageProcessor;
 import ru.tinkoff.edu.java.bot.service.command.Command;
+import ru.tinkoff.edu.java.bot.service.text.TextProvider.BotTextProvider;
 
 import java.util.List;
 
@@ -35,9 +36,8 @@ public class UserMessageProcessor implements IUserMessageProcessor {
             if (supportsCommands.size() == 0) {
                 log.warn("Processing update {} failed: unknown message: {}", update.updateId(), update.message().text());
 
-                return new SendMessage(update.message().chat().id(),
-                        "Извини, бот умеет общаться только через известные ему команды\n" +
-                                "Для просмотра введи /help");
+                var text = BotTextProvider.buildUnknownMessageText();
+                return new SendMessage(update.message().chat().id(), text);
             }
 
             if (supportsCommands.size() > 1) {
@@ -50,7 +50,8 @@ public class UserMessageProcessor implements IUserMessageProcessor {
                 log.error("Processing update {} failed: message {} can be handled by several commands: {}",
                         update.updateId(), update.message().text(), sb);
 
-                throw new IllegalArgumentException(String.format("Неизвестная команда: %s", update.message().text()));
+                var text = BotTextProvider.buildUnknownCommandText(update.message().text());
+                throw new IllegalArgumentException(text);
             }
 
             return supportsCommands.get(0).handle(update);
@@ -58,9 +59,7 @@ public class UserMessageProcessor implements IUserMessageProcessor {
         } catch (HttpClientException e) {
             log.warn("Exception {} thrown: {}", e.getClass().getName(), e.getApiErrorResponse().exceptionMessage());
 
-            return new SendMessage(update.message().chat().id(),
-                    //String.format("Произошла ошибка: %s", e.getApiErrorResponse().description()));
-                    e.getApiErrorResponse().description());
+            return new SendMessage(update.message().chat().id(), e.getApiErrorResponse().description());
 
         } catch (Exception e) {
             log.warn("Exception {} thrown: {}", e.getClass().getName(), e.getMessage());

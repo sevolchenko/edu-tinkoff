@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.IScrapperClient;
 import ru.tinkoff.edu.java.bot.client.dto.request.RemoveLinkRequest;
 import ru.tinkoff.edu.java.bot.client.dto.response.LinkResponse;
+import ru.tinkoff.edu.java.bot.service.text.TextProvider.UntrackTextProvider;
 import ru.tinkoff.edu.java.bot.util.UrlUtils;
 
 import java.net.URI;
@@ -35,8 +36,8 @@ public class UntrackCommand implements Command {
             int spacePos = message.indexOf(' ');
 
             if (spacePos == -1) {
-                return new SendMessage(update.message().chat().id(),
-                        "После команды через пробел нужно указать ссылку, которую нужно удалить из отслеживаемых");
+                var text = UntrackTextProvider.buildNoLinkErrorText();
+                return new SendMessage(update.message().chat().id(), text);
             }
 
             URI link = UrlUtils.create(message.substring(spacePos + 1));
@@ -44,11 +45,11 @@ public class UntrackCommand implements Command {
             LinkResponse linkResponse = scrapperClient.deleteLink(update.message().chat().id(),
                     new RemoveLinkRequest(link));
 
-            return new SendMessage(update.message().chat().id(),
-                    String.format("Ссылка %s успешно удалена из отслеживаемых!\n" +
-                            "Мы больше не пришлем уведомление :(", linkResponse.link()));
+            var text = UntrackTextProvider.buildSuccessfullyRemovedLinkText(linkResponse.link().toString());
+            return new SendMessage(update.message().chat().id(), text);
         } catch (IllegalArgumentException e) {
-            return new SendMessage(update.message().chat().id(), "Ссылка указана неверно")
+            var text = UntrackTextProvider.buildInvalidLinkText();
+            return new SendMessage(update.message().chat().id(), text)
                     .disableWebPagePreview(true);
         }
     }
