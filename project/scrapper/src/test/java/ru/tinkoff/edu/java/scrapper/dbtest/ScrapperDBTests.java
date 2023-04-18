@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper;
+package ru.tinkoff.edu.java.scrapper.dbtest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,10 +30,16 @@ public class ScrapperDBTests extends IntegrationEnvironment {
 
     @Test
     @Transactional(readOnly = true)
-    void chatMigrationsLoads() throws SQLException {
+    void tgChatMigrationsLoads() throws SQLException {
         // given
         var stmt = conn.createStatement();
-        String query = "SELECT COUNT(*) AS count FROM chat";
+        String query = """
+                select EXISTS(
+                    select *
+                    from information_schema.tables
+                    where table_name = 'tg_chat'
+                );
+                """;
 
         // when
         var resultSet = stmt.executeQuery(query);
@@ -42,16 +48,22 @@ public class ScrapperDBTests extends IntegrationEnvironment {
         assertThat(resultSet, is(notNullValue()));
 
         assertThat(resultSet.next(), is(true));
-        assertThat(resultSet.getInt(1), is(greaterThan(0)));
+        assertThat(resultSet.getBoolean(1), is(true));
     }
 
 
     @Test
     @Transactional(readOnly = true)
-    void linksMigrationsLoads() throws SQLException {
+    void linkMigrationsLoads() throws SQLException {
         // given
         var stmt = conn.createStatement();
-        String query = "SELECT COUNT(*) AS count FROM link";
+        String query = """
+                select EXISTS(
+                    select *
+                    from information_schema.tables
+                    where table_name = 'link'
+                );
+                """;
 
         // when
         var resultSet = stmt.executeQuery(query);
@@ -60,16 +72,22 @@ public class ScrapperDBTests extends IntegrationEnvironment {
         assertThat(resultSet, is(notNullValue()));
 
         assertThat(resultSet.next(), is(true));
-        assertThat(resultSet.getInt(1), is(greaterThan(0)));
+        assertThat(resultSet.getBoolean(1), is(true));
     }
 
 
     @Test
     @Transactional(readOnly = true)
-    void chatLinksMigrationsLoads() throws SQLException {
+    void subscriptionMigrationsLoads() throws SQLException {
         // given
         var stmt = conn.createStatement();
-        String query = "SELECT COUNT(*) AS count FROM chat_links";
+        String query = """
+                select EXISTS(
+                    select *
+                    from information_schema.tables
+                    where table_name = 'subscription'
+                );
+                """;
 
         // when
         var resultSet = stmt.executeQuery(query);
@@ -78,7 +96,7 @@ public class ScrapperDBTests extends IntegrationEnvironment {
         assertThat(resultSet, is(notNullValue()));
 
         assertThat(resultSet.next(), is(true));
-        assertThat(resultSet.getInt(1), is(greaterThan(0)));
+        assertThat(resultSet.getBoolean(1), is(true));
     }
 
 }
