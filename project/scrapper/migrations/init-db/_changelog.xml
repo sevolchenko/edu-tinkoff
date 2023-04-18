@@ -9,7 +9,7 @@
 
     <changeSet id="INIT-DB" author="Sergey Volchenko"/>
 
-    <include file="create_chat_table.sql" relativeToChangelogFile="true"/>
+    <include file="create_tg_chat_table.sql" relativeToChangelogFile="true"/>
     <include file="create_link_table.sql" relativeToChangelogFile="true"/>
-    <include file="create_chat_links_table.sql" relativeToChangelogFile="true"/>
+    <include file="create_subscription_table.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
