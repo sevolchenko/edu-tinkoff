@@ -50,13 +50,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.tinkoff.volchenko</groupId>
-            <artifactId>scrapper</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
