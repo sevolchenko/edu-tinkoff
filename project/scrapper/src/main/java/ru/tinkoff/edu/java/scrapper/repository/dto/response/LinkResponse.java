@@ -1,6 +1,15 @@
 package ru.tinkoff.edu.java.scrapper.repository.dto.response;
 
+import lombok.Data;
+
 import java.time.OffsetDateTime;
 
-public record LinkResponse(Long linkId, String url, OffsetDateTime scannedAt, OffsetDateTime createdAt) {
+@Data
+public class LinkResponse {
+
+    private Long linkId;
+    private String url;
+    private OffsetDateTime scannedAt;
+    private OffsetDateTime createdAt;
+
 }

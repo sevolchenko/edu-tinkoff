@@ -13,6 +13,7 @@ import ru.tinkoff.edu.java.bot.service.text.TextProvider.StartTextProvider;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static ru.tinkoff.edu.java.bot.test.data.TestListLinkResponseData.randomId;
 
@@ -121,7 +122,7 @@ public class StartCommandTest {
         Long chatId = randomId();
 
         var update = new TestUpdate(new TestMessage("/start", new TestChat(chatId)));
-        doNothing().when(scrapperClient).registerChatById(anyLong());
+        doNothing().when(scrapperClient).registerChatById(anyLong(), anyString());
 
 
         // when

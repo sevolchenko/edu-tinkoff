@@ -7,10 +7,9 @@ import ru.tinkoff.edu.java.scrapper.dto.request.AddLinkRequest;
 import ru.tinkoff.edu.java.scrapper.dto.request.RemoveLinkRequest;
 import ru.tinkoff.edu.java.scrapper.dto.response.LinkResponse;
 import ru.tinkoff.edu.java.scrapper.dto.response.ListLinkResponse;
-import ru.tinkoff.edu.java.scrapper.exception.AlreadyAddedLinkException;
-import ru.tinkoff.edu.java.scrapper.exception.NoSuchLinkException;
-import ru.tinkoff.edu.java.scrapper.exception.NotSupportedLinkException;
-import ru.tinkoff.edu.java.scrapper.service.LinkService;
+import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkService;
+
+import java.net.URI;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -18,13 +17,19 @@ import ru.tinkoff.edu.java.scrapper.service.LinkService;
 @RequestMapping("/links")
 public class LinksController {
 
-    private final LinkService linkService;
+    private final ILinkService linkService;
 
     @GetMapping
     public ListLinkResponse getLinks(@RequestHeader("Tg-Chat-Id") Long id) {
         log.info("Get Links by id {} called", id);
 
-        return new ListLinkResponse(null, null);
+        var collection = linkService.listAll(id);
+
+        var resList = collection.stream()
+                .map(linkResponse -> new LinkResponse(linkResponse.getLinkId(), URI.create(linkResponse.getUrl())))
+                .toList();
+
+        return new ListLinkResponse(resList, resList.size());
     }
 
     @PostMapping
@@ -32,15 +37,9 @@ public class LinksController {
                                 @RequestBody AddLinkRequest request) {
         log.info("Add Link {} by id {} called", request.link(), id);
 
-        if (!linkService.supports(request.link())) {
-            throw new NotSupportedLinkException(String.format("Link %s is not supported yet", request.link()));
-        }
+        var response = linkService.add(id, request.link());
 
-        if (request.link().toString().equals("exists")) { // todo: Выброс исключения, если ссылка уже отслеживается
-            throw new AlreadyAddedLinkException(String.format("Link already added to id %d: %s", id, request.link()));
-        }
-
-        return new LinkResponse(id, request.link());
+        return new LinkResponse(response.getLinkId(), URI.create(response.getUrl()));
     }
 
     @DeleteMapping
@@ -48,9 +47,8 @@ public class LinksController {
                                 @RequestBody RemoveLinkRequest request) {
         log.info("Delete Link {} by id {} called", request.link(), id);
 
-        if (request.link().toString().equals("doesnt exists")) { // todo: Выброс исключения, если ссылка не отслеживается
-            throw new NoSuchLinkException(String.format("Link has not added to id %d yet: %s", id, request.link()));
-        }
-        return new LinkResponse(id, request.link());
+        var response = linkService.remove(id, request.link());
+
+        return new LinkResponse(response.getLinkId(), URI.create(response.getUrl()));
     }
 }

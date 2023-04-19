@@ -1,6 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +13,6 @@ import ru.tinkoff.edu.java.scrapper.repository.dto.response.TgChatResponse;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ITgChatRepository;
 
 import java.util.Collection;
-import java.util.List;
 
 @Transactional
 @RequiredArgsConstructor
@@ -33,33 +34,46 @@ public class JdbcTgChatRepository implements ITgChatRepository {
         var tgChatId = request.tgChatId();
         var username = request.username();
 
-        List<Long> tempId = jdbcTemplate.query(addSql, (rs, rn) -> rs.getLong("tg_chat_id"), tgChatId, username);
-
-        if (tempId.isEmpty()) {
+        try {
+            return jdbcTemplate.queryForObject(addSql, Long.class, tgChatId, username);
+        } catch (EmptyResultDataAccessException ex) {
             throw new AlreadyRegisteredChatException(String.format("Chat with id %d already registered", tgChatId));
         }
-
-        return tempId.get(0);
     }
 
     @Override
     public TgChatResponse remove(Long tgChatId) {
         String removeSql = """
                 delete from tg_chat where tg_chat_id = ?
-                returning (tg_chat_id, username, registered_at)
+                returning tg_chat_id, username, registered_at
                 """;
 
-        final TgChatResponse response = jdbcTemplate.queryForObject(removeSql, TgChatResponse.class, tgChatId);
+        var rs = jdbcTemplate.query(removeSql, new BeanPropertyRowMapper<>(TgChatResponse.class), tgChatId);
 
-        if (response == null) {
+        if (rs.isEmpty()) {
             throw new NoSuchChatException(String.format("There is no chat with id %d", tgChatId));
         }
 
-        return response;
+        return rs.get(0);
     }
 
     @Override
     public Collection<TgChatResponse> findAll() {
-        return null;
+        String selectSql = "select tg_chat_id, username, registered_at from tg_chat";
+
+        return jdbcTemplate.query(selectSql, new BeanPropertyRowMapper<>(TgChatResponse.class));
+    }
+
+    @Override
+    public TgChatResponse findByTgChatId(Long tgChatId) {
+        String selectSql = "select tg_chat_id, username, registered_at from tg_chat where tg_chat_id = ?";
+
+        var rs = jdbcTemplate.query(selectSql, new BeanPropertyRowMapper<>(TgChatResponse.class), tgChatId);
+
+        if (rs.isEmpty()) {
+            return null;
+        }
+
+        return rs.get(0);
     }
 }

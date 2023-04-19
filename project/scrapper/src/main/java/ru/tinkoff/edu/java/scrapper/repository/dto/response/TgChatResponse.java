@@ -1,6 +1,14 @@
 package ru.tinkoff.edu.java.scrapper.repository.dto.response;
 
+import lombok.Data;
+
 import java.time.OffsetDateTime;
 
-public record TgChatResponse(Long tgChatId, String username, OffsetDateTime registeredAt) {
+@Data
+public class TgChatResponse {
+
+    private Long tgChatId;
+    private String username;
+    private OffsetDateTime registeredAt;
+
 }

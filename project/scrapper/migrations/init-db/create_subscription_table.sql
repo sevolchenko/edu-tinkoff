@@ -10,5 +10,5 @@ create table subscription
     primary key (tg_chat_id, link_id),
 
     foreign key (tg_chat_id) references tg_chat (tg_chat_id),
-    foreign key (link_id) references link (link_id)
+    foreign key (link_id) references link (link_id) on delete cascade
 );
