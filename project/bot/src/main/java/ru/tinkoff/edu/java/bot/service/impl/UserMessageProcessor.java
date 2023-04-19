@@ -28,7 +28,6 @@ public class UserMessageProcessor implements IUserMessageProcessor {
     public SendMessage process(Update update) {
 
         try {
-
             var supportsCommands = commands().stream()
                     .filter(command -> command.supports(update))
                     .toList();

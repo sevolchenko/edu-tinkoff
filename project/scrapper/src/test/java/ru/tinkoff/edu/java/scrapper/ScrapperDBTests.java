@@ -1,6 +1,6 @@
 package ru.tinkoff.edu.java.scrapper;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -17,10 +17,10 @@ import static org.hamcrest.Matchers.*;
 @ActiveProfiles("test")
 public class ScrapperDBTests extends IntegrationEnvironment {
 
-    private Connection conn;
+    private static Connection conn;
 
-    @BeforeEach
-    public void setup() {
+    @BeforeAll
+    public static void setup() {
         try {
             conn = DriverManager.getConnection(DB_CONTAINER.getJdbcUrl(), DB_CONTAINER.getUsername(), DB_CONTAINER.getPassword());
         } catch (SQLException e) {
@@ -29,7 +29,6 @@ public class ScrapperDBTests extends IntegrationEnvironment {
     }
 
     @Test
-    @Transactional(readOnly = true)
     void chatMigrationsLoads() throws SQLException {
         // given
         var stmt = conn.createStatement();
@@ -47,7 +46,6 @@ public class ScrapperDBTests extends IntegrationEnvironment {
 
 
     @Test
-    @Transactional(readOnly = true)
     void linksMigrationsLoads() throws SQLException {
         // given
         var stmt = conn.createStatement();
@@ -65,7 +63,6 @@ public class ScrapperDBTests extends IntegrationEnvironment {
 
 
     @Test
-    @Transactional(readOnly = true)
     void chatLinksMigrationsLoads() throws SQLException {
         // given
         var stmt = conn.createStatement();
