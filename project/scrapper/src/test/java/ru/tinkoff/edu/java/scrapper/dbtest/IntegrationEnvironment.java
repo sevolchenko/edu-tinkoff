@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper;
+package ru.tinkoff.edu.java.scrapper.dbtest;
 
 import liquibase.Contexts;
 import liquibase.LabelExpression;
@@ -45,7 +45,7 @@ public abstract class IntegrationEnvironment {
 
     private static void runMigrations(JdbcDatabaseContainer<?> c) {
         var changelogPath = new File(".").toPath().toAbsolutePath().getParent().getParent()
-                .resolve("migrations");
+                .resolve("scrapper").resolve("migrations");
 
         try (var conn = DriverManager.getConnection(c.getJdbcUrl(), c.getUsername(), c.getPassword())) {
             var changelogDir = new DirectoryResourceAccessor(changelogPath);
