@@ -1,10 +1,9 @@
 package ru.tinkoff.edu.java.scrapper.dbtest;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,10 +16,10 @@ import static org.hamcrest.Matchers.*;
 @ActiveProfiles("test")
 public class ScrapperDBTests extends IntegrationEnvironment {
 
-    private Connection conn;
+    private static Connection conn;
 
-    @BeforeEach
-    public void setup() {
+    @BeforeAll
+    public static void setup() {
         try {
             conn = DriverManager.getConnection(DB_CONTAINER.getJdbcUrl(), DB_CONTAINER.getUsername(), DB_CONTAINER.getPassword());
         } catch (SQLException e) {
@@ -29,8 +28,7 @@ public class ScrapperDBTests extends IntegrationEnvironment {
     }
 
     @Test
-    @Transactional(readOnly = true)
-    void tgChatMigrationsLoads() throws SQLException {
+    void chatMigrationsLoads() throws SQLException {
         // given
         var stmt = conn.createStatement();
         String query = """
@@ -53,8 +51,7 @@ public class ScrapperDBTests extends IntegrationEnvironment {
 
 
     @Test
-    @Transactional(readOnly = true)
-    void linkMigrationsLoads() throws SQLException {
+    void linksMigrationsLoads() throws SQLException {
         // given
         var stmt = conn.createStatement();
         String query = """
@@ -77,8 +74,7 @@ public class ScrapperDBTests extends IntegrationEnvironment {
 
 
     @Test
-    @Transactional(readOnly = true)
-    void subscriptionMigrationsLoads() throws SQLException {
+    void chatLinksMigrationsLoads() throws SQLException {
         // given
         var stmt = conn.createStatement();
         String query = """
