@@ -23,7 +23,7 @@ public class LinksController {
     public ListLinkResponse getLinks(@RequestHeader("Tg-Chat-Id") Long id) {
         log.info("Get Links by id {} called", id);
 
-        var collection = linkService.listAll(id);
+        var collection = linkService.listAllForChat(id);
 
         var resList = collection.stream()
                 .map(linkResponse -> new LinkResponse(linkResponse.getLinkId(), URI.create(linkResponse.getUrl())))

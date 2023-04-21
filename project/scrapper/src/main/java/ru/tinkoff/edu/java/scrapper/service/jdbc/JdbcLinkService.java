@@ -35,7 +35,12 @@ public class JdbcLinkService implements ILinkService {
     }
 
     @Override
-    public Collection<LinkResponse> listAll(Long tgChatId) {
+    public Collection<LinkResponse> listAll() {
+        return linkRepository.findAll();
+    }
+
+    @Override
+    public Collection<LinkResponse> listAllForChat(Long tgChatId) {
         return linkRepository.findAll(tgChatId);
     }
 

@@ -9,6 +9,7 @@ public interface ILinkService {
 
     LinkResponse add(Long tgChatId, URI url);
     LinkResponse remove(Long tgChatId, URI url);
-    Collection<LinkResponse> listAll(Long tgChatId);
 
+    Collection<LinkResponse> listAll();
+    Collection<LinkResponse> listAllForChat(Long tgChatId);
 }

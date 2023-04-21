@@ -1,12 +1,14 @@
 package ru.tinkoff.edu.java.scrapper.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.exception.AlreadyAddedLinkException;
+import ru.tinkoff.edu.java.scrapper.exception.NoSuchChatException;
 import ru.tinkoff.edu.java.scrapper.exception.NoSuchLinkException;
 import ru.tinkoff.edu.java.scrapper.repository.dto.request.SubscriptionRequest;
 import ru.tinkoff.edu.java.scrapper.repository.dto.response.LinkResponse;
@@ -48,6 +50,8 @@ public class JdbcLinkRepository implements ILinkRepository {
 
         } catch (EmptyResultDataAccessException ex) {
             throw new AlreadyAddedLinkException(String.format("Link already added to id %d: %s", tgChatId, url));
+        } catch (DataIntegrityViolationException ex) {
+            throw new NoSuchChatException(String.format("There is no chat with id %d", tgChatId));
         }
     }
 
@@ -56,7 +60,7 @@ public class JdbcLinkRepository implements ILinkRepository {
         String removeSql = """
                 delete from subscription using link
                 where link.link_id = subscription.link_id and tg_chat_id = ? and url = ?
-                returning (link.link_id, url, last_scanned_at, subscription.created_at)
+                returning link.link_id, url, last_scanned_at, subscription.created_at
                 """;
 
         Long tgChatId = request.tgChatId();
@@ -72,6 +76,18 @@ public class JdbcLinkRepository implements ILinkRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Collection<LinkResponse> findAll() {
+        String findAllSql = """
+                select s.link_id, url, last_scanned_at, s.created_at from subscription s, link l
+                where s.link_id = l.link_id
+                """;
+
+        return jdbcTemplate.query(findAllSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Collection<LinkResponse> findAll(Long tgChatId) {
         String findAllSql = """
                 select s.link_id, url, last_scanned_at, s.created_at from subscription s, link l
@@ -82,6 +98,7 @@ public class JdbcLinkRepository implements ILinkRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public LinkResponse findById(SubscriptionRequest request) {
         String findSql = """
                 select s.link_id, url, last_scanned_at, s.created_at from subscription s, link l

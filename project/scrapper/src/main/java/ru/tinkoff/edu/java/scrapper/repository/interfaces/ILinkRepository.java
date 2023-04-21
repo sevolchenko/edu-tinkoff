@@ -11,6 +11,8 @@ public interface ILinkRepository {
 
     LinkResponse remove(SubscriptionRequest request);
 
+    Collection<LinkResponse> findAll();
+
     Collection<LinkResponse> findAll(Long tgChatId);
 
     LinkResponse findById(SubscriptionRequest request);

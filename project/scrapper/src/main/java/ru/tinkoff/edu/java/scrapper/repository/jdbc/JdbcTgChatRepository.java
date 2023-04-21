@@ -58,6 +58,7 @@ public class JdbcTgChatRepository implements ITgChatRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<TgChatResponse> findAll() {
         String selectSql = "select tg_chat_id, username, registered_at from tg_chat";
 
@@ -65,6 +66,7 @@ public class JdbcTgChatRepository implements ITgChatRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TgChatResponse findByTgChatId(Long tgChatId) {
         String selectSql = "select tg_chat_id, username, registered_at from tg_chat where tg_chat_id = ?";
 

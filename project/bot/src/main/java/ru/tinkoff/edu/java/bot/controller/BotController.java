@@ -10,6 +10,7 @@ public class BotController {
 
     @PostMapping("/updates")
     private void updates(@RequestBody LinkUpdateRequest linkUpdateRequest) {
+
     }
 
 }

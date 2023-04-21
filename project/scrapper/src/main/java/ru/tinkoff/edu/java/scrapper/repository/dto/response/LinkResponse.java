@@ -9,7 +9,7 @@ public class LinkResponse {
 
     private Long linkId;
     private String url;
-    private OffsetDateTime scannedAt;
+    private OffsetDateTime lastScannedAt;
     private OffsetDateTime createdAt;
 
 }

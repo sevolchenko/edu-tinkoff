@@ -20,7 +20,7 @@ public class StackOverflowClient implements IStackOverflowClient {
     }
 
 
-        public StackOverflowQuestionResponse fetchQuestion(StackOverflowQuestionRequest stackOverflowQuestionRequest) {
+    public StackOverflowQuestionResponse fetchQuestion(StackOverflowQuestionRequest stackOverflowQuestionRequest) {
         String path = "/questions/{id}";
         StackOverflowQuestionResponse responseBody = webClient.get()
                 .uri(uriBuilder -> uriBuilder
