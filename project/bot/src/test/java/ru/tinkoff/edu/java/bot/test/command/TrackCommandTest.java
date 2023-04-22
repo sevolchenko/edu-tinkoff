@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import ru.tinkoff.edu.java.bot.client.IScrapperClient;
-import ru.tinkoff.edu.java.bot.client.dto.request.AddLinkRequest;
-import ru.tinkoff.edu.java.bot.client.dto.response.LinkResponse;
+import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
+import ru.tinkoff.edu.java.bot.client.scrapper.dto.request.AddLinkRequest;
+import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.LinkResponse;
 import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
@@ -198,7 +198,7 @@ public class TrackCommandTest {
         Long chatId = randomId();
         URI link = UrlUtils.create("https://github.com/sevolchenko/online-store");
 
-        var update = new TestUpdate(new TestMessage("/track " + link.toString(), new TestChat(chatId)));
+        var update = new TestUpdate(new TestMessage("/track " + link, new TestChat(chatId)));
         when(scrapperClient.addLink(eq(chatId), ArgumentMatchers.any(AddLinkRequest.class)))
                 .thenReturn(new LinkResponse(chatId, link));
 
@@ -224,7 +224,7 @@ public class TrackCommandTest {
         Long chatId = randomId();
         URI link = UrlUtils.create("https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c-c");
 
-        var update = new TestUpdate(new TestMessage("/track " + link.toString(), new TestChat(chatId)));
+        var update = new TestUpdate(new TestMessage("/track " + link, new TestChat(chatId)));
         when(scrapperClient.addLink(eq(chatId), ArgumentMatchers.any(AddLinkRequest.class)))
                 .thenReturn(new LinkResponse(chatId, link));
 

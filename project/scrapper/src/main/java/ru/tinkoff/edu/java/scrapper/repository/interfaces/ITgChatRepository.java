@@ -1,18 +1,18 @@
 package ru.tinkoff.edu.java.scrapper.repository.interfaces;
 
-import ru.tinkoff.edu.java.scrapper.repository.dto.request.RegisterTgChatRequest;
-import ru.tinkoff.edu.java.scrapper.repository.dto.response.TgChatResponse;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.RegisterTgChatInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.TgChatOutput;
 
 import java.util.Collection;
 
 public interface ITgChatRepository {
 
-    Long add(RegisterTgChatRequest request);
+    Long add(RegisterTgChatInput request);
 
-    TgChatResponse remove(Long tgChatId);
+    TgChatOutput remove(Long tgChatId);
 
-    Collection<TgChatResponse> findAll();
+    Collection<TgChatOutput> findAll();
 
-    TgChatResponse findByTgChatId(Long tgChatId);
+    TgChatOutput findByTgChatId(Long tgChatId);
 
 }

@@ -1,11 +1,11 @@
 package ru.tinkoff.edu.java.scrapper.service.interfaces;
 
-import ru.tinkoff.edu.java.scrapper.repository.dto.request.RegisterTgChatRequest;
-import ru.tinkoff.edu.java.scrapper.repository.dto.response.TgChatResponse;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.RegisterTgChatInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.TgChatOutput;
 
 public interface ITgChatService {
 
-    TgChatResponse register(RegisterTgChatRequest request);
-    TgChatResponse unregister(Long tgChatId);
+    TgChatOutput register(RegisterTgChatInput request);
+    TgChatOutput unregister(Long tgChatId);
 
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.tinkoff.edu.java.scrapper.dto.response.ApiErrorResponse;
+import ru.tinkoff.edu.java.scrapper.model.dto.response.ApiErrorResponse;
 import ru.tinkoff.edu.java.scrapper.exception.*;
 
 import java.util.Arrays;

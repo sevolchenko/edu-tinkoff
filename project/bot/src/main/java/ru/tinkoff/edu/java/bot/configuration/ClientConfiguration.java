@@ -3,9 +3,9 @@ package ru.tinkoff.edu.java.bot.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.tinkoff.edu.java.bot.client.IScrapperClient;
-import ru.tinkoff.edu.java.bot.client.dto.ClientUrlConfig;
-import ru.tinkoff.edu.java.bot.client.impl.ScrapperClient;
+import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
+import ru.tinkoff.edu.java.bot.client.scrapper.dto.ClientUrlConfig;
+import ru.tinkoff.edu.java.bot.client.scrapper.impl.ScrapperClient;
 
 import java.util.Optional;
 

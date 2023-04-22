@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.annotation.Validated;
-import ru.tinkoff.edu.java.bot.client.dto.ClientUrlConfig;
+import ru.tinkoff.edu.java.bot.client.scrapper.dto.ClientUrlConfig;
 
 import java.util.Optional;
 

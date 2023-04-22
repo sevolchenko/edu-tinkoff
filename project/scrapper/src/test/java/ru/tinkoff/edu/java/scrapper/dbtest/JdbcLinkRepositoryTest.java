@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.exception.AlreadyAddedLinkException;
 import ru.tinkoff.edu.java.scrapper.exception.NoSuchChatException;
 import ru.tinkoff.edu.java.scrapper.exception.NoSuchLinkException;
-import ru.tinkoff.edu.java.scrapper.repository.dto.request.SubscriptionRequest;
-import ru.tinkoff.edu.java.scrapper.repository.dto.response.LinkResponse;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.SubscriptionInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcLinkRepository;
 
 import java.time.OffsetDateTime;
@@ -65,14 +65,14 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         jdbcTemplate.update(insertTgChatSql, tgChatId, username);
 
         var url = "https://localhost:8081";
-        var request = new SubscriptionRequest(tgChatId, url);
+        var request = new SubscriptionInput(tgChatId, url);
 
         // when
         var response = jdbcLinkRepository.add(request);
 
 
         // then
-        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkOutput.class));
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(1));
@@ -97,7 +97,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         var username = "username";
 
         var url = "https://localhost:8081";
-        var request = new SubscriptionRequest(tgChatId, url);
+        var request = new SubscriptionInput(tgChatId, url);
 
         jdbcTemplate.update(insertTgChatSql, tgChatId, username);
 
@@ -112,7 +112,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         // then
         assertThat(ex.getMessage(), is(equalTo(String.format("Link already added to id %d: %s", tgChatId, url))));
 
-        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkOutput.class));
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(1));
@@ -125,7 +125,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         // given
         var tgChatId = randomId();
         var url = "https://localhost:8081";
-        var request = new SubscriptionRequest(tgChatId, url);
+        var request = new SubscriptionInput(tgChatId, url);
 
         // when
         var ex = assertThrows(NoSuchChatException.class, () -> jdbcLinkRepository.add(request));
@@ -134,7 +134,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         // then
         assertThat(ex.getMessage(), is(equalTo(String.format("There is no chat with id %d", tgChatId))));
 
-        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkOutput.class));
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(0));
@@ -152,7 +152,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         jdbcTemplate.update(insertTgChatSql, tgChatId, username);
 
         var url = "https://localhost:8081";
-        var request = new SubscriptionRequest(tgChatId, url);
+        var request = new SubscriptionInput(tgChatId, url);
 
         var linkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url);
         jdbcTemplate.update(insertSubSql, tgChatId, linkId);
@@ -169,7 +169,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(response.getLastScannedAt(), is(lessThanOrEqualTo(OffsetDateTime.now())));
         assertThat(response.getCreatedAt(), is(lessThanOrEqualTo(OffsetDateTime.now())));
 
-        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkOutput.class));
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(0));
@@ -183,7 +183,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         // given
         var tgChatId = randomId();
         var url = "https://localhost:8081";
-        var request = new SubscriptionRequest(tgChatId, url);
+        var request = new SubscriptionInput(tgChatId, url);
 
 
         // when
@@ -194,7 +194,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(ex, is(notNullValue()));
         assertThat(ex.getMessage(), is(equalTo(String.format("Link has not added to id %d yet: %s", tgChatId, url))));
 
-        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkOutput.class));
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(0));
@@ -218,7 +218,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
             jdbcTemplate.update(insertSubSql, tgChatId, linkId);
         });
 
-        var rs1 = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+        var rs1 = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkOutput.class));
 
         // when
         var response = jdbcLinkRepository.findAll(tgChatId);
@@ -229,17 +229,17 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(response, hasSize(list.size()));
 
         int i = 0;
-        for (LinkResponse linkResponse : response) {
-            LinkResponse listResponse = list.get(i);
+        for (LinkOutput linkOutput : response) {
+            LinkOutput listResponse = list.get(i);
 
-            assertThat(linkResponse, is(notNullValue()));
-            assertThat(linkResponse.getLinkId(), is(equalTo(listResponse.getLinkId())));
-            assertThat(linkResponse.getUrl(), is(equalTo(listResponse.getUrl())));
+            assertThat(linkOutput, is(notNullValue()));
+            assertThat(linkOutput.getLinkId(), is(equalTo(listResponse.getLinkId())));
+            assertThat(linkOutput.getUrl(), is(equalTo(listResponse.getUrl())));
 
             i++;
         }
 
-        var rs2 = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+        var rs2 = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkOutput.class));
         assertThat(rs1, is(equalTo(rs2)));
     }
 
@@ -260,7 +260,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
             jdbcTemplate.update(insertSubSql, tgChatId, linkId);
         });
 
-        var rs1 = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+        var rs1 = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkOutput.class));
 
         // when
         var response = jdbcLinkRepository.findAll(tgChatId);
@@ -271,17 +271,17 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(response, hasSize(list.size()));
 
         int i = 0;
-        for (LinkResponse linkResponse : response) {
-            LinkResponse listResponse = list.get(i);
+        for (LinkOutput linkOutput : response) {
+            LinkOutput listResponse = list.get(i);
 
-            assertThat(linkResponse, is(notNullValue()));
-            assertThat(linkResponse.getLinkId(), is(equalTo(listResponse.getLinkId())));
-            assertThat(linkResponse.getUrl(), is(equalTo(listResponse.getUrl())));
+            assertThat(linkOutput, is(notNullValue()));
+            assertThat(linkOutput.getLinkId(), is(equalTo(listResponse.getLinkId())));
+            assertThat(linkOutput.getUrl(), is(equalTo(listResponse.getUrl())));
 
             i++;
         }
 
-        var rs2 = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+        var rs2 = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkOutput.class));
         assertThat(rs1, is(equalTo(rs2)));
     }
 
@@ -296,7 +296,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         jdbcTemplate.update(insertTgChatSql, tgChatId, username);
 
         var url = "https://localhost:8081";
-        var request = new SubscriptionRequest(tgChatId, url);
+        var request = new SubscriptionInput(tgChatId, url);
 
         var linkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url);
         jdbcTemplate.update(insertSubSql, tgChatId, linkId);
@@ -313,7 +313,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(response.getCreatedAt(), is(lessThanOrEqualTo(OffsetDateTime.now())));
         assertThat(response.getLastScannedAt(), is(lessThanOrEqualTo(OffsetDateTime.now())));
 
-        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkOutput.class));
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(1));
@@ -334,7 +334,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         // given
         var tgChatId = randomId();
         var url = "https://localhost:8081";
-        var request = new SubscriptionRequest(tgChatId, url);
+        var request = new SubscriptionInput(tgChatId, url);
 
         // when
         var response = jdbcLinkRepository.findById(request);
@@ -343,7 +343,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         // then
         assertThat(response, is(nullValue()));
 
-        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkResponse.class));
+        var rs = jdbcTemplate.query(selectLinkSql, new BeanPropertyRowMapper<>(LinkOutput.class));
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(0));

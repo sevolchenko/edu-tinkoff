@@ -3,10 +3,10 @@ package ru.tinkoff.edu.java.scrapper.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.tinkoff.edu.java.scrapper.dto.request.AddLinkRequest;
-import ru.tinkoff.edu.java.scrapper.dto.request.RemoveLinkRequest;
-import ru.tinkoff.edu.java.scrapper.dto.response.LinkResponse;
-import ru.tinkoff.edu.java.scrapper.dto.response.ListLinkResponse;
+import ru.tinkoff.edu.java.scrapper.model.dto.request.AddLinkRequest;
+import ru.tinkoff.edu.java.scrapper.model.dto.request.RemoveLinkRequest;
+import ru.tinkoff.edu.java.scrapper.model.dto.response.LinkResponse;
+import ru.tinkoff.edu.java.scrapper.model.dto.response.ListLinkResponse;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkService;
 
 import java.net.URI;

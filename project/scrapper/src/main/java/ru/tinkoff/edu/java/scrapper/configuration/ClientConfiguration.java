@@ -1,16 +1,14 @@
 package ru.tinkoff.edu.java.scrapper.configuration;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.tinkoff.edu.java.scrapper.client.IGitHubClient;
-import ru.tinkoff.edu.java.scrapper.client.IStackOverflowClient;
-import ru.tinkoff.edu.java.scrapper.client.ITgBotClient;
-import ru.tinkoff.edu.java.scrapper.client.dto.ClientUrlConfig;
-import ru.tinkoff.edu.java.scrapper.client.impl.GitHubClient;
-import ru.tinkoff.edu.java.scrapper.client.impl.StackOverflowClient;
-import ru.tinkoff.edu.java.scrapper.client.impl.TgBotClient;
+import ru.tinkoff.edu.java.scrapper.client.github.IGitHubClient;
+import ru.tinkoff.edu.java.scrapper.client.stackoverflow.IStackOverflowClient;
+import ru.tinkoff.edu.java.scrapper.client.tgbot.ITgBotClient;
+import ru.tinkoff.edu.java.scrapper.client.github.impl.GitHubClient;
+import ru.tinkoff.edu.java.scrapper.client.stackoverflow.impl.StackOverflowClient;
+import ru.tinkoff.edu.java.scrapper.client.tgbot.impl.TgBotClient;
 
 import java.util.Optional;
 
@@ -18,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClientConfiguration {
 
-    private final ClientUrlConfig clientUrlConfig;
+    private final ClientUrlConfiguration clientUrlConfiguration;
 
     private static final String TG_BOT_API = "http://localhost:8081";
 
@@ -27,17 +25,17 @@ public class ClientConfiguration {
 
     @Bean
     public IGitHubClient gitHubClient() {
-        return new GitHubClient(Optional.ofNullable(clientUrlConfig.gitHubClientUrl()).orElse(GIT_HUB_API));
+        return new GitHubClient(Optional.ofNullable(clientUrlConfiguration.gitHubClientUrl()).orElse(GIT_HUB_API));
     }
 
     @Bean
     public IStackOverflowClient stackOverflowClient() {
-       return new StackOverflowClient(Optional.ofNullable(clientUrlConfig.stackOverflowClientUrl()).orElse(STACK_OVERFLOW_API));
+       return new StackOverflowClient(Optional.ofNullable(clientUrlConfiguration.stackOverflowClientUrl()).orElse(STACK_OVERFLOW_API));
     }
 
     @Bean
     public ITgBotClient tgBotClient() {
-        return new TgBotClient(Optional.ofNullable(clientUrlConfig.tgBotClientUrl()).orElse(TG_BOT_API));
+        return new TgBotClient(Optional.ofNullable(clientUrlConfiguration.tgBotClientUrl()).orElse(TG_BOT_API));
     }
 
 }

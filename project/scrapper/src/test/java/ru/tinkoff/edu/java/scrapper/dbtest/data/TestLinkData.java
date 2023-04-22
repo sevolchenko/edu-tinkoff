@@ -1,7 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.dbtest.data;
 
-import ru.tinkoff.edu.java.scrapper.repository.dto.request.SubscriptionRequest;
-import ru.tinkoff.edu.java.scrapper.repository.dto.response.LinkResponse;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -25,7 +24,7 @@ public class TestLinkData {
         return OffsetDateTime.of(LocalDateTime.ofEpochSecond(randomSecond, 0, ZoneOffset.UTC), ZoneOffset.UTC);
     }
 
-    public static List<LinkResponse> stabValidResponse() {
+    public static List<LinkOutput> stabValidResponse() {
         return List.of(
                 buildLinkResponse(null, "https://localhost:8081"),
                 buildLinkResponse(null, "https://localhost:8082"),
@@ -33,12 +32,12 @@ public class TestLinkData {
         );
     }
 
-    public static List<LinkResponse> stabEmptyResponse() {
+    public static List<LinkOutput> stabEmptyResponse() {
         return List.of();
     }
 
-    public static LinkResponse buildLinkResponse(Long linkId, String url) {
-        var response = new LinkResponse();
+    public static LinkOutput buildLinkResponse(Long linkId, String url) {
+        var response = new LinkOutput();
         response.setLinkId(linkId);
         response.setUrl(url);
         response.setCreatedAt(OffsetDateTime.now());

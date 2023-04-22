@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class BotConfiguration {
 
     @Bean
-    public TelegramBot telegramBot(String botToken){
+    public TelegramBot telegramBot(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") String botToken){
         return new TelegramBot(botToken);
     }
 

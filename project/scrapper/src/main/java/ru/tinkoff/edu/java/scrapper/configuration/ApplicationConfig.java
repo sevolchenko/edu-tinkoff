@@ -6,8 +6,6 @@ import org.springframework.boot.context.properties.bind.ConstructorBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.validation.annotation.Validated;
-import ru.tinkoff.edu.java.scrapper.client.dto.ClientUrlConfig;
-import ru.tinkoff.edu.java.scrapper.scheduler.SchedulerConfig;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -15,15 +13,15 @@ import java.util.Optional;
 @Validated
 @EnableScheduling
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
-public record ApplicationConfig(@NotNull SchedulerConfig scheduler, @NotNull ClientUrlConfig client, @NotNull Duration linkUpdatePeriod) {
+public record ApplicationConfig(@NotNull SchedulerConfiguration scheduler, @NotNull ClientUrlConfiguration client, @NotNull Duration linkCheckDelay) {
 
     @ConstructorBinding
-    public ApplicationConfig(@NotNull SchedulerConfig scheduler,
-                             ClientUrlConfig client,
-                             @NotNull Duration linkUpdatePeriod) {
+    public ApplicationConfig(@NotNull SchedulerConfiguration scheduler,
+                             ClientUrlConfiguration client,
+                             @NotNull Duration linkCheckDelay) {
         this.scheduler = scheduler;
-        this.client = Optional.ofNullable(client).orElse(new ClientUrlConfig(null, null, null));
-        this.linkUpdatePeriod = linkUpdatePeriod;
+        this.client = Optional.ofNullable(client).orElse(new ClientUrlConfiguration(null, null, null));
+        this.linkCheckDelay = linkCheckDelay;
     }
 
     @Bean
@@ -32,13 +30,13 @@ public record ApplicationConfig(@NotNull SchedulerConfig scheduler, @NotNull Cli
     }
 
     @Bean
-    public ClientUrlConfig clientUrlConfig() {
+    public ClientUrlConfiguration clientUrlConfig() {
         return client;
     }
 
     @Bean
-    public Duration linkUpdatePeriod() {
-        return linkUpdatePeriod;
+    public Duration linkCheckDelay() {
+        return linkCheckDelay;
     }
 
 }

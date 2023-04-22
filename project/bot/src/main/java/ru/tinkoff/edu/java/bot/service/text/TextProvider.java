@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.BotCommand;
 
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class TextProvider {
 
     private static final String NO_LINK_ERROR_TEXT = "После команды через пробел нужно указать ссылку, которую нужно отследить";
@@ -23,6 +24,7 @@ public class TextProvider {
 
     public static class StartTextProvider {
 
+        @SuppressWarnings("SameReturnValue")
         public static String buildStartMessage() {
             return """
                         Привет! Добро пожаловать!
@@ -89,6 +91,7 @@ public class TextProvider {
 
     public static class ListTextProvider {
 
+        @SuppressWarnings("SameReturnValue")
         public static String buildEmptyLinksText() {
             return "Ты еще не отслеживаешь ни одной ссылки";
         }
