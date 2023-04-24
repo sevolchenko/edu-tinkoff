@@ -1,3 +1,3 @@
 package ru.tinkoff.edu.java.scrapper.configuration;
 
-public record ClientUrlConfiguration(String gitHubClientUrl, String stackOverflowClientUrl) {}
+public record ClientUrlConfiguration(String tgBotClientUrl, String gitHubClientUrl, String stackOverflowClientUrl) {}

@@ -1,6 +1,7 @@
 app:
   scheduler:
     interval: PT10S
+  link-check-delay: PT10M
 #  client:
 #    gitHubClientUrl: 'www.github.com'
 spring:
