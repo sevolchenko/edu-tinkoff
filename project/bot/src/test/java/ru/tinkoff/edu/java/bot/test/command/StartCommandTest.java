@@ -3,7 +3,7 @@ package ru.tinkoff.edu.java.bot.test.command;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import ru.tinkoff.edu.java.bot.client.IScrapperClient;
+import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
 import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;

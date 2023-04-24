@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.tinkoff.edu.java.bot.client.exception.HttpClientException;
+import ru.tinkoff.edu.java.bot.client.scrapper.exception.ScrapperClientException;
 import ru.tinkoff.edu.java.bot.service.IUserMessageProcessor;
 import ru.tinkoff.edu.java.bot.service.command.Command;
 import ru.tinkoff.edu.java.bot.service.text.TextProvider.BotTextProvider;
@@ -55,7 +55,7 @@ public class UserMessageProcessor implements IUserMessageProcessor {
 
             return supportsCommands.get(0).handle(update);
 
-        } catch (HttpClientException e) {
+        } catch (ScrapperClientException e) {
             log.warn("Exception {} thrown: {}", e.getClass().getName(), e.getApiErrorResponse().exceptionMessage());
 
             return new SendMessage(update.message().chat().id(), e.getApiErrorResponse().description());

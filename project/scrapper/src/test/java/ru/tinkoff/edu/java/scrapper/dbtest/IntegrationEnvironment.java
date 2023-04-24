@@ -22,7 +22,7 @@ import java.sql.SQLException;
 @Testcontainers
 public abstract class IntegrationEnvironment {
 
-    public static JdbcDatabaseContainer<?> DB_CONTAINER;
+    public static final JdbcDatabaseContainer<?> DB_CONTAINER;
 
     static {
         DB_CONTAINER = new PostgreSQLContainer<>("postgres:15-alpine")
