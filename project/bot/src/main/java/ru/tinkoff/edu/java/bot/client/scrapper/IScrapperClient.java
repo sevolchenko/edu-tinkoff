@@ -8,7 +8,7 @@ import ru.tinkoff.edu.java.bot.client.scrapper.dto.request.RemoveLinkRequest;
 
 public interface IScrapperClient {
 
-    void registerChatById(Long id);
+    void registerChatById(Long id, String username);
 
     void deleteChatById(Long id);
 

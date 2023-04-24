@@ -25,7 +25,7 @@ public class StartCommand implements Command {
 
     @Override
     public SendMessage handle(Update update) {
-        scrapperClient.registerChatById(update.message().chat().id());
+        scrapperClient.registerChatById(update.message().chat().id(), update.message().chat().username());
         var text = StartTextProvider.buildStartMessage();
         return new SendMessage(update.message().chat().id(), text)
                 .disableWebPagePreview(true);

@@ -198,7 +198,7 @@ public class UntrackCommandTest {
         Long chatId = randomId();
         URI link = UrlUtils.create("https://github.com/sevolchenko/online-store");
 
-        var update = new TestUpdate(new TestMessage("/untrack " + link.toString(), new TestChat(chatId)));
+        var update = new TestUpdate(new TestMessage("/untrack " + link, new TestChat(chatId)));
         when(scrapperClient.deleteLink(eq(chatId), ArgumentMatchers.any(RemoveLinkRequest.class)))
                 .thenReturn(new LinkResponse(chatId, link));
 
@@ -224,7 +224,7 @@ public class UntrackCommandTest {
         Long chatId = randomId();
         URI link = UrlUtils.create("https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c-c");
 
-        var update = new TestUpdate(new TestMessage("/untrack " + link.toString(), new TestChat(chatId)));
+        var update = new TestUpdate(new TestMessage("/untrack " + link, new TestChat(chatId)));
         when(scrapperClient.deleteLink(eq(chatId), ArgumentMatchers.any(RemoveLinkRequest.class)))
                 .thenReturn(new LinkResponse(chatId, link));
 

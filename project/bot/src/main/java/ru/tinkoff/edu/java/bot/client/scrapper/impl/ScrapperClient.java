@@ -49,14 +49,15 @@ public class ScrapperClient implements IScrapperClient {
     }
 
     @Override
-    public void registerChatById(Long id) {
-        log.info("Register chat by id {} called", id);
+    public void registerChatById(Long id, String username) {
+        log.info("Register chat by id {} and username {} called", id, username);
 
         String path = "/tg-chat/{id}";
         webClient.post()
                 .uri(uriBuilder -> uriBuilder
                         .path(path)
                         .build(id))
+                .bodyValue(username)
                 .retrieve()
                 .toBodilessEntity()
                 .block();

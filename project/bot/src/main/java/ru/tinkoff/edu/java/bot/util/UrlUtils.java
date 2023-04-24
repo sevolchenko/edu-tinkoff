@@ -7,7 +7,7 @@ public class UrlUtils {
 
     private static final UrlValidator URL_VALIDATOR = new UrlValidator();
 
-    private UrlUtils() {};
+    private UrlUtils() {}
 
     public static URI create(String link) {
 
