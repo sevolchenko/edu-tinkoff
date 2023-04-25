@@ -9,5 +9,5 @@ import java.time.OffsetDateTime;
 public record GitHubRepositoryResponse(
         @JsonProperty("full_name")
         String fullName,
-        @JsonProperty("updated_at")
-        OffsetDateTime updatedAt) { }
+        @JsonProperty("pushed_at")
+        OffsetDateTime pushedAt) { }

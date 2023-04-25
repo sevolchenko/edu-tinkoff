@@ -3,7 +3,7 @@ package ru.tinkoff.edu.java.bot.model.dto.request;
 import java.net.URI;
 import java.util.List;
 
-public record LinkUpdateRequest(Integer linkId,
+public record LinkUpdateRequest(Long linkId,
                                 URI url,
                                 String description,
-                                List<Integer> tgChatIds) {}
+                                List<Long> tgChatIds) {}

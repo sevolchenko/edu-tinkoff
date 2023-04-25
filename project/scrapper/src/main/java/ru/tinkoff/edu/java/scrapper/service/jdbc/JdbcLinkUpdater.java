@@ -7,6 +7,7 @@ import ru.tinkoff.edu.java.scrapper.component.broker.NotificationBroker;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.LinkProcessInput;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ILinkRepository;
+import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcLinkRepository;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkUpdater;
 
 import java.time.Duration;
@@ -16,7 +17,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class JdbcLinkUpdater implements ILinkUpdater {
 
-    private final ILinkRepository linkRepository;
+    private final JdbcLinkRepository linkRepository;
 
     private final Duration linkCheckDelay;
 
@@ -30,20 +31,19 @@ public class JdbcLinkUpdater implements ILinkUpdater {
 
         log.info("Found {} unchecked links", links.size());
 
-        links.stream()
-                .forEach(link -> {
+        links.forEach(link -> {
 
-                    log.info("Processing update link {}", link.url());
+            log.info("Processing update link {}", link.url());
 
-                    var linkProcessInput = new LinkProcessInput(link.lastScannedAt());
+            var linkProcessInput = new LinkProcessInput(link.lastScannedAt());
 
-                    if (linkProcessor.processLink(link.url(), linkProcessInput)) {
-                        notificationBroker.sendUpdate(link.linkId(), link.url(), "Link updated", link.tgChatIds());
-                    }
+            if (linkProcessor.processLink(link.url(), linkProcessInput)) {
+                notificationBroker.sendUpdate(link.linkId(), link.url(), "Link updated", link.tgChatIds());
+            }
 
-                    linkRepository.updateLastScanTime(link.linkId());
+            linkRepository.updateLastScanTime(link.linkId());
 
-                });
+        });
 
 
     }

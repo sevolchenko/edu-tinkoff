@@ -8,6 +8,7 @@ import ru.tinkoff.edu.java.scrapper.exception.NotSupportedLinkException;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.SubscriptionInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ILinkRepository;
+import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcLinkRepository;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkService;
 
 import java.net.URI;
@@ -18,7 +19,7 @@ import java.util.Collection;
 public class JdbcLinkService implements ILinkService {
 
     private final LinkParser linkParser;
-    private final ILinkRepository linkRepository;
+    private final JdbcLinkRepository linkRepository;
 
     @Override
     public LinkOutput add(Long tgChatId, URI url) {

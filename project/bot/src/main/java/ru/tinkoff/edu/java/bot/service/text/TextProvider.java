@@ -106,4 +106,10 @@ public class TextProvider {
 
     }
 
+    public static class NotificationTextProvider {
+        public static String buildLinksListText(String link) {
+            return String.format("Что-то поменялось по ссылке %s, пора проверить!", link);
+        }
+    }
+
 }
