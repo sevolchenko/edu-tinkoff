@@ -6,7 +6,7 @@ import java.net.URI;
 
 public sealed abstract class ConcreteParser<R extends ParseResult> permits GitHubParser, StackOverflowParser {
 
-    private final ConcreteParser<R> next;
+    protected final ConcreteParser<R> next;
 
     public ConcreteParser(ConcreteParser next) {
         this.next = next;

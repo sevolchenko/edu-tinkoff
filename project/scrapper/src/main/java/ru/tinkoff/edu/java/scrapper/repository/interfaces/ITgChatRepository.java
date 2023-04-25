@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface ITgChatRepository {
 
-    Long add(RegisterTgChatInput request);
+    Long add(RegisterTgChatInput input);
 
     TgChatOutput remove(Long tgChatId);
 
