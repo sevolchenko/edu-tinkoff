@@ -33,6 +33,7 @@
         <mockito.version>5.2.0</mockito.version>
         <commons-validator.version>1.7</commons-validator.version>
         <testcontainers.version>1.16.3</testcontainers.version>
+        <mapstruct.version>1.5.3.Final</mapstruct.version>
     </properties>
 
     <dependencies>
@@ -93,6 +94,12 @@
                 <version>${testcontainers.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
             </dependency>
 
         </dependencies>
