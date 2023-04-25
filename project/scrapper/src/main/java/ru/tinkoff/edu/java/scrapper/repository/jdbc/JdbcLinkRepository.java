@@ -159,7 +159,7 @@ public class JdbcLinkRepository implements ILinkRepository {
 
     private static OffsetDateTime getOffsetDateTime(ResultSet rs, String columnLabel) {
         try {
-            return OffsetDateTime.of(rs.getObject(columnLabel, Timestamp.class).toLocalDateTime(), ZoneOffset.UTC);
+            return OffsetDateTime.of(rs.getObject(columnLabel, Timestamp.class).toLocalDateTime(), ZoneOffset.ofHours(3));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

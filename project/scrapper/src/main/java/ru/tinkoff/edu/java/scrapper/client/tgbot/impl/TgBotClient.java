@@ -21,7 +21,10 @@ public class TgBotClient implements ITgBotClient {
                 .uri(uriBuilder -> uriBuilder
                         .path(path)
                         .build())
-                .retrieve();
+                .bodyValue(linkUpdateRequest)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 
 }

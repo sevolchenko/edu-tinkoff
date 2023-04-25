@@ -17,7 +17,7 @@ public class LinkUpdaterScheduler {
     private void update() {
         log.info("Checking for links updates");
 
-//        linkUpdater.update();
+        linkUpdater.update();
     }
 
 }

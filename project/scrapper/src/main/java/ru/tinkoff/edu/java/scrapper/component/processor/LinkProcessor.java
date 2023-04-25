@@ -33,7 +33,7 @@ public class LinkProcessor {
             case GitHubParseResult gitHub -> {
                 var response = gitHubClient.fetchRepository(new GitHubRepositoryRequest(gitHub.username(), gitHub.repository()));
 
-                clientUpdatedAt = response.updatedAt();
+                clientUpdatedAt = response.pushedAt();
 
             }
             case StackOverflowParseResult stackOverflow -> {
