@@ -59,6 +59,11 @@ public class ScrapperExceptionHandler extends ResponseEntityExceptionHandler {
         return buildApiErrorResponse(ex, "Ссылки с этого домена не поддерживаются", HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(InvalidLinkException.class)
+    protected ResponseEntity<Object> handleNotSupportedLinkException(InvalidLinkException ex) {
+        return buildApiErrorResponse(ex, "Неправильный формат ссылки, сопоставьте с примером", HttpStatus.CONFLICT);
+    }
+
     private ResponseEntity<Object> buildApiErrorResponse(Exception ex, String description, HttpStatus status) {
         String[] stackTrace = Arrays.stream(ex.getStackTrace())
                 .map(StackTraceElement::toString)

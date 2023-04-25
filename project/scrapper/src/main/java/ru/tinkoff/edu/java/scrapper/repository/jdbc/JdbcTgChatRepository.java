@@ -22,7 +22,7 @@ public class JdbcTgChatRepository implements ITgChatRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public Long add(RegisterTgChatInput request) {
+    public Long add(RegisterTgChatInput input) {
         String addSql = """
                 insert into tg_chat(tg_chat_id, username, registered_at)
                 values (?, ?, now())
@@ -31,8 +31,8 @@ public class JdbcTgChatRepository implements ITgChatRepository {
                 returning tg_chat_id
                 """;
 
-        var tgChatId = request.tgChatId();
-        var username = request.username();
+        var tgChatId = input.tgChatId();
+        var username = input.username();
 
         try {
             return jdbcTemplate.queryForObject(addSql, Long.class, tgChatId, username);

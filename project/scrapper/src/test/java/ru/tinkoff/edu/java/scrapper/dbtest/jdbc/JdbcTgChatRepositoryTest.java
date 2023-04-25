@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.dbtest;
+package ru.tinkoff.edu.java.scrapper.dbtest.jdbc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import ru.tinkoff.edu.java.scrapper.dbtest.IntegrationEnvironment;
 import ru.tinkoff.edu.java.scrapper.exception.AlreadyRegisteredChatException;
 import ru.tinkoff.edu.java.scrapper.exception.NoSuchChatException;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.RegisterTgChatInput;

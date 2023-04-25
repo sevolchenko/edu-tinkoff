@@ -18,7 +18,12 @@ public class LinkParser {
     }
 
     public ParseResult parse(final URI url) {
-        return stackOverflowParser.parse(url);
+        try {
+            return stackOverflowParser.parse(url);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            return null;
+        }
+
     }
 
     public boolean supports(final URI url) {

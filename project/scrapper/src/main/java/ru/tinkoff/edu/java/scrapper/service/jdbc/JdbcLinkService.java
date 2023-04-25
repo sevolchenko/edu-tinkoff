@@ -3,6 +3,7 @@ package ru.tinkoff.edu.java.scrapper.service.jdbc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.linkparser.LinkParser;
+import ru.tinkoff.edu.java.scrapper.exception.InvalidLinkException;
 import ru.tinkoff.edu.java.scrapper.exception.NotSupportedLinkException;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.SubscriptionInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
@@ -22,7 +23,10 @@ public class JdbcLinkService implements ILinkService {
     @Override
     public LinkOutput add(Long tgChatId, URI url) {
         if (!linkParser.supports(url)) {
-            throw new NotSupportedLinkException(String.format("Link %s is not supported yet", url));
+            throw new NotSupportedLinkException(String.format("Domain %s is not supported yet", url.getHost()));
+        }
+        if (linkParser.parse(url) == null) {
+            throw new InvalidLinkException(String.format("Invalid link format: %s", url));
         }
         var request = new SubscriptionInput(tgChatId, url.toString());
         linkRepository.add(request);
