@@ -28,7 +28,7 @@ import static ru.tinkoff.edu.java.scrapper.dbtest.data.TestLinkData.stabValidRes
 import static ru.tinkoff.edu.java.scrapper.dbtest.data.TestTgChatData.randomId;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles({"test", "test-jdbc"})
 public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
     @Autowired

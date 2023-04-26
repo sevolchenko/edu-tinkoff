@@ -7,4 +7,7 @@ import ru.tinkoff.edu.java.scrapper.model.entity.SubscriptionId;
 
 @Repository
 public interface JpaSubscriptionRepository extends JpaRepository<Subscription, SubscriptionId> {
+
+    boolean existsBySubscriptionId(SubscriptionId subscriptionId);
+
 }

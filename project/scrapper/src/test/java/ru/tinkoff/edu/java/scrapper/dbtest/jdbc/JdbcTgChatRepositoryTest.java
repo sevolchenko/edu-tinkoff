@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.tinkoff.edu.java.scrapper.dbtest.data.TestTgChatData.*;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles({"test", "test-jdbc"})
 public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
 
     @Autowired

@@ -2,6 +2,7 @@ app:
   scheduler:
     interval: PT10S
   link-check-delay: PT1M
+  database-access-type: jpa
 #  client:
 #    gitHubClientUrl: 'www.github.com'
 spring:

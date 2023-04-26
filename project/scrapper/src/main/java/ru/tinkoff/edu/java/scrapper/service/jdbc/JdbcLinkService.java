@@ -1,7 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.service.jdbc;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.SubscriptionInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcLinkRepository;
@@ -10,7 +9,6 @@ import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkService;
 import java.net.URI;
 import java.util.Collection;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcLinkService implements ILinkService {
 

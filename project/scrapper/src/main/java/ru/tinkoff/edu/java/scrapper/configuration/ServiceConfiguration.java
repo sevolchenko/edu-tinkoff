@@ -11,5 +11,4 @@ public class ServiceConfiguration {
     public LinkParser linkParser() {
         return new LinkParser();
     }
-
 }

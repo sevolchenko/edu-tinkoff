@@ -1,14 +1,12 @@
 package ru.tinkoff.edu.java.scrapper.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "tg_chat")
@@ -26,5 +24,8 @@ public class TgChat {
 
     @Column(name = "registered_at")
     private Instant registeredAt;
+
+    @OneToMany(mappedBy = "subscriptionId.tgChat", fetch = FetchType.LAZY)
+    private List<Subscription> subscriptions;
 
 }
