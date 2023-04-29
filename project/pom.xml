@@ -33,6 +33,9 @@
         <mockito.version>5.2.0</mockito.version>
         <commons-validator.version>1.7</commons-validator.version>
         <testcontainers.version>1.16.3</testcontainers.version>
+        <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <jooq.version>3.18.3</jooq.version>
     </properties>
 
     <dependencies>
@@ -82,6 +85,18 @@
             </dependency>
 
             <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen</artifactId>
+                <version>${jooq.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-meta-extensions-liquibase</artifactId>
+                <version>${jooq.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>
                 <version>${commons-validator.version}</version>
@@ -95,6 +110,18 @@
                 <scope>import</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-mapstruct-binding</artifactId>
+                <version>${lombok-mapstruct-binding.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -104,10 +131,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <argLine>--enable-preview</argLine>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>--enable-preview</argLine>
+                </configuration>
             </plugin>
         </plugins>
 
@@ -125,6 +158,10 @@
                             <exclude>
                                 <groupId>org.projectlombok</groupId>
                                 <artifactId>lombok</artifactId>
+                            </exclude>
+                            <exclude>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct</artifactId>
                             </exclude>
                         </excludes>
                     </configuration>
@@ -144,6 +181,9 @@
                     <configuration>
                         <release>17</release>
                         <parameters>true</parameters>
+                        <compilerArgs>
+                            <arg>--enable-preview</arg>
+                        </compilerArgs>
                     </configuration>
                 </plugin>
             </plugins>

@@ -1,5 +1,2 @@
-spring:
-  liquibase:
-    enabled: false
 server:
   port: 10000
