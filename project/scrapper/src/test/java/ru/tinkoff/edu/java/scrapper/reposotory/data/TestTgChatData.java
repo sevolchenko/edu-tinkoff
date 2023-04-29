@@ -1,6 +1,6 @@
-package ru.tinkoff.edu.java.scrapper.dbtest.data;
+package ru.tinkoff.edu.java.scrapper.reposotory.data;
 
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.RegisterTgChatInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddTgChatInput;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -24,23 +24,23 @@ public class TestTgChatData {
         return OffsetDateTime.of(LocalDateTime.ofEpochSecond(randomSecond, 0, ZoneOffset.UTC), ZoneOffset.UTC);
     }
 
-    public static List<RegisterTgChatInput> stabValidResponse(Long tgChatId) {
+    public static List<AddTgChatInput> stabValidResponse(Long tgChatId) {
         return List.of(
-                new RegisterTgChatInput(tgChatId, "username1"),
-                new RegisterTgChatInput(tgChatId, "username2"),
-                new RegisterTgChatInput(randomId(), "username3")
+                new AddTgChatInput(tgChatId, "username1", randomDate()),
+                new AddTgChatInput(tgChatId, "username2", randomDate()),
+                new AddTgChatInput(randomId(), "username3", randomDate())
         );
     }
 
-    public static List<RegisterTgChatInput> stabValidResponse() {
+    public static List<AddTgChatInput> stabValidResponse() {
         return List.of(
-                new RegisterTgChatInput(randomId(), "username1"),
-                new RegisterTgChatInput(randomId(), "username2"),
-                new RegisterTgChatInput(randomId(), "username3")
+                new AddTgChatInput(randomId(), "username1", randomDate()),
+                new AddTgChatInput(randomId(), "username2", randomDate()),
+                new AddTgChatInput(randomId(), "username3", randomDate())
         );
     }
 
-    public static List<RegisterTgChatInput> stabEmptyResponse() {
+    public static List<AddTgChatInput> stabEmptyResponse() {
         return List.of();
     }
 

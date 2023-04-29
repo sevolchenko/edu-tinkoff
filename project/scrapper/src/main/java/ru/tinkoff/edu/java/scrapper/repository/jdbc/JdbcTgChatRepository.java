@@ -1,20 +1,18 @@
 package ru.tinkoff.edu.java.scrapper.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.edu.java.scrapper.exception.AlreadyRegisteredChatException;
-import ru.tinkoff.edu.java.scrapper.exception.NoSuchChatException;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.RegisterTgChatInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddTgChatInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.TgChatOutput;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ITgChatRepository;
 
-import java.util.Collection;
+import java.util.List;
 
-@Transactional
+@Primary
 @RequiredArgsConstructor
 @Repository
 public class JdbcTgChatRepository implements ITgChatRepository {
@@ -22,60 +20,58 @@ public class JdbcTgChatRepository implements ITgChatRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public Long add(RegisterTgChatInput input) {
-        String addSql = """
+    public Long save(AddTgChatInput tgChat) {
+        String insertSql = """
                 insert into tg_chat(tg_chat_id, username, registered_at)
-                values (?, ?, now())
-                on conflict (tg_chat_id)
-                do nothing
+                values (?, ?, ?)
+                on conflict (tg_chat_id) do nothing
                 returning tg_chat_id
                 """;
-
-        var tgChatId = input.tgChatId();
-        var username = input.username();
-
         try {
-            return jdbcTemplate.queryForObject(addSql, Long.class, tgChatId, username);
+            return jdbcTemplate.queryForObject(insertSql, Long.class, tgChat.tgChatId(), tgChat.username(), tgChat.registeredAt());
         } catch (EmptyResultDataAccessException ex) {
-            throw new AlreadyRegisteredChatException(String.format("Chat with id %d already registered", tgChatId));
+            return null;
         }
     }
 
     @Override
     public TgChatOutput remove(Long tgChatId) {
-        String removeSql = """
-                delete from tg_chat where tg_chat_id = ?
+        String deleteSql = """
+                delete from tg_chat
+                where tg_chat_id = ?
                 returning tg_chat_id, username, registered_at
                 """;
 
-        var rs = jdbcTemplate.query(removeSql, new BeanPropertyRowMapper<>(TgChatOutput.class), tgChatId);
+        var rs = jdbcTemplate.query(deleteSql, new BeanPropertyRowMapper<>(TgChatOutput.class), tgChatId);
 
         if (rs.isEmpty()) {
-            throw new NoSuchChatException(String.format("There is no chat with id %d", tgChatId));
+            return null;
+        } else {
+            return rs.get(0);
         }
-
-        return rs.get(0);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Collection<TgChatOutput> findAll() {
-        String selectSql = "select tg_chat_id, username, registered_at from tg_chat";
-
+    public List<TgChatOutput> findAll() {
+        String selectSql = """
+                select * from tg_chat
+                """;
         return jdbcTemplate.query(selectSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public TgChatOutput findByTgChatId(Long tgChatId) {
-        String selectSql = "select tg_chat_id, username, registered_at from tg_chat where tg_chat_id = ?";
-
+    public TgChatOutput findById(Long tgChatId) {
+        String selectSql = """
+                select * from tg_chat
+                where tg_chat_id = ?
+                """;
         var rs = jdbcTemplate.query(selectSql, new BeanPropertyRowMapper<>(TgChatOutput.class), tgChatId);
 
         if (rs.isEmpty()) {
             return null;
+        } else {
+            return rs.get(0);
         }
-
-        return rs.get(0);
     }
+
 }

@@ -11,13 +11,13 @@ import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkUpdater;
 @RequiredArgsConstructor
 public class LinkUpdaterScheduler {
 
-    private final ILinkUpdater linkUpdater;
+    //private final ILinkUpdater linkUpdater;
 
     @Scheduled(fixedDelayString = "#{@delay}")
     private void update() {
-        log.info("Checking for links updates");
+        //log.info("Checking for links updates");
 
-        linkUpdater.update();
+        //linkUpdater.update();
     }
 
 }

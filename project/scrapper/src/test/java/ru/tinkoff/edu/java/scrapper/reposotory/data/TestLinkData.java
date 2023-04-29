@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.dbtest.data;
+package ru.tinkoff.edu.java.scrapper.reposotory.data;
 
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 

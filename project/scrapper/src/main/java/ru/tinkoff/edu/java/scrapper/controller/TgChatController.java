@@ -3,7 +3,7 @@ package ru.tinkoff.edu.java.scrapper.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.RegisterTgChatInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddTgChatInput;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ITgChatService;
 
 @Slf4j
@@ -18,7 +18,7 @@ public class TgChatController {
     private void registerChatById(@PathVariable Long id, @RequestBody String username) {
         log.info("Register chat by id {} and username {} called", id, username);
 
-        tgChatService.register(new RegisterTgChatInput(id, username));
+        tgChatService.register(id, username);
     }
 
     @DeleteMapping("/{id}")
