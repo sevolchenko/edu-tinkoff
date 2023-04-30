@@ -1,6 +1,7 @@
 package ru.tinkoff.edu.java.scrapper.repository.interfaces;
 
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 
 import java.time.OffsetDateTime;
@@ -20,6 +21,6 @@ public interface ILinkRepository {
 
     List<LinkOutput> findAllByLastScannedAtIsBefore(OffsetDateTime time);
 
-    void updateLastScannedAt(Long linkId, OffsetDateTime scanTime);
+    void updateLastScannedAt(Long linkId, ILinkState state, OffsetDateTime scanTime);
 
 }

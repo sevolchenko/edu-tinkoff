@@ -2,12 +2,6 @@ package ru.tinkoff.edu.java.scrapper.repository.jooq;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.conf.RenderNameCase;
-import org.jooq.conf.Settings;
-import org.jooq.impl.DSL;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddSubscriptionInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.SubscriptionIdInput;
@@ -17,8 +11,6 @@ import ru.tinkoff.edu.java.scrapper.model.jooq.generated.tables.records.Subscrip
 import ru.tinkoff.edu.java.scrapper.model.mapping.SubscriptionOutputMapper;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ISubscriptionRepository;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import static ru.tinkoff.edu.java.scrapper.model.jooq.generated.Tables.SUBSCRIPTION;

@@ -2,22 +2,14 @@ package ru.tinkoff.edu.java.scrapper.repository.jooq;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.conf.RenderNameCase;
-import org.jooq.conf.Settings;
-import org.jooq.impl.DSL;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 import ru.tinkoff.edu.java.scrapper.model.jooq.generated.tables.records.LinkRecord;
 import ru.tinkoff.edu.java.scrapper.model.mapping.LinkOutputMapper;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ILinkRepository;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -93,19 +85,17 @@ public class JooqLinkRepository implements ILinkRepository {
     @Override
     public List<LinkOutput> findAllByLastScannedAtIsBefore(OffsetDateTime time) {
         var res = dslContext.select().from(LINK)
-                .where(LINK.LAST_SCANNED_AT.greaterThan(time))
+                .where(LINK.LAST_SCANNED_AT.lessThan(time))
                 .fetchInto(LinkRecord.class);
 
         return linkOutputMapper.map(res);
     }
 
     @Override
-    public void updateLastScannedAt(Long linkId, OffsetDateTime scanTime) {
-
+    public void updateLastScannedAt(Long linkId, ILinkState state, OffsetDateTime scanTime) {
         dslContext.update(LINK)
                 .set(LINK.LAST_SCANNED_AT, scanTime)
                 .where(LINK.LINK_ID.eq(linkId))
                 .execute();
-
     }
 }

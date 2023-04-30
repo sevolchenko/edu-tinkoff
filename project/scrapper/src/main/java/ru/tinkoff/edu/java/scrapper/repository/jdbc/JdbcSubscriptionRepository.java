@@ -22,8 +22,8 @@ public class JdbcSubscriptionRepository implements ISubscriptionRepository {
 
     private final JdbcTemplate jdbcTemplate;
     
-    private final RowMapper<SubscriptionOutput> rowMapper = new BeanPropertyRowMapper<>(SubscriptionOutput.class);
-    private final RowMapper<SubscriptionIdOutput> idRowMapper = new BeanPropertyRowMapper<>(SubscriptionIdOutput.class);
+    private final RowMapper<SubscriptionOutput> rowMapper;
+    private final RowMapper<SubscriptionIdOutput> idRowMapper;
 
     @Override
     public SubscriptionIdOutput save(AddSubscriptionInput subscription) {

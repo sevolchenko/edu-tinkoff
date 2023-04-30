@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.util.StreamUtils;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.annotation.Rollback;
@@ -36,7 +35,9 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private final RowMapper<SubscriptionOutput> subscriptionRowMapper = new BeanPropertyRowMapper<>(SubscriptionOutput.class);
+
+    @Autowired
+    private RowMapper<SubscriptionOutput> subscriptionRowMapper;
 
     private final String selectSubscriptionSql = """
                 select * from subscription

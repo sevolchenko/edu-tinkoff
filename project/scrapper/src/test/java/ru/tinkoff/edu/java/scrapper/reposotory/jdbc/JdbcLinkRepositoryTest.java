@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.util.StreamUtils;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.annotation.Rollback;
@@ -19,10 +18,8 @@ import java.time.OffsetDateTime;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestDatesData.randomDate;
+import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestDatesData.*;
 import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestLinkData.*;
-import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestDatesData.endDate;
-import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestDatesData.startDate;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -34,15 +31,16 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private final RowMapper<LinkOutput> rowMapper = new BeanPropertyRowMapper<>(LinkOutput.class);
+    @Autowired
+    private RowMapper<LinkOutput> rowMapper;
 
     private final String selectLinkSql = """
                 select * from link
                 """;
 
     private final String insertLinkSql = """
-                insert into link(url, last_scanned_at, created_at)
-                values (?, ?, ?)
+                insert into link(url, state, last_scanned_at, created_at)
+                values (?, ?::json, ?, ?)
                 returning link_id
                 """;
 
@@ -52,10 +50,11 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
     void testAddValidChat() {
         // given
         var url = "http://someurl.com";
+        var state = randomState();
         var lastScannedAt = randomDate();
         var createdAt = OffsetDateTime.now();
 
-        var request = new AddLinkInput(url, lastScannedAt, createdAt);
+        var request = new AddLinkInput(url, state, lastScannedAt, createdAt);
 
 
         // when
@@ -75,6 +74,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(row, is(notNullValue()));
         assertThat(row.getLinkId(), is(equalTo(linkId)));
         assertThat(row.getUrl(), is(equalTo(url)));
+        assertThat(row.getState(), is(equalTo(state)));
         assertThat(row.getLastScannedAt().toEpochSecond(), is(equalTo(lastScannedAt.toEpochSecond())));
         assertThat(row.getCreatedAt().toEpochSecond(), is(equalTo(createdAt.toEpochSecond())));
     }
@@ -85,12 +85,13 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
     void testAddValidRepeatedChat() {
         // given
         var url = "http://someurl.com";
+        var state = randomState();
         var lastScannedAt = randomDate();
         var createdAt = OffsetDateTime.now();
 
-        var request = new AddLinkInput(url, lastScannedAt, createdAt);
+        var request = new AddLinkInput(url, state, lastScannedAt, createdAt);
 
-        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, lastScannedAt, createdAt);
+        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, state.asJson(), lastScannedAt, createdAt);
 
 
         // when
@@ -110,6 +111,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(row, is(notNullValue()));
         assertThat(row.getLinkId(), is(equalTo(savedLinkId)));
         assertThat(row.getUrl(), is(equalTo(url)));
+        assertThat(row.getState(), is(equalTo(state)));
         assertThat(row.getLastScannedAt().toEpochSecond(), is(equalTo(lastScannedAt.toEpochSecond())));
         assertThat(row.getCreatedAt().toEpochSecond(), is(equalTo(createdAt.toEpochSecond())));
     }
@@ -121,10 +123,11 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
     void testDeleteValidChat() {
         // given
         var url = "http://someurl.com";
+        var state = randomState();
         var lastScannedAt = randomDate();
         var createdAt = OffsetDateTime.now();
 
-        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, lastScannedAt, createdAt);
+        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, state.asJson(), lastScannedAt, createdAt);
 
 
         // when
@@ -135,6 +138,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(response, is(notNullValue()));
         assertThat(response.getLinkId(), is(equalTo(savedLinkId)));
         assertThat(response.getUrl(), is(equalTo(url)));
+        assertThat(response.getState(), is(equalTo(state)));
         assertThat(response.getLastScannedAt().toEpochSecond(), is(equalTo(lastScannedAt.toEpochSecond())));
         assertThat(response.getCreatedAt().toEpochSecond(), is(equalTo(createdAt.toEpochSecond())));
 
@@ -170,11 +174,12 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         var list = stabValidResponse();
         var addRequestsList = list.stream().map(request -> {
                     var linkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class,
-                            request.url(), request.lastScannedAt(), request.createdAt());
+                            request.url(), request.state().asJson(), request.lastScannedAt(), request.createdAt());
 
                     var output = new LinkOutput();
                     output.setLinkId(linkId);
                     output.setUrl(request.url());
+                    output.setState(request.state());
                     output.setLastScannedAt(request.lastScannedAt());
                     output.setCreatedAt(request.createdAt());
                     return output;
@@ -196,6 +201,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
                 (tgChat, addTgChat) -> {
                     assertThat(tgChat.getLinkId(), is(equalTo(addTgChat.getLinkId())));
                     assertThat(tgChat.getUrl(), is(equalTo(addTgChat.getUrl())));
+                    assertThat(tgChat.getState(), is(equalTo(addTgChat.getState())));
                     assertThat(tgChat.getLastScannedAt().toEpochSecond(), is(equalTo(addTgChat.getLastScannedAt().toEpochSecond())));
                     assertThat(tgChat.getCreatedAt().toEpochSecond(), is(equalTo(addTgChat.getCreatedAt().toEpochSecond())));
                     return null;
@@ -214,11 +220,12 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         var list = stabEmptyResponse();
         var addRequestsList = list.stream().map(request -> {
                     var linkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class,
-                            request.url(), request.lastScannedAt(), request.createdAt());
+                            request.url(), request.state().asJson(), request.lastScannedAt(), request.createdAt());
 
                     var output = new LinkOutput();
                     output.setLinkId(linkId);
                     output.setUrl(request.url());
+                    output.setState(request.state());
                     output.setLastScannedAt(request.lastScannedAt());
                     output.setCreatedAt(request.createdAt());
                     return output;
@@ -240,6 +247,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
                 (tgChat, addTgChat) -> {
                     assertThat(tgChat.getLinkId(), is(equalTo(addTgChat.getLinkId())));
                     assertThat(tgChat.getUrl(), is(equalTo(addTgChat.getUrl())));
+                    assertThat(tgChat.getState(), is(equalTo(addTgChat.getState())));
                     assertThat(tgChat.getLastScannedAt().toEpochSecond(), is(equalTo(addTgChat.getLastScannedAt().toEpochSecond())));
                     assertThat(tgChat.getCreatedAt().toEpochSecond(), is(equalTo(addTgChat.getCreatedAt().toEpochSecond())));
                     return null;
@@ -256,10 +264,12 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
     void testFindKnownChat() {
         // given
         var url = "http://someurl.com";
+        var state = randomState();
         var lastScannedAt = randomDate();
         var createdAt = OffsetDateTime.now();
 
-        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, lastScannedAt, createdAt);
+        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class,
+                url, state.asJson(), lastScannedAt, createdAt);
 
 
         // when
@@ -270,6 +280,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(response, is(notNullValue()));
         assertThat(response.getLinkId(), is(equalTo(savedLinkId)));
         assertThat(response.getUrl(), is(equalTo(url)));
+        assertThat(response.getState(), is(equalTo(state)));
         assertThat(response.getLastScannedAt().toEpochSecond(), is(equalTo(lastScannedAt.toEpochSecond())));
         assertThat(response.getCreatedAt().toEpochSecond(), is(equalTo(createdAt.toEpochSecond())));
 
@@ -283,6 +294,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(row, is(notNullValue()));
         assertThat(row.getLinkId(), is(equalTo(savedLinkId)));
         assertThat(row.getUrl(), is(equalTo(url)));
+        assertThat(row.getState(), is(equalTo(state)));
         assertThat(row.getLastScannedAt().toEpochSecond(), is(equalTo(lastScannedAt.toEpochSecond())));
         assertThat(row.getCreatedAt().toEpochSecond(), is(equalTo(createdAt.toEpochSecond())));
     }
@@ -316,10 +328,12 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
     void testFindKnownChatByUrl() {
         // given
         var url = "http://someurl.com";
+        var state = randomState();
         var lastScannedAt = randomDate();
         var createdAt = OffsetDateTime.now();
 
-        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, lastScannedAt, createdAt);
+        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class,
+                url, state.asJson(), lastScannedAt, createdAt);
 
 
         // when
@@ -330,6 +344,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(response, is(notNullValue()));
         assertThat(response.getLinkId(), is(equalTo(savedLinkId)));
         assertThat(response.getUrl(), is(equalTo(url)));
+        assertThat(response.getState(), is(equalTo(state)));
         assertThat(response.getLastScannedAt().toEpochSecond(), is(equalTo(lastScannedAt.toEpochSecond())));
         assertThat(response.getCreatedAt().toEpochSecond(), is(equalTo(createdAt.toEpochSecond())));
 
@@ -343,6 +358,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(row, is(notNullValue()));
         assertThat(row.getLinkId(), is(equalTo(savedLinkId)));
         assertThat(row.getUrl(), is(equalTo(url)));
+        assertThat(row.getState(), is(equalTo(state)));
         assertThat(row.getLastScannedAt().toEpochSecond(), is(equalTo(lastScannedAt.toEpochSecond())));
         assertThat(row.getCreatedAt().toEpochSecond(), is(equalTo(createdAt.toEpochSecond())));
     }
@@ -376,7 +392,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         // given
         var list = stabEmptyResponse();
         list.forEach(request -> jdbcTemplate.queryForObject(insertLinkSql, Long.class,
-                request.url(), request.lastScannedAt(), request.createdAt()));
+                request.state().asJson(), request.url(), request.lastScannedAt(), request.createdAt()));
 
 
         // when
@@ -397,7 +413,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         // given
         var list = stabEmptyResponse();
         list.forEach(request -> jdbcTemplate.queryForObject(insertLinkSql, Long.class,
-                request.url(), request.lastScannedAt(), request.createdAt()));
+                request.url(), request.state().asJson(), request.lastScannedAt(), request.createdAt()));
 
 
         // when
@@ -418,16 +434,17 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
     void testUpdateLastScannedAt() {
         // given
         var url = "http://someurl.com";
+        var state = randomState();
         var lastScannedAt = randomDate();
         var createdAt = OffsetDateTime.now();
 
-        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, lastScannedAt, createdAt);
+        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, state.asJson(), lastScannedAt, createdAt);
 
         var updatedTime = randomDate();
 
 
         // when
-        jdbcLinkRepository.updateLastScannedAt(savedLinkId, updatedTime);
+        jdbcLinkRepository.updateLastScannedAt(savedLinkId, state, updatedTime);
 
 
         // then
@@ -441,6 +458,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
         assertThat(row, is(notNullValue()));
         assertThat(row.getLinkId(), is(equalTo(savedLinkId)));
         assertThat(row.getUrl(), is(equalTo(url)));
+        assertThat(row.getState(), is(equalTo(state)));
         assertThat(row.getLastScannedAt().toEpochSecond(), is(equalTo(updatedTime.toEpochSecond())));
         assertThat(row.getCreatedAt().toEpochSecond(), is(equalTo(createdAt.toEpochSecond())));
     }

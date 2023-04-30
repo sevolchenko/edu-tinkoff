@@ -14,6 +14,7 @@ import javax.annotation.processing.Generated;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jooq.JSON;
 
 
 /**
@@ -33,6 +34,7 @@ public class Link implements Serializable {
 
     private Long linkId;
     private String url;
+    private JSON state;
     private OffsetDateTime lastScannedAt;
     private OffsetDateTime createdAt;
 
@@ -41,19 +43,22 @@ public class Link implements Serializable {
     public Link(Link value) {
         this.linkId = value.linkId;
         this.url = value.url;
+        this.state = value.state;
         this.lastScannedAt = value.lastScannedAt;
         this.createdAt = value.createdAt;
     }
 
-    @ConstructorProperties({ "linkId", "url", "lastScannedAt", "createdAt" })
+    @ConstructorProperties({ "linkId", "url", "state", "lastScannedAt", "createdAt" })
     public Link(
         @Nullable Long linkId,
         @NotNull String url,
+        @NotNull JSON state,
         @NotNull OffsetDateTime lastScannedAt,
         @NotNull OffsetDateTime createdAt
     ) {
         this.linkId = linkId;
         this.url = url;
+        this.state = state;
         this.lastScannedAt = lastScannedAt;
         this.createdAt = createdAt;
     }
@@ -88,6 +93,22 @@ public class Link implements Serializable {
      */
     public void setUrl(@NotNull String url) {
         this.url = url;
+    }
+
+    /**
+     * Getter for <code>LINK.STATE</code>.
+     */
+    @jakarta.validation.constraints.NotNull
+    @NotNull
+    public JSON getState() {
+        return this.state;
+    }
+
+    /**
+     * Setter for <code>LINK.STATE</code>.
+     */
+    public void setState(@NotNull JSON state) {
+        this.state = state;
     }
 
     /**
@@ -143,6 +164,12 @@ public class Link implements Serializable {
         }
         else if (!this.url.equals(other.url))
             return false;
+        if (this.state == null) {
+            if (other.state != null)
+                return false;
+        }
+        else if (!this.state.equals(other.state))
+            return false;
         if (this.lastScannedAt == null) {
             if (other.lastScannedAt != null)
                 return false;
@@ -164,6 +191,7 @@ public class Link implements Serializable {
         int result = 1;
         result = prime * result + ((this.linkId == null) ? 0 : this.linkId.hashCode());
         result = prime * result + ((this.url == null) ? 0 : this.url.hashCode());
+        result = prime * result + ((this.state == null) ? 0 : this.state.hashCode());
         result = prime * result + ((this.lastScannedAt == null) ? 0 : this.lastScannedAt.hashCode());
         result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
         return result;
@@ -175,6 +203,7 @@ public class Link implements Serializable {
 
         sb.append(linkId);
         sb.append(", ").append(url);
+        sb.append(", ").append(state);
         sb.append(", ").append(lastScannedAt);
         sb.append(", ").append(createdAt);
 

@@ -1,6 +1,7 @@
 package ru.tinkoff.edu.java.bot.service.text;
 
 import com.pengrad.telegrambot.model.BotCommand;
+import ru.tinkoff.edu.java.bot.model.dto.request.LinkEvent;
 
 import java.util.List;
 
@@ -107,8 +108,21 @@ public class TextProvider {
     }
 
     public static class NotificationTextProvider {
-        public static String buildLinksListText(String link) {
-            return String.format("Что-то поменялось по ссылке %s, пора проверить!", link);
+        public static String buildLinksListText(LinkEvent event, String link) {
+            switch (event) {
+                case UPDATED, default -> {
+                    return String.format("Что-то новое по ссылке %s, пора проверить!", link);
+                }
+                case BRANCHES_COUNT_INCREASED -> {
+                    return String.format("Создана новая ветка в репозитории %s, пора проверить!", link);
+                }
+                case BRANCHES_COUNT_DECREASED -> {
+                    return String.format("Удалили ветку в репозитории %s, пора посмотреть!", link);
+                }
+                case ANSWERS_COUNT_INCREASED -> {
+                    return String.format("Новый ответ на вопрос %s! Пора прочитать!", link);
+                }
+            }
         }
     }
 
