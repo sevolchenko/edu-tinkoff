@@ -14,9 +14,9 @@ spring:
     url: jdbc:postgresql://localhost:5433/scrapper
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-#
-#  liquibase:
-#    change-log: "./migrations/master.xml"
+
+  liquibase:
+    enabled: false
 
 springdoc:
   swagger-ui:

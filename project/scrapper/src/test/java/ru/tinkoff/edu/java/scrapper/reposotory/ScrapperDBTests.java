@@ -1,9 +1,10 @@
-package ru.tinkoff.edu.java.scrapper.dbtest;
+package ru.tinkoff.edu.java.scrapper.reposotory;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import ru.tinkoff.edu.java.scrapper.IntegrationEnvironment;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -9,7 +9,6 @@ public class SubscriptionOutput {
 
     private Long tgChatId;
     private Long linkId;
-    private String url;
     private OffsetDateTime createdAt;
 
 }

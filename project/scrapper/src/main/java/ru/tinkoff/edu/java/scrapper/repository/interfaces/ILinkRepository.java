@@ -1,24 +1,26 @@
 package ru.tinkoff.edu.java.scrapper.repository.interfaces;
 
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.SubscriptionInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkWithChatsOutput;
 
-import java.time.Duration;
-import java.util.Collection;
+import java.time.OffsetDateTime;
+import java.util.List;
 
 public interface ILinkRepository {
 
-    Long add(SubscriptionInput input); // returns link id
+    Long save(AddLinkInput link);
 
-    LinkOutput remove(SubscriptionInput input);
+    LinkOutput remove(Long linkId);
 
-    Collection<LinkWithChatsOutput> findUncheckedLinks(Duration linkCheckDelay);
+    List<LinkOutput> findAll();
 
-    void updateLastScanTime(Long linkId);
+    LinkOutput findById(Long linkId);
 
-    Collection<LinkOutput> findAll(Long tgChatId);
+    LinkOutput findByUrl(String url);
 
-    LinkOutput findById(SubscriptionInput input);
+    List<LinkOutput> findAllByLastScannedAtIsBefore(OffsetDateTime time);
+
+    void updateLastScannedAt(Long linkId, ILinkState state, OffsetDateTime scanTime);
 
 }

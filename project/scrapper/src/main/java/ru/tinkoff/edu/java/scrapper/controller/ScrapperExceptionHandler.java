@@ -49,9 +49,14 @@ public class ScrapperExceptionHandler extends ResponseEntityExceptionHandler {
         return buildApiErrorResponse(ex, "Ссылка не найдена", HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(AlreadyAddedLinkException.class)
-    protected ResponseEntity<Object> handleAlreadyAddedLinkException(AlreadyAddedLinkException ex) {
-        return buildApiErrorResponse(ex, "Ссылка уже добавлена", HttpStatus.CONFLICT);
+    @ExceptionHandler(AlreadySubscribedLinkException.class)
+    protected ResponseEntity<Object> handleAlreadyAddedLinkException(AlreadySubscribedLinkException ex) {
+        return buildApiErrorResponse(ex, "Подписка уже добавлена", HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NoSuchSubscriptionException.class)
+    protected ResponseEntity<Object> handleNoSuchSubscriptionException(NoSuchSubscriptionException ex) {
+        return buildApiErrorResponse(ex, "Такой подписки не существует", HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(NotSupportedLinkException.class)
