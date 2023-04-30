@@ -3,11 +3,11 @@ package ru.tinkoff.edu.java.scrapper.repository.jdbc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ILinkRepository;
 
@@ -20,19 +20,20 @@ import java.util.List;
 public class JdbcLinkRepository implements ILinkRepository {
 
     private final JdbcTemplate jdbcTemplate;
-    private final RowMapper<LinkOutput> rowMapper = new BeanPropertyRowMapper<>(LinkOutput.class);
+    private final RowMapper<LinkOutput> rowMapper;
 
     @Override
     public Long save(AddLinkInput link) {
         String insertSql = """
-                insert into link(url, last_scanned_at, created_at)
-                values (?, ?, ?)
+                insert into link(url, state, last_scanned_at, created_at)
+                values (?, ?::json, ?, ?)
                 on conflict do nothing
                 returning link_id
                 """;
 
         try {
-            return jdbcTemplate.queryForObject(insertSql, Long.class, link.url(), link.lastScannedAt(), link.createdAt());
+            return jdbcTemplate.queryForObject(insertSql, Long.class,
+                    link.url(), link.state().asJson(), link.lastScannedAt(), link.createdAt());
         } catch (EmptyResultDataAccessException ex) {
             return null;
         }
@@ -43,7 +44,7 @@ public class JdbcLinkRepository implements ILinkRepository {
         String removeSql = """
                 delete from link
                 where link_id = ?
-                returning link_id, url, last_scanned_at, created_at
+                returning *
                 """;
 
         var rs = jdbcTemplate.query(removeSql, rowMapper, linkId);
@@ -85,9 +86,10 @@ public class JdbcLinkRepository implements ILinkRepository {
         String selectSql = """
                 select * from link
                 where url = ?
+                
                 """;
 
-        var rs = jdbcTemplate.query(selectSql,  rowMapper, url);
+        var rs = jdbcTemplate.query(selectSql, rowMapper, url);
 
         if (rs.isEmpty()) {
             return null;
@@ -100,22 +102,20 @@ public class JdbcLinkRepository implements ILinkRepository {
     public List<LinkOutput> findAllByLastScannedAtIsBefore(OffsetDateTime time) {
         String selectSql = """
                 select * from link
-                where last_scanned_at > ?::timestamptz
+                where last_scanned_at < ?::timestamptz
                 """;
 
         return jdbcTemplate.query(selectSql, rowMapper, time.toString());
     }
 
     @Override
-    public void updateLastScannedAt(Long linkId, OffsetDateTime scanTime) {
-
+    public void updateLastScannedAt(Long linkId, ILinkState state, OffsetDateTime scanTime) {
         String updateSql = """
                 update link
-                set last_scanned_at = ?
+                set last_scanned_at = ?, state = ?::json
                 where link_id = ?
                 """;
 
-        jdbcTemplate.update(updateSql, scanTime, linkId);
-
+        jdbcTemplate.update(updateSql, scanTime, state.asJson(), linkId);
     }
 }

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.util.StreamUtils;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.annotation.Rollback;
@@ -30,7 +29,8 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private final RowMapper<TgChatOutput> rowMapper = new BeanPropertyRowMapper<>(TgChatOutput.class);
+    @Autowired
+    private RowMapper<TgChatOutput> rowMapper;
 
     private final String selectTgChatSql = """
                 select * from tg_chat

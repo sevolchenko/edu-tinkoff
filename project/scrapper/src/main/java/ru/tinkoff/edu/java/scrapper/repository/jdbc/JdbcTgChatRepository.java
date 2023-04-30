@@ -20,7 +20,7 @@ public class JdbcTgChatRepository implements ITgChatRepository {
 
     private final JdbcTemplate jdbcTemplate;
     
-    private final RowMapper<TgChatOutput> rowMapper = new BeanPropertyRowMapper<>(TgChatOutput.class);
+    private final RowMapper<TgChatOutput> rowMapper;
 
     @Override
     public Long save(AddTgChatInput tgChat) {

@@ -3,8 +3,11 @@ package ru.tinkoff.edu.java.scrapper.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.edu.java.linkparser.LinkParser;
-import ru.tinkoff.edu.java.scrapper.exception.*;
+import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
+import ru.tinkoff.edu.java.scrapper.exception.AlreadySubscribedLinkException;
+import ru.tinkoff.edu.java.scrapper.exception.NoSuchChatException;
+import ru.tinkoff.edu.java.scrapper.exception.NoSuchLinkException;
+import ru.tinkoff.edu.java.scrapper.exception.NoSuchSubscriptionException;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddSubscriptionInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.SubscriptionIdInput;
@@ -26,17 +29,12 @@ public class LinkService implements ILinkService {
     private final ISubscriptionRepository subscriptionRepository;
     private final ITgChatRepository tgChatRepository;
 
-    private final LinkParser linkParser;
+    private final LinkProcessor linkProcessor;
 
     @Override
     public LinkOutput add(Long tgChatId, URI url) {
-        if (!linkParser.supports(url)) {
-            throw new NotSupportedLinkException(url);
-        }
 
-        if (linkParser.parse(url) == null) {
-            throw new InvalidLinkException(url);
-        }
+        var state = linkProcessor.getState(url);
 
         if (tgChatRepository.findById(tgChatId) == null) {
             throw new NoSuchChatException(tgChatId);
@@ -46,7 +44,7 @@ public class LinkService implements ILinkService {
 
         if (output == null) {
             Long linkId = linkRepository.save(
-                    new AddLinkInput(url.toString(), OffsetDateTime.now(), OffsetDateTime.now())
+                    new AddLinkInput(url.toString(), state, OffsetDateTime.now(), OffsetDateTime.now())
             );
 
             output = linkRepository.findById(linkId);

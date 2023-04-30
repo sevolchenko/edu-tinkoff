@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.component.broker.NotificationBroker;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.LinkProcessInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.SubscriptionOutput;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ILinkRepository;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ISubscriptionRepository;
@@ -40,16 +39,18 @@ public class LinkUpdater implements ILinkUpdater {
 
             log.info("Processing update link {}", link.getUrl());
 
-            if (linkProcessor.processLink(link.getUrl(), new LinkProcessInput(link.getLastScannedAt()))) {
+            var output = linkProcessor.processLink(link.getUrl(), link.getState());
+
+            if (output.event() != null) {
 
                 var tgChatIds = subscriptionRepository.findAllByLinkId(link.getLinkId()).stream()
                         .map(SubscriptionOutput::getTgChatId)
                         .toList();
 
-                notificationBroker.sendUpdate(link.getLinkId(), link.getUrl(), "Link updated", tgChatIds);
+                notificationBroker.sendUpdate(link.getLinkId(), link.getUrl(), output.event(), tgChatIds);
             }
 
-            linkRepository.updateLastScannedAt(link.getLinkId(), OffsetDateTime.now());
+            linkRepository.updateLastScannedAt(link.getLinkId(), output.newState(), OffsetDateTime.now());
 
         });
 

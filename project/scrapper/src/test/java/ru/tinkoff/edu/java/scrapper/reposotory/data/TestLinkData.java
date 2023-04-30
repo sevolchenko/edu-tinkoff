@@ -1,10 +1,10 @@
 package ru.tinkoff.edu.java.scrapper.reposotory.data;
 
+import ru.tinkoff.edu.java.scrapper.client.github.dto.GitHubLinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Random;
 
@@ -16,6 +16,10 @@ public class TestLinkData {
 
     public static Long randomId() {
         return RND.nextLong(Long.MAX_VALUE);
+    }
+
+    public static ILinkState randomState() {
+        return new GitHubLinkState(randomDate(), RND.nextInt(100));
     }
 
     public static List<AddLinkInput> stabValidResponse() {
@@ -31,10 +35,10 @@ public class TestLinkData {
     }
 
     public static AddLinkInput buildLinkResponse(String url) {
-        return buildLinkResponse(url, randomDate(), OffsetDateTime.now());
+        return buildLinkResponse(url, randomState(), randomDate(), OffsetDateTime.now());
     }
 
-    public static AddLinkInput buildLinkResponse(String url, OffsetDateTime lastScannedAt, OffsetDateTime createdAt) {
-        return new AddLinkInput(url, lastScannedAt, createdAt);
+    public static AddLinkInput buildLinkResponse(String url, ILinkState state, OffsetDateTime lastScannedAt, OffsetDateTime createdAt) {
+        return new AddLinkInput(url, state, lastScannedAt, createdAt);
     }
 }
