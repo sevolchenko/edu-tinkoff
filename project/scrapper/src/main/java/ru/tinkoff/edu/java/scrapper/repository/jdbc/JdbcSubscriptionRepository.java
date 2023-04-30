@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddSubscriptionInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.SubscriptionIdInput;
@@ -20,6 +21,9 @@ public class JdbcSubscriptionRepository implements ISubscriptionRepository {
 
 
     private final JdbcTemplate jdbcTemplate;
+    
+    private final RowMapper<SubscriptionOutput> rowMapper = new BeanPropertyRowMapper<>(SubscriptionOutput.class);
+    private final RowMapper<SubscriptionIdOutput> idRowMapper = new BeanPropertyRowMapper<>(SubscriptionIdOutput.class);
 
     @Override
     public SubscriptionIdOutput save(AddSubscriptionInput subscription) {
@@ -30,7 +34,7 @@ public class JdbcSubscriptionRepository implements ISubscriptionRepository {
                 returning tg_chat_id, link_id
                 """;
 
-        var rs = jdbcTemplate.query(insertSql, new BeanPropertyRowMapper<>(SubscriptionIdOutput.class),
+        var rs = jdbcTemplate.query(insertSql, idRowMapper,
                 subscription.tgChatId(), subscription.linkId(),
                 subscription.createdAt());
 
@@ -49,7 +53,7 @@ public class JdbcSubscriptionRepository implements ISubscriptionRepository {
                 returning tg_chat_id, link_id, created_at
                 """;
 
-        var rs = jdbcTemplate.query(removeSql, new BeanPropertyRowMapper<>(SubscriptionOutput.class),
+        var rs = jdbcTemplate.query(removeSql, rowMapper,
                 subscriptionId.tgChatId(), subscriptionId.linkId());
 
         if (rs.isEmpty()) {
@@ -65,7 +69,7 @@ public class JdbcSubscriptionRepository implements ISubscriptionRepository {
                 select * from subscription
                 """;
 
-        return jdbcTemplate.query(selectsSql, new BeanPropertyRowMapper<>(SubscriptionOutput.class));
+        return jdbcTemplate.query(selectsSql, rowMapper);
     }
 
     @Override
@@ -75,7 +79,7 @@ public class JdbcSubscriptionRepository implements ISubscriptionRepository {
                 where link_id = ?
                 """;
 
-        return jdbcTemplate.query(selectsSql, new BeanPropertyRowMapper<>(SubscriptionOutput.class), linkId);
+        return jdbcTemplate.query(selectsSql, rowMapper, linkId);
     }
 
     @Override
@@ -86,7 +90,7 @@ public class JdbcSubscriptionRepository implements ISubscriptionRepository {
                 where tg_chat_id = ? and link_id = ?
                 """;
 
-        var rs = jdbcTemplate.query(selectsSql, new BeanPropertyRowMapper<>(SubscriptionOutput.class));
+        var rs = jdbcTemplate.query(selectsSql, rowMapper, subscriptionId.tgChatId(), subscriptionId.linkId());
 
         if (rs.isEmpty()) {
             return null;

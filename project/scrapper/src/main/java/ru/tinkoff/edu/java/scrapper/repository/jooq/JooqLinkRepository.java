@@ -32,7 +32,7 @@ public class JooqLinkRepository implements ILinkRepository {
 
     @Override
     public Long save(AddLinkInput link) {
-        var res = dslContext.insertInto(LINK, LINK.fields())
+        var res = dslContext.insertInto(LINK, LINK.URL, LINK.LAST_SCANNED_AT, LINK.CREATED_AT)
                 .values(link.url(), link.lastScannedAt(), link.createdAt())
                 .onConflict(LINK.URL).doNothing()
                 .returningResult(LINK.LINK_ID)

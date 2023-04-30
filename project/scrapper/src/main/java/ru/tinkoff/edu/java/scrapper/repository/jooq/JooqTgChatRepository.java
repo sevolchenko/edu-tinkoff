@@ -24,6 +24,7 @@ public class JooqTgChatRepository implements ITgChatRepository {
     public Long save(AddTgChatInput tgChat) {
         var res = dslContext.insertInto(TG_CHAT, TG_CHAT.fields())
                 .values(tgChat.tgChatId(), tgChat.username(), tgChat.registeredAt())
+                .onDuplicateKeyIgnore()
                 .returningResult(TG_CHAT.TG_CHAT_ID)
                 .fetchOne();
 

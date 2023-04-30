@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.util.StreamUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcTgChatRepository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestDatesData.randomDate;
 import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestTgChatData.*;
 
 @SpringBootTest
@@ -27,6 +29,8 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    private final RowMapper<TgChatOutput> rowMapper = new BeanPropertyRowMapper<>(TgChatOutput.class);
 
     private final String selectTgChatSql = """
                 select * from tg_chat
@@ -58,7 +62,7 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
 
         assertThat(tgChat, is(equalTo(tgChatId)));
 
-        var rs = jdbcTemplate.query(selectTgChatSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
+        var rs = jdbcTemplate.query(selectTgChatSql, rowMapper);
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(1));
@@ -92,7 +96,7 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
         // then
         assertThat(tgChat, is(nullValue()));
 
-        var rs = jdbcTemplate.query(selectTgChatSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
+        var rs = jdbcTemplate.query(selectTgChatSql, rowMapper);
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(1));
@@ -128,11 +132,11 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
         assertThat(response.getUsername(), is(equalTo(username)));
         assertThat(response.getRegisteredAt().toEpochSecond(), is(equalTo(registeredAt.toEpochSecond())));
 
-        var rs = jdbcTemplate.query(selectTgChatSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
+        var rs = jdbcTemplate.query(selectTgChatSql, rowMapper);
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(0));
-      }
+    }
 
 
     @Transactional
@@ -160,7 +164,7 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
         var list = stabValidResponse();
         list.forEach(request -> jdbcTemplate.update(insertTgChatSql, request.tgChatId(), request.username(), request.registeredAt()));
 
-        var rs1 = jdbcTemplate.query(selectTgChatSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
+        var rs1 = jdbcTemplate.query(selectTgChatSql, rowMapper);
 
 
         // when
@@ -179,7 +183,7 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
                     return null;
                 });
 
-        var rs2 = jdbcTemplate.query(selectTgChatSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
+        var rs2 = jdbcTemplate.query(selectTgChatSql, rowMapper);
         assertThat(rs1, is(equalTo(rs2)));
     }
 
@@ -192,7 +196,7 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
         var list = stabEmptyResponse();
         list.forEach(request -> jdbcTemplate.update(insertTgChatSql, request.tgChatId(), request.username()));
 
-        var rs1 = jdbcTemplate.query(selectTgChatSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
+        var rs1 = jdbcTemplate.query(selectTgChatSql, rowMapper);
 
 
         // when
@@ -211,7 +215,7 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
                     return null;
                 });
 
-        var rs2 = jdbcTemplate.query(selectTgChatSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
+        var rs2 = jdbcTemplate.query(selectTgChatSql, rowMapper);
         assertThat(rs1, is(equalTo(rs2)));
     }
 
@@ -238,7 +242,7 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
         assertThat(response.getUsername(), is(equalTo(username)));
         assertThat(response.getRegisteredAt().toEpochSecond(), is(equalTo(registeredAt.toEpochSecond())));
 
-        var rs = jdbcTemplate.query(selectTgChatSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
+        var rs = jdbcTemplate.query(selectTgChatSql, rowMapper);
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(1));
@@ -267,7 +271,7 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
         // then
         assertThat(response, is(nullValue()));
 
-        var rs = jdbcTemplate.query(selectTgChatSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
+        var rs = jdbcTemplate.query(selectTgChatSql, rowMapper);
 
         assertThat(rs, is(notNullValue()));
         assertThat(rs, hasSize(0));

@@ -2,8 +2,10 @@ package ru.tinkoff.edu.java.scrapper.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
@@ -18,17 +20,22 @@ import java.util.List;
 public class JdbcLinkRepository implements ILinkRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private final RowMapper<LinkOutput> rowMapper = new BeanPropertyRowMapper<>(LinkOutput.class);
 
     @Override
     public Long save(AddLinkInput link) {
         String insertSql = """
                 insert into link(url, last_scanned_at, created_at)
                 values (?, ?, ?)
-                on conflict (url) do nothing
+                on conflict do nothing
                 returning link_id
                 """;
 
-        return jdbcTemplate.queryForObject(insertSql, Long.class, link.url(), link.lastScannedAt(), link.createdAt());
+        try {
+            return jdbcTemplate.queryForObject(insertSql, Long.class, link.url(), link.lastScannedAt(), link.createdAt());
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
 
     @Override
@@ -39,7 +46,13 @@ public class JdbcLinkRepository implements ILinkRepository {
                 returning link_id, url, last_scanned_at, created_at
                 """;
 
-        return jdbcTemplate.queryForObject(removeSql, new BeanPropertyRowMapper<>(LinkOutput.class), linkId);
+        var rs = jdbcTemplate.query(removeSql, rowMapper, linkId);
+
+        if (rs.isEmpty()) {
+            return null;
+        } else {
+            return rs.get(0);
+        }
     }
 
     @Override
@@ -48,7 +61,7 @@ public class JdbcLinkRepository implements ILinkRepository {
                 select * from link
                 """;
 
-        return jdbcTemplate.query(selectSql,  new BeanPropertyRowMapper<>(LinkOutput.class));
+        return jdbcTemplate.query(selectSql,  rowMapper);
     }
 
     @Override
@@ -58,7 +71,7 @@ public class JdbcLinkRepository implements ILinkRepository {
                 where link_id = ?
                 """;
 
-        var rs = jdbcTemplate.query(selectSql,  new BeanPropertyRowMapper<>(LinkOutput.class), linkId);
+        var rs = jdbcTemplate.query(selectSql,  rowMapper, linkId);
 
         if (rs.isEmpty()) {
             return null;
@@ -74,7 +87,7 @@ public class JdbcLinkRepository implements ILinkRepository {
                 where url = ?
                 """;
 
-        var rs = jdbcTemplate.query(selectSql,  new BeanPropertyRowMapper<>(LinkOutput.class), url);
+        var rs = jdbcTemplate.query(selectSql,  rowMapper, url);
 
         if (rs.isEmpty()) {
             return null;
@@ -87,10 +100,10 @@ public class JdbcLinkRepository implements ILinkRepository {
     public List<LinkOutput> findAllByLastScannedAtIsBefore(OffsetDateTime time) {
         String selectSql = """
                 select * from link
-                where last_scanned_at > ?
+                where last_scanned_at > ?::timestamptz
                 """;
 
-        return jdbcTemplate.query(selectSql, new BeanPropertyRowMapper<>(LinkOutput.class), time.toString());
+        return jdbcTemplate.query(selectSql, rowMapper, time.toString());
     }
 
     @Override
