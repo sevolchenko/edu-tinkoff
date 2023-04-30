@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddTgChatInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.TgChatOutput;
@@ -18,6 +19,8 @@ import java.util.List;
 public class JdbcTgChatRepository implements ITgChatRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    
+    private final RowMapper<TgChatOutput> rowMapper = new BeanPropertyRowMapper<>(TgChatOutput.class);
 
     @Override
     public Long save(AddTgChatInput tgChat) {
@@ -42,12 +45,10 @@ public class JdbcTgChatRepository implements ITgChatRepository {
                 returning tg_chat_id, username, registered_at
                 """;
 
-        var rs = jdbcTemplate.query(deleteSql, new BeanPropertyRowMapper<>(TgChatOutput.class), tgChatId);
-
-        if (rs.isEmpty()) {
+        try {
+            return jdbcTemplate.queryForObject(deleteSql, rowMapper, tgChatId);
+        } catch (EmptyResultDataAccessException ex) {
             return null;
-        } else {
-            return rs.get(0);
         }
     }
 
@@ -56,7 +57,7 @@ public class JdbcTgChatRepository implements ITgChatRepository {
         String selectSql = """
                 select * from tg_chat
                 """;
-        return jdbcTemplate.query(selectSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
+        return jdbcTemplate.query(selectSql, rowMapper);
     }
 
     @Override
@@ -65,12 +66,11 @@ public class JdbcTgChatRepository implements ITgChatRepository {
                 select * from tg_chat
                 where tg_chat_id = ?
                 """;
-        var rs = jdbcTemplate.query(selectSql, new BeanPropertyRowMapper<>(TgChatOutput.class), tgChatId);
 
-        if (rs.isEmpty()) {
+        try {
+            return jdbcTemplate.queryForObject(selectSql, rowMapper, tgChatId);
+        } catch (EmptyResultDataAccessException ex) {
             return null;
-        } else {
-            return rs.get(0);
         }
     }
 

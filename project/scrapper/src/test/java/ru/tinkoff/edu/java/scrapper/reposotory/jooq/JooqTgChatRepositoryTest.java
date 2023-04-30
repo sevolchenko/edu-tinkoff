@@ -16,6 +16,7 @@ import ru.tinkoff.edu.java.scrapper.repository.jooq.JooqTgChatRepository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestDatesData.randomDate;
 import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestTgChatData.*;
 
 @SpringBootTest

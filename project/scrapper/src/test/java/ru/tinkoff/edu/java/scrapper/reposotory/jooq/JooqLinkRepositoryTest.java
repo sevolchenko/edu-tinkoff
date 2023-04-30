@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.reposotory.jdbc;
+package ru.tinkoff.edu.java.scrapper.reposotory.jooq;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,23 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.IntegrationEnvironment;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
-import ru.tinkoff.edu.java.scrapper.repository.jdbc.JdbcLinkRepository;
+import ru.tinkoff.edu.java.scrapper.repository.jooq.JooqLinkRepository;
 
 import java.time.OffsetDateTime;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestDatesData.randomDate;
+import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestDatesData.*;
 import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestLinkData.*;
-import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestDatesData.endDate;
-import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestDatesData.startDate;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
+public class JooqLinkRepositoryTest extends IntegrationEnvironment {
 
     @Autowired
-    private JdbcLinkRepository jdbcLinkRepository;
+    private JooqLinkRepository jooqLinkRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -59,7 +57,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        var linkId = jdbcLinkRepository.save(request);
+        var linkId = jooqLinkRepository.save(request);
 
 
         // then
@@ -94,7 +92,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        var linkId = jdbcLinkRepository.save(request);
+        var linkId = jooqLinkRepository.save(request);
 
 
         // then
@@ -128,7 +126,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        var response = jdbcLinkRepository.remove(savedLinkId);
+        var response = jooqLinkRepository.remove(savedLinkId);
 
 
         // then
@@ -154,7 +152,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        var response = jdbcLinkRepository.remove(linkId);
+        var response = jooqLinkRepository.remove(linkId);
 
 
         // then
@@ -185,7 +183,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        var response = jdbcLinkRepository.findAll();
+        var response = jooqLinkRepository.findAll();
 
 
         // then
@@ -229,7 +227,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        var response = jdbcLinkRepository.findAll();
+        var response = jooqLinkRepository.findAll();
 
 
         // then
@@ -263,7 +261,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        var response = jdbcLinkRepository.findById(savedLinkId);
+        var response = jooqLinkRepository.findById(savedLinkId);
 
 
         // then
@@ -297,7 +295,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        var response = jdbcLinkRepository.findById(linkId);
+        var response = jooqLinkRepository.findById(linkId);
 
 
         // then
@@ -323,7 +321,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        var response = jdbcLinkRepository.findByUrl(url);
+        var response = jooqLinkRepository.findByUrl(url);
 
 
         // then
@@ -357,7 +355,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        var response = jdbcLinkRepository.findByUrl(url);
+        var response = jooqLinkRepository.findByUrl(url);
 
 
         // then
@@ -380,7 +378,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-         var response = jdbcLinkRepository.findAllByLastScannedAtIsBefore(startDate);
+        var response = jooqLinkRepository.findAllByLastScannedAtIsBefore(startDate);
 
 
         // then
@@ -401,7 +399,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        var response = jdbcLinkRepository.findAllByLastScannedAtIsBefore(endDate);
+        var response = jooqLinkRepository.findAllByLastScannedAtIsBefore(endDate);
 
 
         // then
@@ -427,7 +425,7 @@ public class JdbcLinkRepositoryTest extends IntegrationEnvironment {
 
 
         // when
-        jdbcLinkRepository.updateLastScannedAt(savedLinkId, updatedTime);
+        jooqLinkRepository.updateLastScannedAt(savedLinkId, updatedTime);
 
 
         // then
