@@ -1,7 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.repository.jdbc;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,7 +13,6 @@ import ru.tinkoff.edu.java.scrapper.repository.interfaces.ILinkRepository;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-@Primary
 @RequiredArgsConstructor
 @Repository
 public class JdbcLinkRepository implements ILinkRepository {

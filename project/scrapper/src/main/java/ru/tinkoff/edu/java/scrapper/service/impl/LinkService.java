@@ -1,7 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
 import ru.tinkoff.edu.java.scrapper.exception.AlreadySubscribedLinkException;
@@ -21,7 +20,7 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 
-@Service
+@Transactional
 @RequiredArgsConstructor
 public class LinkService implements ILinkService {
 
@@ -34,8 +33,6 @@ public class LinkService implements ILinkService {
     @Override
     public LinkOutput add(Long tgChatId, URI url) {
 
-        var state = linkProcessor.getState(url);
-
         if (tgChatRepository.findById(tgChatId) == null) {
             throw new NoSuchChatException(tgChatId);
         }
@@ -43,6 +40,8 @@ public class LinkService implements ILinkService {
         LinkOutput output = linkRepository.findByUrl(url.toString());
 
         if (output == null) {
+            var state = linkProcessor.getState(url);
+
             Long linkId = linkRepository.save(
                     new AddLinkInput(url.toString(), state, OffsetDateTime.now(), OffsetDateTime.now())
             );

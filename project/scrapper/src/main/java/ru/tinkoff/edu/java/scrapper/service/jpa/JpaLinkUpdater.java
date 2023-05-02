@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.component.broker.NotificationBroker;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.LinkProcessInput;
-import ru.tinkoff.edu.java.scrapper.model.mapping.TimeMapper;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaLinkRepository;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkUpdater;
 
@@ -16,6 +14,7 @@ import java.time.Instant;
 
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class JpaLinkUpdater implements ILinkUpdater {
 
     private final JpaLinkRepository linkRepository;
@@ -25,10 +24,7 @@ public class JpaLinkUpdater implements ILinkUpdater {
     private final LinkProcessor linkProcessor;
     private final NotificationBroker notificationBroker;
 
-    private final TimeMapper timeMapper;
-
     @Override
-    @Transactional
     public void update() {
 
         var links = linkRepository.findAllByLastScannedAtIsBefore(Instant.now(Clock.systemUTC()).minus(linkCheckDelay));
@@ -39,9 +35,9 @@ public class JpaLinkUpdater implements ILinkUpdater {
 
             log.info("Processing update link {}", link.getUrl());
 
-            var linkProcessInput = new LinkProcessInput(timeMapper.map(link.getLastScannedAt()));
+            var output = linkProcessor.processLink(link.getUrl(), link.getState());
 
-            if (linkProcessor.processLink(link.getUrl(), linkProcessInput)) {
+            if (output.event() != null) {
 
                 var tgChatIds = link.getSubscriptions().stream()
                         .map(subscription -> {
@@ -50,12 +46,13 @@ public class JpaLinkUpdater implements ILinkUpdater {
                         })
                         .toList();
 
-                notificationBroker.sendUpdate(link.getLinkId(), link.getUrl(), "Link updated", tgChatIds);
+                notificationBroker.sendUpdate(link.getLinkId(), link.getUrl(), output.event(), tgChatIds);
             } else {
                 log.info("No changes detected at link {}", link.getUrl());
             }
 
             link.setLastScannedAt(Instant.now());
+            link.setState(output.newState());
 
         });
 

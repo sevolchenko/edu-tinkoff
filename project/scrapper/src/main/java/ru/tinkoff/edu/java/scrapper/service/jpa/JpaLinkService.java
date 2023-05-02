@@ -2,15 +2,17 @@ package ru.tinkoff.edu.java.scrapper.service.jpa;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.edu.java.scrapper.exception.AlreadyAddedLinkException;
+import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
+import ru.tinkoff.edu.java.scrapper.exception.AlreadySubscribedLinkException;
 import ru.tinkoff.edu.java.scrapper.exception.NoSuchChatException;
 import ru.tinkoff.edu.java.scrapper.exception.NoSuchLinkException;
+import ru.tinkoff.edu.java.scrapper.exception.NoSuchSubscriptionException;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 import ru.tinkoff.edu.java.scrapper.model.entity.Link;
 import ru.tinkoff.edu.java.scrapper.model.entity.Subscription;
 import ru.tinkoff.edu.java.scrapper.model.entity.SubscriptionId;
 import ru.tinkoff.edu.java.scrapper.model.entity.TgChat;
-import ru.tinkoff.edu.java.scrapper.model.mapping.LinkMapper;
+import ru.tinkoff.edu.java.scrapper.model.mapping.LinkOutputMapper;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaLinkRepository;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaSubscriptionRepository;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaTgChatRepository;
@@ -28,26 +30,33 @@ public class JpaLinkService implements ILinkService {
     private final JpaSubscriptionRepository subscriptionRepository;
     private final JpaTgChatRepository tgChatRepository;
 
-    private final LinkMapper linkMapper;
+    private final LinkProcessor linkProcessor;
+
+    private final LinkOutputMapper mapper;
 
     @Override
     public LinkOutput add(Long tgChatId, URI url) {
+
         TgChat tgChat = tgChatRepository.findById(tgChatId)
-                .orElseThrow(() -> new NoSuchChatException(String.format("There is no chat with id %d", tgChatId)));
+                .orElseThrow(() -> new NoSuchChatException(tgChatId));
 
         Link link = linkRepository.findByUrlEquals(url.toString())
-                .orElseGet(() -> linkRepository.save(new Link()
-                        .setUrl(url.toString())
-                        .setCreatedAt(Instant.now())
-                        .setLastScannedAt(Instant.now())
-                ));
+                .orElseGet(() -> {
+                    var state = linkProcessor.getState(url);
+                    return linkRepository.save(new Link()
+                            .setUrl(url.toString())
+                            .setState(state)
+                            .setCreatedAt(Instant.now())
+                            .setLastScannedAt(Instant.now())
+                    );
+                });
 
         SubscriptionId subscriptionId = new SubscriptionId()
                 .setLink(link)
                 .setTgChat(tgChat);
 
         if (subscriptionRepository.existsBySubscriptionId(subscriptionId)) {
-            throw new AlreadyAddedLinkException(String.format("Link already added to id %d: %s", tgChatId, url));
+            throw new AlreadySubscribedLinkException(tgChatId, url);
         }
 
         Subscription sub = new Subscription()
@@ -56,27 +65,28 @@ public class JpaLinkService implements ILinkService {
 
         subscriptionRepository.save(sub);
 
-        return linkMapper.toOutput(link);
+        return mapper.map(link);
     }
 
     @Override
     public LinkOutput remove(Long tgChatId, URI url) {
-        Link link = linkRepository.findByUrlEquals(url.toString()).get();
-
         TgChat tgChat = tgChatRepository.findById(tgChatId)
-                .orElseThrow(() -> new NoSuchChatException(String.format("There is no chat with id %d", tgChatId)));
+                .orElseThrow(() -> new NoSuchChatException(tgChatId));
+
+        Link link = linkRepository.findByUrlEquals(url.toString())
+                .orElseThrow(() -> new NoSuchLinkException(url));
 
         SubscriptionId subscriptionId = new SubscriptionId()
                 .setLink(link)
                 .setTgChat(tgChat);
 
         if (!subscriptionRepository.existsBySubscriptionId(subscriptionId)) {
-            throw new NoSuchLinkException(String.format("Link has not added to id %d yet: %s", tgChatId, url));
+            throw new NoSuchSubscriptionException(tgChatId, url);
         }
 
         subscriptionRepository.deleteById(subscriptionId);
 
-        return linkMapper.toOutput(link);
+        return mapper.map(link);
     }
 
     @Override
@@ -88,7 +98,7 @@ public class JpaLinkService implements ILinkService {
         return tgChat.getSubscriptions().stream()
                 .map((subscription -> {
                     Link link = subscription.getSubscriptionId().getLink();
-                    return linkMapper.toOutput(link);
+                    return mapper.map(link);
                 }))
                 .toList();
     }
