@@ -4,6 +4,7 @@ import org.jooq.JSON;
 import org.mapstruct.Mapper;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
+import ru.tinkoff.edu.java.scrapper.model.entity.Link;
 import ru.tinkoff.edu.java.scrapper.model.jooq.generated.tables.records.LinkRecord;
 import ru.tinkoff.edu.java.scrapper.util.ObjectMapperUtil;
 
@@ -15,6 +16,8 @@ public interface LinkOutputMapper {
     LinkOutput map(LinkRecord link);
 
     List<LinkOutput> map(List<LinkRecord> links);
+
+    LinkOutput map(Link link);
 
     default ILinkState map(JSON json) {
         return ObjectMapperUtil.readValue(json.data(), ILinkState.class);
