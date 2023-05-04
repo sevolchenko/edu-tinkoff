@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.service.text;
+package ru.tinkoff.edu.java.bot.util;
 
 import com.pengrad.telegrambot.model.BotCommand;
 import ru.tinkoff.edu.java.bot.model.dto.request.LinkEvent;

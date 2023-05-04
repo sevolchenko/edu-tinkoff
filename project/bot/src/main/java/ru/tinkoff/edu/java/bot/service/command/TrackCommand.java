@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
 import ru.tinkoff.edu.java.bot.client.scrapper.dto.request.AddLinkRequest;
 import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.LinkResponse;
-import ru.tinkoff.edu.java.bot.service.text.TextProvider.TrackTextProvider;
+import ru.tinkoff.edu.java.bot.util.TextProvider.TrackTextProvider;
 import ru.tinkoff.edu.java.bot.util.UrlUtils;
 
 import java.net.URI;

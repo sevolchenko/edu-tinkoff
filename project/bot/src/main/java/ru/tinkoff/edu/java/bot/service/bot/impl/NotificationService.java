@@ -1,13 +1,13 @@
-package ru.tinkoff.edu.java.bot.service.impl;
+package ru.tinkoff.edu.java.bot.service.bot.impl;
 
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.bot.model.dto.request.LinkEvent;
-import ru.tinkoff.edu.java.bot.service.IBot;
-import ru.tinkoff.edu.java.bot.service.INotificationService;
-import ru.tinkoff.edu.java.bot.service.text.TextProvider.NotificationTextProvider;
+import ru.tinkoff.edu.java.bot.service.bot.IBot;
+import ru.tinkoff.edu.java.bot.service.bot.INotificationService;
+import ru.tinkoff.edu.java.bot.util.TextProvider.NotificationTextProvider;
 
 import java.net.URI;
 import java.util.List;

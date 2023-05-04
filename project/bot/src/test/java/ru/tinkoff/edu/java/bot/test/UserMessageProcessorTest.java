@@ -10,10 +10,10 @@ import ru.tinkoff.edu.java.bot.model.service.command.TestListCommand;
 import ru.tinkoff.edu.java.bot.model.service.command.TestStartCommand;
 import ru.tinkoff.edu.java.bot.model.service.command.TestTrackCommand;
 import ru.tinkoff.edu.java.bot.model.service.command.TestUntrackCommand;
-import ru.tinkoff.edu.java.bot.service.IUserMessageProcessor;
+import ru.tinkoff.edu.java.bot.service.bot.IUserMessageProcessor;
 import ru.tinkoff.edu.java.bot.service.command.*;
-import ru.tinkoff.edu.java.bot.service.impl.UserMessageProcessor;
-import ru.tinkoff.edu.java.bot.service.text.TextProvider.BotTextProvider;
+import ru.tinkoff.edu.java.bot.service.bot.impl.UserMessageProcessor;
+import ru.tinkoff.edu.java.bot.util.TextProvider.BotTextProvider;
 
 import java.util.List;
 

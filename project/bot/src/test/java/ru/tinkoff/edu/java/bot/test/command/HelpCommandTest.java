@@ -7,7 +7,7 @@ import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.HelpCommand;
-import ru.tinkoff.edu.java.bot.service.text.TextProvider.HelpTextProvider;
+import ru.tinkoff.edu.java.bot.util.TextProvider.HelpTextProvider;
 import ru.tinkoff.edu.java.bot.test.data.TestBotCommandsList;
 
 import java.util.List;

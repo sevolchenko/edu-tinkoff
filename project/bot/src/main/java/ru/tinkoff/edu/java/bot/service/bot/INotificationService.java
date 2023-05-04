@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.service;
+package ru.tinkoff.edu.java.bot.service.bot;
 
 import ru.tinkoff.edu.java.bot.model.dto.request.LinkEvent;
 

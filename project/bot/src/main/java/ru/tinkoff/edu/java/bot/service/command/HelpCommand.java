@@ -6,7 +6,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import ru.tinkoff.edu.java.bot.service.text.TextProvider.HelpTextProvider;
+import ru.tinkoff.edu.java.bot.util.TextProvider.HelpTextProvider;
 
 import java.util.List;
 

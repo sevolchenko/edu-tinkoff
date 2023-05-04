@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.service.impl;
+package ru.tinkoff.edu.java.bot.service.bot.impl;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.scrapper.exception.ScrapperClientException;
-import ru.tinkoff.edu.java.bot.service.IUserMessageProcessor;
+import ru.tinkoff.edu.java.bot.service.bot.IUserMessageProcessor;
 import ru.tinkoff.edu.java.bot.service.command.Command;
-import ru.tinkoff.edu.java.bot.service.text.TextProvider.BotTextProvider;
+import ru.tinkoff.edu.java.bot.util.TextProvider.BotTextProvider;
 
 import java.util.List;
 

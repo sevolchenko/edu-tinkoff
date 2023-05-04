@@ -18,6 +18,11 @@ spring:
   liquibase:
     enabled: false
 
+  rabbitmq:
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+
+
 springdoc:
   swagger-ui:
     path: '/swagger-ui'

@@ -3,5 +3,11 @@ app:
 springdoc:
   swagger-ui:
     path: '/swagger-ui'
+
+spring:
+  rabbitmq:
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+
 server:
   port: ${BOT_PORT}

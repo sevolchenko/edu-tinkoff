@@ -11,7 +11,7 @@ import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.UntrackCommand;
-import ru.tinkoff.edu.java.bot.service.text.TextProvider.UntrackTextProvider;
+import ru.tinkoff.edu.java.bot.util.TextProvider.UntrackTextProvider;
 import ru.tinkoff.edu.java.bot.util.UrlUtils;
 
 import java.net.URI;
