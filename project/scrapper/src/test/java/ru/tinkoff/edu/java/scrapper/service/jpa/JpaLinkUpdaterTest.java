@@ -13,7 +13,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.IntegrationEnvironment;
-import ru.tinkoff.edu.java.scrapper.component.broker.NotificationBroker;
+import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
+import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkEvent;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
@@ -25,7 +26,6 @@ import java.time.OffsetDateTime;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestLinkData.randomState;
@@ -48,7 +48,7 @@ public class JpaLinkUpdaterTest extends IntegrationEnvironment {
     private Duration linkCheckDelay;
     private LinkProcessor linkProcessor;
 
-    private NotificationBroker notificationBroker;
+    private INotificationProducer notificationProducer;
 
     @Autowired
     private RowMapper<LinkOutput> rowMapper;
@@ -67,13 +67,13 @@ public class JpaLinkUpdaterTest extends IntegrationEnvironment {
     @BeforeEach
     public void setUp() {
         linkProcessor = Mockito.mock(LinkProcessor.class);
-        notificationBroker = Mockito.mock(NotificationBroker.class);
+        notificationProducer = Mockito.mock(INotificationProducer.class);
 
         linkUpdater = new JpaLinkUpdater(
                 linkRepository,
                 linkCheckDelay,
                 linkProcessor,
-                notificationBroker
+                notificationProducer
         );
     }
 
@@ -136,9 +136,8 @@ public class JpaLinkUpdaterTest extends IntegrationEnvironment {
                     var newState = randomState();
                     when(linkProcessor.processLink(request.url(), request.state()))
                             .thenReturn(new LinkProcessOutput(newState, LinkEvent.UPDATED));
-                    doNothing().when(notificationBroker)
-                            .sendUpdate(eq(linkId), eq(request.url()),
-                                    ArgumentMatchers.any(LinkEvent.class), ArgumentMatchers.any());
+                    doNothing().when(notificationProducer)
+                            .sendUpdate(ArgumentMatchers.any(LinkUpdateRequest.class));
 
                     var output = new LinkOutput();
                     output.setLinkId(linkId);
@@ -186,9 +185,8 @@ public class JpaLinkUpdaterTest extends IntegrationEnvironment {
                     var newState = randomState();
                     when(linkProcessor.processLink(request.url(), request.state()))
                             .thenReturn(new LinkProcessOutput(newState, null));
-                    doNothing().when(notificationBroker)
-                            .sendUpdate(eq(linkId), eq(request.url()),
-                                    ArgumentMatchers.any(LinkEvent.class), ArgumentMatchers.any());
+                    doNothing().when(notificationProducer)
+                            .sendUpdate(ArgumentMatchers.any(LinkUpdateRequest.class));
 
                     var output = new LinkOutput();
                     output.setLinkId(linkId);

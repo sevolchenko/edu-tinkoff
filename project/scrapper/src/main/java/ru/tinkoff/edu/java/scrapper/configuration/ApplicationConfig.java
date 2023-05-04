@@ -13,18 +13,24 @@ import java.util.Optional;
 @Validated
 @EnableScheduling
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
-public record ApplicationConfig(@NotNull SchedulerConfiguration scheduler, @NotNull ClientUrlConfiguration client,
-                                @NotNull Duration linkCheckDelay, AccessType databaseAccessType) {
+public record ApplicationConfig(
+        @NotNull SchedulerConfiguration scheduler,
+        @NotNull ClientUrlConfiguration client,
+        @NotNull Duration linkCheckDelay,
+        AccessType databaseAccessType,
+        @NotNull Boolean useQueue) {
 
     @ConstructorBinding
     public ApplicationConfig(@NotNull SchedulerConfiguration scheduler,
                              ClientUrlConfiguration client,
                              @NotNull Duration linkCheckDelay,
-                             AccessType databaseAccessType) {
+                             AccessType databaseAccessType,
+                             Boolean useQueue) {
         this.scheduler = scheduler;
         this.client = Optional.ofNullable(client).orElse(new ClientUrlConfiguration(null, null, null));
         this.linkCheckDelay = linkCheckDelay;
         this.databaseAccessType = Optional.ofNullable(databaseAccessType).orElse(AccessType.JDBC);
+        this.useQueue = Optional.ofNullable(useQueue).orElse(false);
     }
 
     @Bean
