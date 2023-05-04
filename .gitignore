@@ -1,5 +1,7 @@
 .env
 
+rabbitmq_state/
+
 .idea/
 *.iml
 
