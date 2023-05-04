@@ -3,13 +3,15 @@ package ru.tinkoff.edu.java.scrapper.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.edu.java.scrapper.component.broker.NotificationBroker;
+import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
+import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.SubscriptionOutput;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ILinkRepository;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ISubscriptionRepository;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkUpdater;
 
+import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 
@@ -24,7 +26,7 @@ public class LinkUpdater implements ILinkUpdater {
     private final Duration linkCheckDelay;
 
     private final LinkProcessor linkProcessor;
-    private final NotificationBroker notificationBroker;
+    private final INotificationProducer notificationProducer;
 
     @Override
     public void update() {
@@ -41,11 +43,17 @@ public class LinkUpdater implements ILinkUpdater {
 
             if (output.event() != null) {
 
+                log.info("Event \"{}\" found for link {}",
+                        output.event().getDescription(), link.getUrl());
+
                 var tgChatIds = subscriptionRepository.findAllByLinkId(link.getLinkId()).stream()
                         .map(SubscriptionOutput::getTgChatId)
                         .toList();
 
-                notificationBroker.sendUpdate(link.getLinkId(), link.getUrl(), output.event(), tgChatIds);
+                var update = new LinkUpdateRequest(link.getLinkId(),
+                        URI.create(link.getUrl()), output.event().getCode(), tgChatIds);
+
+                notificationProducer.sendUpdate(update);
             }
 
             linkRepository.updateLastScannedAt(link.getLinkId(), output.newState(), OffsetDateTime.now());

@@ -3,11 +3,13 @@ package ru.tinkoff.edu.java.scrapper.service.jpa;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.edu.java.scrapper.component.broker.NotificationBroker;
+import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
+import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaLinkRepository;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkUpdater;
 
+import java.net.URI;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -22,7 +24,7 @@ public class JpaLinkUpdater implements ILinkUpdater {
     private final Duration linkCheckDelay;
 
     private final LinkProcessor linkProcessor;
-    private final NotificationBroker notificationBroker;
+    private final INotificationProducer notificationProducer;
 
     @Override
     public void update() {
@@ -39,6 +41,9 @@ public class JpaLinkUpdater implements ILinkUpdater {
 
             if (output.event() != null) {
 
+                log.info("Event \"{}\" found for link {}",
+                        output.event().getDescription(), link.getUrl());
+
                 var tgChatIds = link.getSubscriptions().stream()
                         .map(subscription -> {
                             var tgChat = subscription.getSubscriptionId().getTgChat();
@@ -46,7 +51,10 @@ public class JpaLinkUpdater implements ILinkUpdater {
                         })
                         .toList();
 
-                notificationBroker.sendUpdate(link.getLinkId(), link.getUrl(), output.event(), tgChatIds);
+                var update = new LinkUpdateRequest(link.getLinkId(),
+                        URI.create(link.getUrl()), output.event().getCode(), tgChatIds);
+
+                notificationProducer.sendUpdate(update);
             } else {
                 log.info("No changes detected at link {}", link.getUrl());
             }

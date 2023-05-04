@@ -1,6 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.configuration;
 
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -9,10 +11,16 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
-
 @Configuration
 public class RabbitMQConfiguration {
+
+    @Bean
+    public CachingConnectionFactory connectionFactory() {
+        var connectionFactory = new CachingConnectionFactory("localhost");
+        connectionFactory.setUsername("sergey");
+        connectionFactory.setPassword("qwerty1234");
+        return connectionFactory;
+    }
 
     @Bean
     public AmqpAdmin amqpAdmin(CachingConnectionFactory connectionFactory) {
@@ -21,7 +29,8 @@ public class RabbitMQConfiguration {
 
     @Bean
     public RabbitTemplate rabbitTemplate(CachingConnectionFactory connectionFactory) {
-        return new RabbitTemplate(connectionFactory);
+        var rabbitTemplate = new RabbitTemplate(connectionFactory);
+        return rabbitTemplate;
     }
 
     @Bean
@@ -38,12 +47,4 @@ public class RabbitMQConfiguration {
     public DirectExchange exchange() {
         return new DirectExchange("directExchange", true, false);
     }
-
-    @Bean
-    List<Binding> bindings() {
-        return List.of(
-                BindingBuilder.bind(directQueue()).to(exchange()).with("directRoutingKey")
-        );
-    }
-
 }

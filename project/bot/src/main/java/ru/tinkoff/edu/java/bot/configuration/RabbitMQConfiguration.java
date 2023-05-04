@@ -5,16 +5,25 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.ClassMapper;
+import org.springframework.amqp.support.converter.DefaultClassMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.tinkoff.edu.java.bot.model.dto.request.LinkUpdateRequest;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
 public class RabbitMQConfiguration {
+    @Bean
+    public CachingConnectionFactory connectionFactory() {
+        var connectionFactory = new CachingConnectionFactory("localhost");
+        connectionFactory.setUsername("sergey");
+        connectionFactory.setPassword("qwerty1234");
+        return connectionFactory;
+    }
 
     @Bean
     public AmqpAdmin amqpAdmin(CachingConnectionFactory connectionFactory) {
@@ -32,29 +41,22 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public MessageConverter jsonMessageConverter() {
-        return new Jackson2JsonMessageConverter();
-    }
-
-    @Bean
     public DirectExchange exchange() {
         return new DirectExchange("directExchange", true, false);
     }
 
     @Bean
-    List<Binding> bindings() {
-        return List.of(
-                BindingBuilder.bind(directQueue()).to(exchange()).with("directRoutingKey")
-        );
+    Binding bind(Queue q, DirectExchange directExchange) {
+        return BindingBuilder.bind(q).to(directExchange).with("directRoutingKey");
     }
 
     @Bean
     public ClassMapper classMapper(){
         Map<String, Class<?>> mappings = new HashMap<>();
-        mappings.put("ru.tinkoff.edu.java.scrapper.service.dto.LinkUpdate",LinkUpdate.class);
+        mappings.put("ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest", LinkUpdateRequest.class);
 
         DefaultClassMapper classMapper = new DefaultClassMapper();
-        classMapper.setTrustedPackages("ru.tinkoff.edu.java.scrapper.service.dto.*");
+        classMapper.setTrustedPackages("ru.tinkoff.edu.java.scrapper.component.producer.dto.*");
         classMapper.setIdClassMapping(mappings);
         return classMapper;
     }

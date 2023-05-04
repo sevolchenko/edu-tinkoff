@@ -3,6 +3,7 @@ app:
     interval: PT10S
   link-check-delay: PT1M
   database-access-type: jpa
+  use-queue: true
 #  client:
 #    gitHubClientUrl: 'www.github.com'
 spring:

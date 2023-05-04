@@ -3,7 +3,7 @@ package ru.tinkoff.edu.java.scrapper.configuration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.tinkoff.edu.java.scrapper.component.broker.NotificationBroker;
+import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
 import ru.tinkoff.edu.java.scrapper.model.mapping.LinkOutputMapper;
 import ru.tinkoff.edu.java.scrapper.model.mapping.TgChatOutputMapper;
@@ -57,10 +57,10 @@ public class DatabaseAccessConfiguration {
                 JdbcSubscriptionRepository subscriptionRepository,
                 Duration linkCheckDelay,
                 LinkProcessor linkProcessor,
-                NotificationBroker notificationBroker
+                INotificationProducer notificationProducer
         ) {
             return new LinkUpdater(linkRepository, subscriptionRepository,
-                    linkCheckDelay, linkProcessor, notificationBroker);
+                    linkCheckDelay, linkProcessor, notificationProducer);
         }
 
     }
@@ -91,10 +91,10 @@ public class DatabaseAccessConfiguration {
                 JooqSubscriptionRepository subscriptionRepository,
                 Duration linkCheckDelay,
                 LinkProcessor linkProcessor,
-                NotificationBroker notificationBroker
+                INotificationProducer notificationProducer
         ) {
             return new LinkUpdater(linkRepository, subscriptionRepository,
-                    linkCheckDelay, linkProcessor, notificationBroker);
+                    linkCheckDelay, linkProcessor, notificationProducer);
         }
 
     }
@@ -127,9 +127,9 @@ public class DatabaseAccessConfiguration {
                 JpaLinkRepository linkRepository,
                 Duration linkCheckDelay,
                 LinkProcessor linkProcessor,
-                NotificationBroker notificationBroker
+                INotificationProducer notificationProducer
         ) {
-            return new JpaLinkUpdater(linkRepository, linkCheckDelay, linkProcessor, notificationBroker);
+            return new JpaLinkUpdater(linkRepository, linkCheckDelay, linkProcessor, notificationProducer);
         }
 
     }
