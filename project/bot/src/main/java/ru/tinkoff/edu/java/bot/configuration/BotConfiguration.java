@@ -5,10 +5,10 @@ import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.tinkoff.edu.java.bot.service.IBot;
-import ru.tinkoff.edu.java.bot.service.IUserMessageProcessor;
+import ru.tinkoff.edu.java.bot.service.bot.IBot;
+import ru.tinkoff.edu.java.bot.service.bot.IUserMessageProcessor;
 import ru.tinkoff.edu.java.bot.service.command.Command;
-import ru.tinkoff.edu.java.bot.service.impl.Bot;
+import ru.tinkoff.edu.java.bot.service.bot.impl.Bot;
 
 import java.util.Collections;
 import java.util.List;

@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
-import ru.tinkoff.edu.java.bot.service.text.TextProvider.StartTextProvider;
+import ru.tinkoff.edu.java.bot.util.TextProvider.StartTextProvider;
 
 @RequiredArgsConstructor
 @Component

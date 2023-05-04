@@ -8,7 +8,7 @@ import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.StartCommand;
-import ru.tinkoff.edu.java.bot.service.text.TextProvider.StartTextProvider;
+import ru.tinkoff.edu.java.bot.util.TextProvider.StartTextProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

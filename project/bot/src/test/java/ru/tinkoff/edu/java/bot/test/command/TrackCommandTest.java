@@ -12,7 +12,7 @@ import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.TrackCommand;
 import ru.tinkoff.edu.java.bot.util.UrlUtils;
-import ru.tinkoff.edu.java.bot.service.text.TextProvider.TrackTextProvider;
+import ru.tinkoff.edu.java.bot.util.TextProvider.TrackTextProvider;
 
 import java.net.URI;
 
