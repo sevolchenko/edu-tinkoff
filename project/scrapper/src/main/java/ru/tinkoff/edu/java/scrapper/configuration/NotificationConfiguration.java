@@ -8,6 +8,7 @@ import ru.tinkoff.edu.java.scrapper.client.tgbot.ITgBotClient;
 import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
 import ru.tinkoff.edu.java.scrapper.component.producer.impl.HttpNotificationProducer;
 import ru.tinkoff.edu.java.scrapper.component.producer.impl.RabbitNotificationProducer;
+import ru.tinkoff.edu.java.scrapper.configuration.properties.QueueProperties;
 
 @Configuration
 public class NotificationConfiguration {
@@ -24,10 +25,10 @@ public class NotificationConfiguration {
 
     @ConditionalOnProperty(prefix = "app", name = "use-queue", havingValue = "true")
     public static class WithQueue {
-
         @Bean
-        public INotificationProducer notificationProducer(RabbitTemplate rabbitTemplate) {
-            return new RabbitNotificationProducer(rabbitTemplate);
+        public INotificationProducer notificationProducer(RabbitTemplate rabbitTemplate,
+                                                          QueueProperties queue) {
+            return new RabbitNotificationProducer(rabbitTemplate, queue);
         }
 
     }

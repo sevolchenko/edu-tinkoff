@@ -3,7 +3,7 @@ app:
     interval: PT10S
   link-check-delay: PT1M
   database-access-type: jpa
-  use-queue: false
+  use-queue: true
   queue:
     name: scrapper
     exchange: scrapper
@@ -28,12 +28,6 @@ spring:
     port: 5672
     username: ${RABBITMQ_USER:guest}
     password: ${RABBITMQ_PASSWORD:guest}
-    listener:
-      direct:
-        default-requeue-rejected: false
-      simple:
-        default-requeue-rejected: false
-
 
 springdoc:
   swagger-ui:

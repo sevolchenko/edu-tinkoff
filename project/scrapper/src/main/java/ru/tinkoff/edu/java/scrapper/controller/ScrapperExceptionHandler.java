@@ -36,7 +36,7 @@ public class ScrapperExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NoSuchChatException.class)
     protected ResponseEntity<Object> handleNoSuchChatException(NoSuchChatException ex) {
-        return buildApiErrorResponse(ex, "Чат не найден", HttpStatus.NOT_FOUND);
+        return buildApiErrorResponse(ex, "Чата еще нет в базе, зарегистрируйтесь", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AlreadyRegisteredChatException.class)
@@ -67,6 +67,11 @@ public class ScrapperExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidLinkException.class)
     protected ResponseEntity<Object> handleNotSupportedLinkException(InvalidLinkException ex) {
         return buildApiErrorResponse(ex, "Неправильный формат ссылки, сопоставьте с примером", HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NotFoundLinkException.class)
+    protected ResponseEntity<Object> handleNotFoundLinkException(NotFoundLinkException ex) {
+        return buildApiErrorResponse(ex, "Ссылка не найдена или к ней нет доступа", HttpStatus.CONFLICT);
     }
 
     private ResponseEntity<Object> buildApiErrorResponse(Exception ex, String description, HttpStatus status) {

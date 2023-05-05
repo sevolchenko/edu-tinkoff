@@ -6,6 +6,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
 import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
+import ru.tinkoff.edu.java.scrapper.configuration.properties.QueueProperties;
 
 @Component
 @Slf4j
@@ -13,6 +14,7 @@ import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
 public class RabbitNotificationProducer implements INotificationProducer {
 
     private final RabbitTemplate rabbitTemplate;
+    private final QueueProperties queue;
 
     @Override
     public void sendUpdate(LinkUpdateRequest linkUpdate) {
@@ -21,7 +23,7 @@ public class RabbitNotificationProducer implements INotificationProducer {
                 linkUpdate.url(), linkUpdate.tgChatIds(), linkUpdate.eventCode());
 
            rabbitTemplate.convertAndSend(
-                "directExchange", "directRoutingKey", linkUpdate);
+                queue.exchange(), queue.routingKey(), linkUpdate);
     }
 
 }
