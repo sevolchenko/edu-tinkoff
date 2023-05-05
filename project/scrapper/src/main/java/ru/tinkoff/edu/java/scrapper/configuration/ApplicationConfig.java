@@ -6,6 +6,10 @@ import org.springframework.boot.context.properties.bind.ConstructorBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.validation.annotation.Validated;
+import ru.tinkoff.edu.java.scrapper.configuration.properties.AccessType;
+import ru.tinkoff.edu.java.scrapper.configuration.properties.ClientUrlProperties;
+import ru.tinkoff.edu.java.scrapper.configuration.properties.QueueProperties;
+import ru.tinkoff.edu.java.scrapper.configuration.properties.SchedulerProperties;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -14,23 +18,28 @@ import java.util.Optional;
 @EnableScheduling
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(
-        @NotNull SchedulerConfiguration scheduler,
-        @NotNull ClientUrlConfiguration client,
+        @NotNull SchedulerProperties scheduler,
+        @NotNull ClientUrlProperties client,
         @NotNull Duration linkCheckDelay,
         AccessType databaseAccessType,
-        @NotNull Boolean useQueue) {
+        @NotNull Boolean useQueue,
+
+        QueueProperties queue
+        ) {
 
     @ConstructorBinding
-    public ApplicationConfig(@NotNull SchedulerConfiguration scheduler,
-                             ClientUrlConfiguration client,
+    public ApplicationConfig(@NotNull SchedulerProperties scheduler,
+                             ClientUrlProperties client,
                              @NotNull Duration linkCheckDelay,
                              AccessType databaseAccessType,
-                             Boolean useQueue) {
+                             Boolean useQueue,
+                             QueueProperties queue) {
         this.scheduler = scheduler;
-        this.client = Optional.ofNullable(client).orElse(new ClientUrlConfiguration(null, null, null));
+        this.client = new ClientUrlProperties(Optional.ofNullable(client).orElse(ClientUrlProperties.EMPTY));
         this.linkCheckDelay = linkCheckDelay;
-        this.databaseAccessType = Optional.ofNullable(databaseAccessType).orElse(AccessType.JDBC);
+        this.databaseAccessType = Optional.ofNullable(databaseAccessType).orElse(AccessType.DEFAULT);
         this.useQueue = Optional.ofNullable(useQueue).orElse(false);
+        this.queue = queue;
     }
 
     @Bean
@@ -39,13 +48,18 @@ public record ApplicationConfig(
     }
 
     @Bean
-    public ClientUrlConfiguration clientUrlConfig() {
+    public ClientUrlProperties clientUrlProperties() {
         return client;
     }
 
     @Bean
     public Duration linkCheckDelay() {
         return linkCheckDelay;
+    }
+
+    @Bean
+    public QueueProperties queueProperties() {
+        return queue;
     }
 
 }

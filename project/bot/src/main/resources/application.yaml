@@ -1,13 +1,27 @@
 app:
   bot-token: ${BOT_TOKEN}
+  queue:
+    name: scrapper
+    exchange: scrapper
+    routing-key: scrapper
+
 springdoc:
   swagger-ui:
     path: '/swagger-ui'
 
 spring:
+
   rabbitmq:
-    username: ${RABBITMQ_USER}
-    password: ${RABBITMQ_PASSWORD}
+    host: ${RABBITMQ_HOST:localhost}
+    port: 5672
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    listener:
+      direct:
+        default-requeue-rejected: false
+      simple:
+        default-requeue-rejected: false
+
 
 server:
   port: ${BOT_PORT}

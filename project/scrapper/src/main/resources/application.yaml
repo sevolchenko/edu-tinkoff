@@ -3,7 +3,11 @@ app:
     interval: PT10S
   link-check-delay: PT1M
   database-access-type: jpa
-  use-queue: true
+  use-queue: false
+  queue:
+    name: scrapper
+    exchange: scrapper
+    routing-key: scrapper
 #  client:
 #    gitHubClientUrl: 'www.github.com'
 spring:
@@ -20,8 +24,15 @@ spring:
     enabled: false
 
   rabbitmq:
-    username: ${RABBITMQ_USER}
-    password: ${RABBITMQ_PASSWORD}
+    host: ${RABBITMQ_HOST:localhost}
+    port: 5672
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    listener:
+      direct:
+        default-requeue-rejected: false
+      simple:
+        default-requeue-rejected: false
 
 
 springdoc:

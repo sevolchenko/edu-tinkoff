@@ -1,41 +1,26 @@
 package ru.tinkoff.edu.java.scrapper.configuration;
 
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.tinkoff.edu.java.scrapper.component.producer.impl.RabbitNotificationProducer;
+import ru.tinkoff.edu.java.scrapper.configuration.properties.QueueProperties;
+
+import java.util.List;
 
 @Configuration
+@ConditionalOnBean(RabbitNotificationProducer.class) // Чтобы очередь конфигурировалась только если она используется
 public class RabbitMQConfiguration {
-
-    @Bean
-    public CachingConnectionFactory connectionFactory() {
-        var connectionFactory = new CachingConnectionFactory("localhost");
-        connectionFactory.setUsername("sergey");
-        connectionFactory.setPassword("qwerty1234");
-        return connectionFactory;
-    }
 
     @Bean
     public AmqpAdmin amqpAdmin(CachingConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
-    }
-
-    @Bean
-    public RabbitTemplate rabbitTemplate(CachingConnectionFactory connectionFactory) {
-        var rabbitTemplate = new RabbitTemplate(connectionFactory);
-        return rabbitTemplate;
-    }
-
-    @Bean
-    public Queue directQueue() {
-        return new Queue("directQueue");
     }
 
     @Bean
@@ -44,7 +29,29 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public DirectExchange exchange() {
-        return new DirectExchange("directExchange", true, false);
+    public RabbitTemplate rabbitTemplate(CachingConnectionFactory connectionFactory,
+                                         MessageConverter messageConverter) {
+        var rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(messageConverter);
+        return rabbitTemplate;
+    }
+
+    @Bean
+    public Queue directQueue(QueueProperties queueProperties) {
+        return QueueBuilder.durable(queueProperties.name())
+                .build();
+    }
+
+    @Bean
+    public DirectExchange directExchange(QueueProperties queueProperties) {
+        return new DirectExchange(queueProperties.exchange(), true, false);
+    }
+
+
+    @Bean
+    public List<Binding> bindings(QueueProperties queueProperties, Queue directQueue, DirectExchange directExchange) {
+        return List.of(
+                BindingBuilder.bind(directQueue).to(directExchange).with(queueProperties.routingKey())
+        );
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import ru.tinkoff.edu.java.scrapper.client.github.dto.GitHubLinkState;
 import ru.tinkoff.edu.java.scrapper.client.stackoverflow.dto.StackOverflowLinkState;
+import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkEvent;
 import ru.tinkoff.edu.java.scrapper.util.ObjectMapperUtil;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
@@ -12,6 +13,8 @@ import ru.tinkoff.edu.java.scrapper.util.ObjectMapperUtil;
         @JsonSubTypes.Type(value = StackOverflowLinkState.class, name = "stackoverflow-linkstate")
 })
 public interface ILinkState {
+
+    LinkEvent compareTo(ILinkState newState);
 
     default String asJson() {
         return ObjectMapperUtil.writeValueAsString(this);

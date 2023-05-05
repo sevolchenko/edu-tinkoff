@@ -13,12 +13,11 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.IntegrationEnvironment;
-import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
-import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
+import ru.tinkoff.edu.java.scrapper.client.github.dto.GitHubLinkState;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkEvent;
+import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
+import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkProcessOutput;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaLinkRepository;
 
 import java.time.Duration;
@@ -28,8 +27,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestLinkData.randomState;
-import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestLinkData.stabValidResponse;
+import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestLinkData.*;
 
 @SpringBootTest
 @ActiveProfiles({"test", "test-jpa"})
@@ -134,8 +132,8 @@ public class JpaLinkUpdaterTest extends IntegrationEnvironment {
                             request.createdAt());
 
                     var newState = randomState();
-                    when(linkProcessor.processLink(request.url(), request.state()))
-                            .thenReturn(new LinkProcessOutput(newState, LinkEvent.UPDATED));
+                    when(linkProcessor.getState(ArgumentMatchers.any()))
+                            .thenReturn(randomUpdatedState((GitHubLinkState) request.state()));
                     doNothing().when(notificationProducer)
                             .sendUpdate(ArgumentMatchers.any(LinkUpdateRequest.class));
 
@@ -183,8 +181,8 @@ public class JpaLinkUpdaterTest extends IntegrationEnvironment {
                             request.createdAt());
 
                     var newState = randomState();
-                    when(linkProcessor.processLink(request.url(), request.state()))
-                            .thenReturn(new LinkProcessOutput(newState, null));
+                    when(linkProcessor.getState(ArgumentMatchers.any()))
+                            .thenReturn(randomUpdatedState((GitHubLinkState) request.state()));
                     doNothing().when(notificationProducer)
                             .sendUpdate(ArgumentMatchers.any(LinkUpdateRequest.class));
 

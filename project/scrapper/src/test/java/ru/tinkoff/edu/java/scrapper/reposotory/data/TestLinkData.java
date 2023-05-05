@@ -4,6 +4,7 @@ import ru.tinkoff.edu.java.scrapper.client.github.dto.GitHubLinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Random;
@@ -20,6 +21,10 @@ public class TestLinkData {
 
     public static ILinkState randomState() {
         return new GitHubLinkState(randomDate(), RND.nextInt(100));
+    }
+
+    public static ILinkState randomUpdatedState(GitHubLinkState gitHubLinkState) {
+        return new GitHubLinkState(gitHubLinkState.pushedAt().plus(Duration.ofDays(1)), gitHubLinkState.branchesCount());
     }
 
     public static List<AddLinkInput> stabValidResponse() {

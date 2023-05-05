@@ -39,24 +39,26 @@ public class LinkUpdater implements ILinkUpdater {
 
             log.info("Processing update link {}", link.getUrl());
 
-            var output = linkProcessor.processLink(link.getUrl(), link.getState());
+            var newState = linkProcessor.getState(URI.create(link.getUrl()));
 
-            if (output.event() != null) {
+            var event = link.getState().compareTo(newState);
+
+            if (event != null) {
 
                 log.info("Event \"{}\" found for link {}",
-                        output.event().getDescription(), link.getUrl());
+                        event.getDescription(), link.getUrl());
 
                 var tgChatIds = subscriptionRepository.findAllByLinkId(link.getLinkId()).stream()
                         .map(SubscriptionOutput::getTgChatId)
                         .toList();
 
                 var update = new LinkUpdateRequest(link.getLinkId(),
-                        URI.create(link.getUrl()), output.event().getCode(), tgChatIds);
+                        URI.create(link.getUrl()), event.getCode(), tgChatIds);
 
                 notificationProducer.sendUpdate(update);
             }
 
-            linkRepository.updateLastScannedAt(link.getLinkId(), output.newState(), OffsetDateTime.now());
+            linkRepository.updateLastScannedAt(link.getLinkId(), newState, OffsetDateTime.now());
 
         });
 
