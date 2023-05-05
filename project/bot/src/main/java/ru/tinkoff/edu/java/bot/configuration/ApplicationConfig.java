@@ -5,18 +5,24 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.annotation.Validated;
+import ru.tinkoff.edu.java.bot.configuration.properties.ClientUrlProperties;
+import ru.tinkoff.edu.java.bot.configuration.properties.QueueProperties;
 
 import java.util.Optional;
 
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
-public record ApplicationConfig(@NotNull String botToken, @NotNull ClientUrlConfiguration client) {
+public record ApplicationConfig(@NotNull String botToken,
+                                @NotNull ClientUrlProperties client,
+                                @NotNull QueueProperties queue) {
 
     @ConstructorBinding
     public ApplicationConfig(@NotNull String botToken,
-                             ClientUrlConfiguration client) {
+                             ClientUrlProperties client,
+                             @NotNull QueueProperties queue) {
         this.botToken = botToken;
-        this.client = Optional.ofNullable(client).orElse(new ClientUrlConfiguration(null));
+        this.client = new ClientUrlProperties(Optional.ofNullable(client).orElse(ClientUrlProperties.EMPTY));
+        this.queue = queue;
     }
 
     @Bean(name = "botToken")
@@ -25,8 +31,13 @@ public record ApplicationConfig(@NotNull String botToken, @NotNull ClientUrlConf
     }
 
     @Bean
-    public ClientUrlConfiguration clientUrlConfig() {
+    public ClientUrlProperties clientUrlProperties() {
         return client;
+    }
+
+    @Bean
+    public QueueProperties queueProperties() {
+        return queue;
     }
 
 }
