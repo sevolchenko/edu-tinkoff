@@ -12,7 +12,7 @@ import ru.tinkoff.edu.java.bot.service.bot.INotificationService;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@RabbitListener(queues = "directQueue")
+@RabbitListener(queues = "${app.queue.name}")
 public class ScrapperQueueListener {
 
     private final INotificationService notificationService;
