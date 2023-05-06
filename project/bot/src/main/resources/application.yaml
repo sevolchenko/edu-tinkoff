@@ -17,11 +17,14 @@ spring:
     username: ${RABBITMQ_USER:guest}
     password: ${RABBITMQ_PASSWORD:guest}
     listener:
-      direct:
-        default-requeue-rejected: false
       simple:
+        default-requeue-rejected: false
+        retry:
+          enabled: true
+          max-attempts: 3
+      direct:
         default-requeue-rejected: false
 
 
 server:
-  port: ${BOT_PORT}
+  port: ${BOT_PORT:8081}

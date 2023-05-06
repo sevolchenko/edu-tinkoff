@@ -18,11 +18,10 @@ public class ScrapperQueueListener {
     private final INotificationService notificationService;
 
     @RabbitHandler
-    private void received(LinkUpdateRequest linkUpdateRequest) {
+    public void received(LinkUpdateRequest linkUpdateRequest) {
 
         notificationService.linkUpdateReceived(linkUpdateRequest.url(),
                 LinkEvent.get(linkUpdateRequest.eventCode()), linkUpdateRequest.tgChatIds());
-
 
     }
 
