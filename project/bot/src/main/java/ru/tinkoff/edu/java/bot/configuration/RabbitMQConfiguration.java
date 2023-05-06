@@ -14,7 +14,6 @@ import ru.tinkoff.edu.java.bot.configuration.properties.QueueProperties;
 import ru.tinkoff.edu.java.bot.model.dto.request.LinkUpdateRequest;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -34,7 +33,7 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public ClassMapper classMapper(){
+    public ClassMapper classMapper() {
         Map<String, Class<?>> mappings = new HashMap<>();
         mappings.put("ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest", LinkUpdateRequest.class);
 
@@ -45,11 +44,12 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public MessageConverter jsonMessageConverter(ClassMapper classMapper){
-        Jackson2JsonMessageConverter jsonConverter=new Jackson2JsonMessageConverter();
+    public MessageConverter jsonMessageConverter(ClassMapper classMapper) {
+        Jackson2JsonMessageConverter jsonConverter = new Jackson2JsonMessageConverter();
         jsonConverter.setClassMapper(classMapper);
         return jsonConverter;
     }
+
     @Bean
     public RabbitTemplate rabbitTemplate(CachingConnectionFactory connectionFactory,
                                          MessageConverter messageConverter) {
@@ -61,18 +61,34 @@ public class RabbitMQConfiguration {
     @Bean
     public Queue directQueue(QueueProperties queueProperties) {
         return QueueBuilder.durable(queueProperties.name())
-                .withArgument("x-dead-letter-exchange", "")
-                .withArgument("x-dead-letter-routing-key", deadLetterQueueName(queueProperties.name()))
+                .withArgument("x-dead-letter-exchange", deadExchangeName(queueProperties.exchange()))
+                .withArgument("x-dead-letter-routing-key", deadLetterQueueName(queueProperties.routingKey()))
                 .build();
     }
 
-
+    @Bean
+    public Queue deadLetterQueue(QueueProperties queueProperties) {
+        return QueueBuilder.durable(deadLetterQueueName(queueProperties.name())).build();
+    }
 
     @Bean
-    public List<Binding> bindings(QueueProperties queueProperties, Queue directQueue, DirectExchange directExchange) {
-        return List.of(
-                BindingBuilder.bind(directQueue).to(directExchange).with(queueProperties.routingKey())
-        );
+    public DirectExchange directExchange(QueueProperties queueProperties) {
+        return new DirectExchange(queueProperties.exchange(), true, false);
+    }
+
+    @Bean
+    public DirectExchange deadLetterExchange(QueueProperties queueProperties) {
+        return new DirectExchange(deadExchangeName(queueProperties.exchange()));
+    }
+
+    @Bean
+    public Binding directBinding(QueueProperties queueProperties, Queue directQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(directQueue).to(directExchange).with(queueProperties.routingKey());
+    }
+
+    @Bean
+    public Binding dlqBinding(QueueProperties queueProperties, Queue deadLetterQueue, DirectExchange deadLetterExchange) {
+        return BindingBuilder.bind(deadLetterQueue).to(deadLetterExchange).with(deadLetterQueueName(queueProperties.routingKey()));
     }
 
 }

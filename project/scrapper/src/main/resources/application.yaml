@@ -33,4 +33,4 @@ springdoc:
   swagger-ui:
     path: '/swagger-ui'
 server:
-  port: ${SCRAPPER_PORT}
+  port: ${SCRAPPER_PORT:8082}

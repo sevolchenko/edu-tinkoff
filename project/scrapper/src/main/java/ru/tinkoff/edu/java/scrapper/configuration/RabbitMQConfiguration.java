@@ -18,6 +18,14 @@ import java.util.List;
 @ConditionalOnBean(RabbitNotificationProducer.class) // Чтобы очередь конфигурировалась только если она используется
 public class RabbitMQConfiguration {
 
+    private static String deadExchangeName(String exchange) {
+        return exchange + ".dlx";
+    }
+
+    private static String deadLetterQueueName(String exchange) {
+        return exchange + ".dlq";
+    }
+
     @Bean
     public AmqpAdmin amqpAdmin(CachingConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
@@ -39,6 +47,8 @@ public class RabbitMQConfiguration {
     @Bean
     public Queue directQueue(QueueProperties queueProperties) {
         return QueueBuilder.durable(queueProperties.name())
+                .withArgument("x-dead-letter-exchange", deadExchangeName(queueProperties.exchange()))
+                .withArgument("x-dead-letter-routing-key", deadLetterQueueName(queueProperties.name()))
                 .build();
     }
 
