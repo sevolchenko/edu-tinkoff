@@ -3,12 +3,10 @@ package ru.tinkoff.edu.java.scrapper.component.producer.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.stereotype.Component;
-import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
 import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
+import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
 import ru.tinkoff.edu.java.scrapper.configuration.properties.QueueProperties;
 
-@Component
 @Slf4j
 @RequiredArgsConstructor
 public class RabbitNotificationProducer implements INotificationProducer {
