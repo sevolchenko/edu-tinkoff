@@ -29,7 +29,7 @@ public final class GitHubParser extends ConcreteParser<GitHubParseResult> {
             String username = parts[1];
             String repository = parts[2];
             return new GitHubParseResult(username, repository);
-        } else if (next != null){
+        } else if (next != null) {
             return next.parse(url);
         }
         return null;

@@ -11,9 +11,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class LinkParserTest {
-    
+
     private LinkParser linkParser;
-    
+
     @BeforeEach
     public void setup() {
         linkParser = new LinkParser();

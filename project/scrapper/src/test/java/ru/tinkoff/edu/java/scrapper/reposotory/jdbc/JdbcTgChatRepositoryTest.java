@@ -33,13 +33,13 @@ public class JdbcTgChatRepositoryTest extends IntegrationEnvironment {
     private RowMapper<TgChatOutput> rowMapper;
 
     private final String selectTgChatSql = """
-                select * from tg_chat
-                """;
+            select * from tg_chat
+            """;
 
     private final String insertTgChatSql = """
-                insert into tg_chat(tg_chat_id, username, registered_at)
-                values (?, ?, ?)
-                """;
+            insert into tg_chat(tg_chat_id, username, registered_at)
+            values (?, ?, ?)
+            """;
 
     @Transactional
     @Rollback

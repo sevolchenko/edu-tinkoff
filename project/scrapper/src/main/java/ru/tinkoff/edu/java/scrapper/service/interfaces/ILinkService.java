@@ -8,6 +8,8 @@ import java.util.Collection;
 public interface ILinkService {
 
     LinkOutput add(Long tgChatId, URI url);
+
     LinkOutput remove(Long tgChatId, URI url);
+
     Collection<LinkOutput> listAllForChat(Long tgChatId);
 }

@@ -1,6 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.model.dto.internal.input;
 
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
+import ru.tinkoff.edu.java.scrapper.model.linkstate.ILinkState;
 
 import java.time.OffsetDateTime;
 

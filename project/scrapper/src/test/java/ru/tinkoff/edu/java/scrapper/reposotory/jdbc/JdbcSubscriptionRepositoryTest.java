@@ -40,8 +40,8 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
     private RowMapper<SubscriptionOutput> subscriptionRowMapper;
 
     private final String selectSubscriptionSql = """
-                select * from subscription
-                """;
+            select * from subscription
+            """;
 
     private final String insertSubscriptionSql = """
                 insert into subscription(tg_chat_id, link_id, created_at)
@@ -49,15 +49,15 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
             """;
 
     private final String insertTgChatSql = """
-                insert into tg_chat(tg_chat_id, username, registered_at)
-                values (?, ?, ?)
-                """;
+            insert into tg_chat(tg_chat_id, username, registered_at)
+            values (?, ?, ?)
+            """;
 
     private final String insertLinkSql = """
-                insert into link(url, last_scanned_at, created_at)
-                values (?, ?, ?)
-                returning link_id
-                """;
+            insert into link(url, last_scanned_at, created_at)
+            values (?, ?, ?)
+            returning link_id
+            """;
 
     @Transactional
     @Rollback
@@ -220,7 +220,7 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
                     res.setLinkId(linkId);
                     res.setCreatedAt(subCreatedAt);
                     return res;
-        })
+                })
                 .toList();
 
         var rs1 = jdbcTemplate.query(selectSubscriptionSql, subscriptionRowMapper);
@@ -376,20 +376,20 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
         var tgChats = TestTgChatData.stabValidResponse();
         var links = TestLinkData.stabValidResponse();
         StreamUtils.zip(tgChats.stream(), links.stream(), (tgChat, link) -> {
-                    jdbcTemplate.update(insertTgChatSql,
-                            tgChat.tgChatId(), tgChat.username(), tgChat.registeredAt());
-                    Long linkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class,
-                            link.url(), link.lastScannedAt(), link.createdAt());
+            jdbcTemplate.update(insertTgChatSql,
+                    tgChat.tgChatId(), tgChat.username(), tgChat.registeredAt());
+            Long linkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class,
+                    link.url(), link.lastScannedAt(), link.createdAt());
 
-                    var subCreatedAt = randomDate();
-                    jdbcTemplate.update(insertSubscriptionSql, tgChat.tgChatId(), linkId, subCreatedAt);
+            var subCreatedAt = randomDate();
+            jdbcTemplate.update(insertSubscriptionSql, tgChat.tgChatId(), linkId, subCreatedAt);
 
-                    var res = new SubscriptionOutput();
-                    res.setTgChatId(tgChat.tgChatId());
-                    res.setLinkId(linkId);
-                    res.setCreatedAt(subCreatedAt);
-                    return res;
-                });
+            var res = new SubscriptionOutput();
+            res.setTgChatId(tgChat.tgChatId());
+            res.setLinkId(linkId);
+            res.setCreatedAt(subCreatedAt);
+            return res;
+        });
 
         var rs1 = jdbcTemplate.query(selectSubscriptionSql, subscriptionRowMapper);
 

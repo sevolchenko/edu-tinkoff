@@ -20,7 +20,7 @@ public class RabbitNotificationProducer implements INotificationProducer {
         log.info("Notifying about link {} chats {}. Event code: {}",
                 linkUpdate.url(), linkUpdate.tgChatIds(), linkUpdate.eventCode());
 
-           rabbitTemplate.convertAndSend(
+        rabbitTemplate.convertAndSend(
                 queue.exchange(), queue.routingKey(), linkUpdate);
     }
 

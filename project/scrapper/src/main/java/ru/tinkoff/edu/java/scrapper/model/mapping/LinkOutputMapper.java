@@ -2,10 +2,10 @@ package ru.tinkoff.edu.java.scrapper.model.mapping;
 
 import org.jooq.JSON;
 import org.mapstruct.Mapper;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 import ru.tinkoff.edu.java.scrapper.model.entity.Link;
 import ru.tinkoff.edu.java.scrapper.model.jooq.generated.tables.records.LinkRecord;
+import ru.tinkoff.edu.java.scrapper.model.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.util.ObjectMapperUtil;
 
 import java.util.List;

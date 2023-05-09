@@ -1,8 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.client.tgbot.impl;
 
 import org.springframework.web.reactive.function.client.WebClient;
-import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
 import ru.tinkoff.edu.java.scrapper.client.tgbot.ITgBotClient;
+import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
 
 public class TgBotClient implements ITgBotClient {
 

@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.bot.service.bot.IBot;
 import ru.tinkoff.edu.java.bot.service.bot.IUserMessageProcessor;
-import ru.tinkoff.edu.java.bot.service.command.Command;
 import ru.tinkoff.edu.java.bot.service.bot.impl.Bot;
+import ru.tinkoff.edu.java.bot.service.command.Command;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class BotConfiguration {
 
     @Bean
-    public TelegramBot telegramBot(String botToken){
+    public TelegramBot telegramBot(String botToken) {
         return new TelegramBot(botToken);
     }
 

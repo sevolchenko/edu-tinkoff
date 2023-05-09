@@ -4,11 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
+import ru.tinkoff.edu.java.bot.component.textprovider.StartCommandTextProvider;
+import ru.tinkoff.edu.java.bot.model.service.TestMessageTemplates;
 import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.StartCommand;
-import ru.tinkoff.edu.java.bot.util.TextProvider.StartTextProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -23,12 +24,14 @@ public class StartCommandTest {
 
     private IScrapperClient scrapperClient;
 
+    private StartCommandTextProvider textProvider;
+
     @BeforeEach
     public void setup() {
 
         this.scrapperClient = Mockito.mock(IScrapperClient.class);
-        this.startCommand = new StartCommand(scrapperClient);
-
+        this.textProvider = new StartCommandTextProvider(TestMessageTemplates.get());
+        this.startCommand = new StartCommand(scrapperClient, textProvider);
     }
 
     @Test
@@ -136,7 +139,7 @@ public class StartCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, equalTo(StartTextProvider.buildStartMessage()));
+        assertThat(text, equalTo(textProvider.getStartMessage()));
 
         assertThat(parameters.get("disable_web_page_preview"), is(true));
 

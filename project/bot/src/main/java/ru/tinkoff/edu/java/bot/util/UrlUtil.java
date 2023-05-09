@@ -1,13 +1,19 @@
 package ru.tinkoff.edu.java.bot.util;
 
-import java.net.URI;
 import org.apache.commons.validator.routines.UrlValidator;
 
-public class UrlUtils {
+import java.net.URI;
 
-    private static final UrlValidator URL_VALIDATOR = new UrlValidator();
+public class UrlUtil {
 
-    private UrlUtils() {}
+    private static final UrlValidator URL_VALIDATOR;
+
+    static {
+        URL_VALIDATOR = new UrlValidator();
+    }
+
+    private UrlUtil() {
+    }
 
     public static URI create(String link) {
 

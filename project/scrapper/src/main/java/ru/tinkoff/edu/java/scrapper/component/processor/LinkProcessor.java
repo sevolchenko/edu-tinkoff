@@ -12,7 +12,7 @@ import ru.tinkoff.edu.java.scrapper.client.stackoverflow.IStackOverflowClient;
 import ru.tinkoff.edu.java.scrapper.client.stackoverflow.dto.StackOverflowQuestionRequest;
 import ru.tinkoff.edu.java.scrapper.exception.InvalidLinkException;
 import ru.tinkoff.edu.java.scrapper.exception.NotSupportedLinkException;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
+import ru.tinkoff.edu.java.scrapper.model.linkstate.ILinkState;
 
 import java.net.URI;
 
@@ -55,7 +55,6 @@ public class LinkProcessor {
 
         return clientState;
     }
-
 
 
 }

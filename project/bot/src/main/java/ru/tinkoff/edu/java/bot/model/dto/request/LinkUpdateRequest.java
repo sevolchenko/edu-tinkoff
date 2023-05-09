@@ -6,4 +6,5 @@ import java.util.List;
 public record LinkUpdateRequest(Long linkId,
                                 URI url,
                                 Integer eventCode,
-                                List<Long> tgChatIds) {}
+                                List<Long> tgChatIds) {
+}

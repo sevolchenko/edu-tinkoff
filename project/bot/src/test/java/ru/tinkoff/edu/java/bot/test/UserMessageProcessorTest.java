@@ -3,17 +3,15 @@ package ru.tinkoff.edu.java.bot.test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import ru.tinkoff.edu.java.bot.component.textprovider.ErrorTextProvider;
+import ru.tinkoff.edu.java.bot.model.service.TestMessageTemplates;
+import ru.tinkoff.edu.java.bot.model.service.command.*;
 import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
-import ru.tinkoff.edu.java.bot.model.service.command.TestListCommand;
-import ru.tinkoff.edu.java.bot.model.service.command.TestStartCommand;
-import ru.tinkoff.edu.java.bot.model.service.command.TestTrackCommand;
-import ru.tinkoff.edu.java.bot.model.service.command.TestUntrackCommand;
 import ru.tinkoff.edu.java.bot.service.bot.IUserMessageProcessor;
-import ru.tinkoff.edu.java.bot.service.command.*;
 import ru.tinkoff.edu.java.bot.service.bot.impl.UserMessageProcessor;
-import ru.tinkoff.edu.java.bot.util.TextProvider.BotTextProvider;
+import ru.tinkoff.edu.java.bot.service.command.*;
 
 import java.util.List;
 
@@ -30,17 +28,21 @@ public class UserMessageProcessorTest {
     private UntrackCommand untrackCommand;
     private ListCommand listCommand;
 
+    private ErrorTextProvider errorTextProvider;
+
     private List<? extends Command> commands;
 
     private IUserMessageProcessor userMessageProcessor;
 
     @BeforeEach
     public void setup() {
-        helpCommand = Mockito.spy(HelpCommand.class);
+        helpCommand = Mockito.spy(TestHelpCommand.class);
         startCommand = Mockito.spy(TestStartCommand.class);
         trackCommand = Mockito.spy(TestTrackCommand.class);
         untrackCommand = Mockito.spy(TestUntrackCommand.class);
         listCommand = Mockito.spy(TestListCommand.class);
+
+        errorTextProvider = new ErrorTextProvider(TestMessageTemplates.get());
 
         this.commands = List.of(
                 helpCommand,
@@ -50,7 +52,7 @@ public class UserMessageProcessorTest {
                 listCommand
         );
 
-        this.userMessageProcessor = new UserMessageProcessor(commands);
+        this.userMessageProcessor = new UserMessageProcessor(commands, errorTextProvider);
 
     }
 
@@ -83,7 +85,7 @@ public class UserMessageProcessorTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, equalTo(BotTextProvider.buildUnknownMessageText()));
+        assertThat(text, equalTo(errorTextProvider.getUnknownMessageText()));
     }
 
     @Test
@@ -104,8 +106,9 @@ public class UserMessageProcessorTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, equalTo(BotTextProvider.buildUnknownMessageText()));
+        assertThat(text, equalTo(errorTextProvider.getUnknownMessageText()));
     }
+
     @Test
     void testProcessCallsStartCommand() {
         // given

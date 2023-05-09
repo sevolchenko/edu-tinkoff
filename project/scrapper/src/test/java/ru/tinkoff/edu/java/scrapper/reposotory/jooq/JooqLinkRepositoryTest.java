@@ -35,14 +35,14 @@ public class JooqLinkRepositoryTest extends IntegrationEnvironment {
     private RowMapper<LinkOutput> rowMapper;
 
     private final String selectLinkSql = """
-                select * from link
-                """;
+            select * from link
+            """;
 
     private final String insertLinkSql = """
-                insert into link(url, state, last_scanned_at, created_at)
-                values (?, ?::json, ?, ?)
-                returning link_id
-                """;
+            insert into link(url, state, last_scanned_at, created_at)
+            values (?, ?::json, ?, ?)
+            returning link_id
+            """;
 
     @Transactional
     @Rollback

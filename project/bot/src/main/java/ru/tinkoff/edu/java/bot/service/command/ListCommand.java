@@ -5,13 +5,14 @@ import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
-import ru.tinkoff.edu.java.bot.util.TextProvider.ListTextProvider;
+import ru.tinkoff.edu.java.bot.component.textprovider.ListCommandTextProvider;
 
 @RequiredArgsConstructor
 @Component
 public class ListCommand implements Command {
 
     private final IScrapperClient scrapperClient;
+    private final ListCommandTextProvider textProvider;
 
     @Override
     public String command() {
@@ -28,11 +29,11 @@ public class ListCommand implements Command {
         var linkResponses = scrapperClient.getLinks(update.message().chat().id());
 
         if (linkResponses.size() == null || linkResponses.size() == 0) {
-            var text = ListTextProvider.buildEmptyLinksText();
+            var text = textProvider.getEmptyLinksText();
             return new SendMessage(update.message().chat().id(), text);
         }
 
-        var text = ListTextProvider.buildLinksListText(linkResponses.links().stream()
+        var text = textProvider.getLinksListText(linkResponses.links().stream()
                 .map(linkResponse -> linkResponse.link().toString())
                 .toList());
         return new SendMessage(update.message().chat().id(), text)

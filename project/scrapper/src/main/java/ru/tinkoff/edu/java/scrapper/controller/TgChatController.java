@@ -3,7 +3,6 @@ package ru.tinkoff.edu.java.scrapper.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddTgChatInput;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ITgChatService;
 
 @Slf4j

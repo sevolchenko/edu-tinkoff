@@ -34,7 +34,7 @@ public final class StackOverflowParser extends ConcreteParser<StackOverflowParse
             }
             Integer questionId = Integer.parseInt(parts[REQUIRED_PARTS.length + 1]);
             return new StackOverflowParseResult(questionId);
-        } else if (next != null){
+        } else if (next != null) {
             return next.parse(url);
         }
         return null;

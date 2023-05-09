@@ -1,8 +1,6 @@
 package ru.tinkoff.edu.java.scrapper.model.jooq.codegen;
 
 import org.jooq.codegen.GenerationTool;
-import org.jooq.conf.RenderNameCase;
-import org.jooq.conf.Settings;
 import org.jooq.meta.jaxb.*;
 
 public class JooqCodegen {

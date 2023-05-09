@@ -7,12 +7,13 @@ import org.mockito.Mockito;
 import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
 import ru.tinkoff.edu.java.bot.client.scrapper.dto.request.RemoveLinkRequest;
 import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.LinkResponse;
+import ru.tinkoff.edu.java.bot.component.textprovider.UntrackCommandTextProvider;
+import ru.tinkoff.edu.java.bot.model.service.TestMessageTemplates;
 import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.UntrackCommand;
-import ru.tinkoff.edu.java.bot.util.TextProvider.UntrackTextProvider;
-import ru.tinkoff.edu.java.bot.util.UrlUtils;
+import ru.tinkoff.edu.java.bot.util.UrlUtil;
 
 import java.net.URI;
 
@@ -27,12 +28,14 @@ public class UntrackCommandTest {
     private UntrackCommand untrackCommand;
 
     private IScrapperClient scrapperClient;
+    private UntrackCommandTextProvider textProvider;
 
     @BeforeEach
     public void setup() {
-
         this.scrapperClient = Mockito.mock(IScrapperClient.class);
-        this.untrackCommand = new UntrackCommand(scrapperClient);
+        this.textProvider = new UntrackCommandTextProvider(TestMessageTemplates.get());
+
+        this.untrackCommand = new UntrackCommand(scrapperClient, textProvider);
 
     }
 
@@ -140,7 +143,7 @@ public class UntrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo(UntrackTextProvider.buildNoLinkErrorText())));
+        assertThat(text, is(equalTo(textProvider.getNoLinkErrorText())));
 
     }
 
@@ -164,7 +167,7 @@ public class UntrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo(UntrackTextProvider.buildInvalidLinkText())));
+        assertThat(text, is(equalTo(textProvider.getInvalidLinkText())));
 
     }
 
@@ -187,7 +190,7 @@ public class UntrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo(UntrackTextProvider.buildInvalidLinkText())));
+        assertThat(text, is(equalTo(textProvider.getInvalidLinkText())));
 
     }
 
@@ -196,7 +199,7 @@ public class UntrackCommandTest {
     void testHandleCommandWithValidLink1() {
         // given
         Long chatId = randomId();
-        URI link = UrlUtils.create("https://github.com/sevolchenko/online-store");
+        URI link = UrlUtil.create("https://github.com/sevolchenko/online-store");
 
         var update = new TestUpdate(new TestMessage("/untrack " + link, new TestChat(chatId)));
         when(scrapperClient.deleteLink(eq(chatId), ArgumentMatchers.any(RemoveLinkRequest.class)))
@@ -214,7 +217,7 @@ public class UntrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo(UntrackTextProvider.buildSuccessfullyRemovedLinkText(link.toString()))));
+        assertThat(text, is(equalTo(textProvider.getSuccessfullyRemovedLinkText(link.toString()))));
 
     }
 
@@ -222,7 +225,7 @@ public class UntrackCommandTest {
     void testHandleCommandWithValidLink2() {
         // given
         Long chatId = randomId();
-        URI link = UrlUtils.create("https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c-c");
+        URI link = UrlUtil.create("https://stackoverflow.com/questions/1642028/what-is-the-operator-in-c-c");
 
         var update = new TestUpdate(new TestMessage("/untrack " + link, new TestChat(chatId)));
         when(scrapperClient.deleteLink(eq(chatId), ArgumentMatchers.any(RemoveLinkRequest.class)))
@@ -240,7 +243,7 @@ public class UntrackCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, is(equalTo(UntrackTextProvider.buildSuccessfullyRemovedLinkText(link.toString()))));
+        assertThat(text, is(equalTo(textProvider.getSuccessfullyRemovedLinkText(link.toString()))));
 
     }
 

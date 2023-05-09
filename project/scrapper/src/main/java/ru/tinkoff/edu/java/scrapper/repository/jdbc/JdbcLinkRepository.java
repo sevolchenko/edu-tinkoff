@@ -6,8 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
+import ru.tinkoff.edu.java.scrapper.model.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ILinkRepository;
 
 import java.time.OffsetDateTime;
@@ -60,7 +60,7 @@ public class JdbcLinkRepository implements ILinkRepository {
                 select * from link
                 """;
 
-        return jdbcTemplate.query(selectSql,  rowMapper);
+        return jdbcTemplate.query(selectSql, rowMapper);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class JdbcLinkRepository implements ILinkRepository {
                 where link_id = ?
                 """;
 
-        var rs = jdbcTemplate.query(selectSql,  rowMapper, linkId);
+        var rs = jdbcTemplate.query(selectSql, rowMapper, linkId);
 
         if (rs.isEmpty()) {
             return null;
@@ -84,7 +84,7 @@ public class JdbcLinkRepository implements ILinkRepository {
         String selectSql = """
                 select * from link
                 where url = ?
-                
+                                
                 """;
 
         var rs = jdbcTemplate.query(selectSql, rowMapper, url);

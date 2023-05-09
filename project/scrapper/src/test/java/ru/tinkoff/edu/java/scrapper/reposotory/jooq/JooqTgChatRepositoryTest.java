@@ -177,7 +177,7 @@ public class JooqTgChatRepositoryTest extends IntegrationEnvironment {
                     assertThat(tgChat.getUsername(), is(equalTo(addTgChat.username())));
                     assertThat(tgChat.getRegisteredAt().toEpochSecond(), is(equalTo(addTgChat.registeredAt().toEpochSecond())));
                     return null;
-        });
+                });
 
         var rs2 = jdbcTemplate.query(selectTgChatSql, new BeanPropertyRowMapper<>(TgChatOutput.class));
         assertThat(rs1, is(equalTo(rs2)));

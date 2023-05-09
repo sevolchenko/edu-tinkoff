@@ -10,9 +10,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 class StackOverflowParserTest {
-    
+
     private StackOverflowParser stackOverflowParser;
-    
+
     @BeforeEach
     void setup() {
         stackOverflowParser = new StackOverflowParser();

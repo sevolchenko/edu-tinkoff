@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface JpaLinkRepository extends JpaRepository<Link, Long> {
 
-   Optional<Link> findByUrlEquals(String url);
+    Optional<Link> findByUrlEquals(String url);
 
     List<Link> findAllByLastScannedAtIsBefore(Instant time);
 

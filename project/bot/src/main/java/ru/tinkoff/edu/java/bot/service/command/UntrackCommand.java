@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
 import ru.tinkoff.edu.java.bot.client.scrapper.dto.request.RemoveLinkRequest;
 import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.LinkResponse;
-import ru.tinkoff.edu.java.bot.util.TextProvider.UntrackTextProvider;
-import ru.tinkoff.edu.java.bot.util.UrlUtils;
+import ru.tinkoff.edu.java.bot.component.textprovider.UntrackCommandTextProvider;
+import ru.tinkoff.edu.java.bot.util.UrlUtil;
 
 import java.net.URI;
 
@@ -17,6 +17,7 @@ import java.net.URI;
 public class UntrackCommand implements Command {
 
     private final IScrapperClient scrapperClient;
+    private final UntrackCommandTextProvider textProvider;
 
     @Override
     public String command() {
@@ -36,19 +37,19 @@ public class UntrackCommand implements Command {
             int spacePos = message.indexOf(' ');
 
             if (spacePos == -1) {
-                var text = UntrackTextProvider.buildNoLinkErrorText();
+                var text = textProvider.getNoLinkErrorText();
                 return new SendMessage(update.message().chat().id(), text);
             }
 
-            URI link = UrlUtils.create(message.substring(spacePos + 1));
+            URI link = UrlUtil.create(message.substring(spacePos + 1));
 
             LinkResponse linkResponse = scrapperClient.deleteLink(update.message().chat().id(),
                     new RemoveLinkRequest(link));
 
-            var text = UntrackTextProvider.buildSuccessfullyRemovedLinkText(linkResponse.link().toString());
+            var text = textProvider.getSuccessfullyRemovedLinkText(linkResponse.link().toString());
             return new SendMessage(update.message().chat().id(), text);
         } catch (IllegalArgumentException e) {
-            var text = UntrackTextProvider.buildInvalidLinkText();
+            var text = textProvider.getInvalidLinkText();
             return new SendMessage(update.message().chat().id(), text)
                     .disableWebPagePreview(true);
         }

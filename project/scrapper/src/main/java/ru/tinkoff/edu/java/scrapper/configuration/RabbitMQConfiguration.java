@@ -14,7 +14,8 @@ import ru.tinkoff.edu.java.scrapper.configuration.properties.QueueProperties;
 import java.util.List;
 
 @Configuration
-@ConditionalOnProperty(prefix = "app", name = "use-queue", havingValue = "true") // Чтобы очередь конфигурировалась только если она используется
+@ConditionalOnProperty(prefix = "app", name = "use-queue", havingValue = "true")
+// Чтобы очередь конфигурировалась только если она используется
 public class RabbitMQConfiguration {
 
     private static String deadExchangeName(String exchange) {

@@ -2,7 +2,7 @@ package ru.tinkoff.edu.java.scrapper.reposotory.data;
 
 import ru.tinkoff.edu.java.scrapper.client.github.dto.GitHubLinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
+import ru.tinkoff.edu.java.scrapper.model.linkstate.ILinkState;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;

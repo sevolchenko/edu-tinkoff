@@ -18,7 +18,7 @@ public enum LinkEvent {
     private final String description;
 
     public static LinkEvent get(Integer code) {
-        for (LinkEvent event: values()) {
+        for (LinkEvent event : values()) {
             if (event.code.equals(code)) {
                 return event;
             }

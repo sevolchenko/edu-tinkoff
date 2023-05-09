@@ -16,7 +16,7 @@ import java.util.List;
 public class JdbcTgChatRepository implements ITgChatRepository {
 
     private final JdbcTemplate jdbcTemplate;
-    
+
     private final RowMapper<TgChatOutput> rowMapper;
 
     @Override

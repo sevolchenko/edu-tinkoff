@@ -3,11 +3,12 @@ package ru.tinkoff.edu.java.bot.test.command;
 import com.pengrad.telegrambot.model.BotCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.tinkoff.edu.java.bot.component.textprovider.HelpCommandTextProvider;
+import ru.tinkoff.edu.java.bot.model.service.TestMessageTemplates;
 import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
 import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.HelpCommand;
-import ru.tinkoff.edu.java.bot.util.TextProvider.HelpTextProvider;
 import ru.tinkoff.edu.java.bot.test.data.TestBotCommandsList;
 
 import java.util.List;
@@ -19,12 +20,15 @@ import static ru.tinkoff.edu.java.bot.test.data.TestListLinkResponseData.randomI
 public class HelpCommandTest {
 
     private HelpCommand helpCommand;
+
+    private HelpCommandTextProvider textProvider;
     private final List<BotCommand> botCommands = TestBotCommandsList.BOT_COMMANDS;
 
     @BeforeEach
     public void setup() {
 
-        this.helpCommand = new HelpCommand();
+        this.textProvider = new HelpCommandTextProvider(TestMessageTemplates.get());
+        this.helpCommand = new HelpCommand(textProvider);
         helpCommand.setBotCommands(botCommands);
 
     }
@@ -132,7 +136,7 @@ public class HelpCommandTest {
         assertThat(parameters.get("chat_id"), is(equalTo(chatId)));
 
         String text = (String) parameters.get("text");
-        assertThat(text, equalTo(HelpTextProvider.buildHelpText(botCommands)));
+        assertThat(text, equalTo(textProvider.getHelpText(botCommands)));
 
     }
 

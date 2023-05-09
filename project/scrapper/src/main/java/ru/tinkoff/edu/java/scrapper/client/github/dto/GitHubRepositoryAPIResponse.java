@@ -8,11 +8,11 @@ import java.time.OffsetDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-public class GitHubRepositoryAPIResponse{
+public class GitHubRepositoryAPIResponse {
 
-        @JsonProperty("full_name")
-        private String fullName;
-        @JsonProperty("pushed_at")
-        private OffsetDateTime pushedAt;
-        private Integer branchesCount;
+    @JsonProperty("full_name")
+    private String fullName;
+    @JsonProperty("pushed_at")
+    private OffsetDateTime pushedAt;
+    private Integer branchesCount;
 }

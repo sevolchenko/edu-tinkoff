@@ -7,7 +7,7 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record StackOverflowAPIResponse (
+public record StackOverflowAPIResponse(
 
         String title,
         URI link,

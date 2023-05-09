@@ -24,7 +24,7 @@ public class ClientConfiguration {
 
     @Bean
     public IStackOverflowClient stackOverflowClient() {
-       return new StackOverflowClient(clientUrlProperties.stackOverflowClientUrl());
+        return new StackOverflowClient(clientUrlProperties.stackOverflowClientUrl());
     }
 
     @Bean

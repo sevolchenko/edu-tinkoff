@@ -11,11 +11,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.SubscriptionIdOutput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.SubscriptionOutput;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.TgChatOutput;
+import ru.tinkoff.edu.java.scrapper.model.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.util.ObjectMapperUtil;
 
 import javax.sql.DataSource;
@@ -46,12 +46,12 @@ public class RepositoryConfiguration {
     }
 
     @Bean
-    public RowMapper<TgChatOutput> tgChatRowMapper(){
+    public RowMapper<TgChatOutput> tgChatRowMapper() {
         return new BeanPropertyRowMapper<>(TgChatOutput.class);
     }
 
     @Bean
-    public RowMapper<LinkOutput> linkRowMapper(){
+    public RowMapper<LinkOutput> linkRowMapper() {
         return (rs, rn) -> {
             LinkOutput linkOutput = new LinkOutput();
             linkOutput.setLinkId(rs.getLong("link_id"));
@@ -63,8 +63,9 @@ public class RepositoryConfiguration {
             return linkOutput;
         };
     }
+
     @Bean
-    public RowMapper<SubscriptionOutput> subscriptionRowMapper(){
+    public RowMapper<SubscriptionOutput> subscriptionRowMapper() {
         return new BeanPropertyRowMapper<>(SubscriptionOutput.class);
     }
 

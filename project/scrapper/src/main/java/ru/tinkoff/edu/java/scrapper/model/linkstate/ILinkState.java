@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate;
+package ru.tinkoff.edu.java.scrapper.model.linkstate;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

@@ -7,11 +7,16 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class ObjectMapperUtil {
 
-    private ObjectMapperUtil() {}
+    private ObjectMapperUtil() {
+    }
 
-    private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
-            .addModule(new JavaTimeModule())
-            .build();
+    private static final ObjectMapper OBJECT_MAPPER;
+
+    static {
+        OBJECT_MAPPER = JsonMapper.builder()
+                .addModule(new JavaTimeModule())
+                .build();
+    }
 
     public static <T> T readValue(String json, Class<T> valueType) {
         try {

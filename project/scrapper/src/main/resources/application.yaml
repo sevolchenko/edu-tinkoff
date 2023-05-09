@@ -8,8 +8,7 @@ app:
     name: scrapper
     exchange: scrapper
     routing-key: scrapper
-#  client:
-#    gitHubClientUrl: 'www.github.com'
+
 spring:
   jpa:
     show-sql: true
@@ -17,8 +16,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5433/scrapper
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
 
   liquibase:
     enabled: false

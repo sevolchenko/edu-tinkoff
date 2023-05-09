@@ -2,7 +2,7 @@ package ru.tinkoff.edu.java.scrapper.model.entity.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
+import ru.tinkoff.edu.java.scrapper.model.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.util.ObjectMapperUtil;
 
 @Converter

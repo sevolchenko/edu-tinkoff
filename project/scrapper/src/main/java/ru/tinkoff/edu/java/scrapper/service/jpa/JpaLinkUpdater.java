@@ -3,9 +3,9 @@ package ru.tinkoff.edu.java.scrapper.service.jpa;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
-import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
+import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
+import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaLinkRepository;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkUpdater;
 

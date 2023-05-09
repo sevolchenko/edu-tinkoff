@@ -18,7 +18,7 @@ public class JdbcSubscriptionRepository implements ISubscriptionRepository {
 
 
     private final JdbcTemplate jdbcTemplate;
-    
+
     private final RowMapper<SubscriptionOutput> rowMapper;
     private final RowMapper<SubscriptionIdOutput> idRowMapper;
 
@@ -37,8 +37,8 @@ public class JdbcSubscriptionRepository implements ISubscriptionRepository {
 
         if (rs.isEmpty()) {
             return null;
-        } else  {
-            return  rs.get(0);
+        } else {
+            return rs.get(0);
         }
     }
 

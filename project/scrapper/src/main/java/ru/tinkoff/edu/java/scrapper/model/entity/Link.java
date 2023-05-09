@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.ColumnTransformer;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.model.entity.converter.LinkStateConverter;
+import ru.tinkoff.edu.java.scrapper.model.linkstate.ILinkState;
 
 import java.time.Instant;
 import java.util.List;

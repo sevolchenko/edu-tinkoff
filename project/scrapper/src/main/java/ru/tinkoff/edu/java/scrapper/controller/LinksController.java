@@ -44,7 +44,7 @@ public class LinksController {
 
     @DeleteMapping
     public LinkResponse deleteLink(@RequestHeader("Tg-Chat-Id") Long id,
-                                @RequestBody RemoveLinkRequest request) {
+                                   @RequestBody RemoveLinkRequest request) {
         log.info("Delete Link {} by id {} called", request.link(), id);
 
         var response = linkService.remove(id, request.link());

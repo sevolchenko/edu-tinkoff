@@ -1,13 +1,13 @@
 package ru.tinkoff.edu.java.scrapper.client.github.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkEvent;
+import ru.tinkoff.edu.java.scrapper.model.linkstate.ILinkState;
 
 import java.time.OffsetDateTime;
 
 @JsonTypeName("github-linkstate")
-public record GitHubLinkState (
+public record GitHubLinkState(
 
         OffsetDateTime pushedAt,
 

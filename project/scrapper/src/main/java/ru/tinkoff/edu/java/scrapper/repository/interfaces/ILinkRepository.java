@@ -1,8 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.repository.interfaces;
 
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.input.AddLinkInput;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.linkstate.ILinkState;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
+import ru.tinkoff.edu.java.scrapper.model.linkstate.ILinkState;
 
 import java.time.OffsetDateTime;
 import java.util.List;
