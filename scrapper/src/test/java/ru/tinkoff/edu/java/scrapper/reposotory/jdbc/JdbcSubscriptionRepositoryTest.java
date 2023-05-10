@@ -23,6 +23,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestDatesData.randomDate;
+import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestLinkData.randomState;
 import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestSubscriptionData.random;
 import static ru.tinkoff.edu.java.scrapper.reposotory.data.TestTgChatData.randomId;
 
@@ -54,8 +55,8 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
             """;
 
     private final String insertLinkSql = """
-            insert into link(url, last_scanned_at, created_at)
-            values (?, ?, ?)
+            insert into link(url, state, last_scanned_at, created_at)
+            values (?, ?::json, ?, ?)
             returning link_id
             """;
 
@@ -70,9 +71,10 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
         jdbcTemplate.update(insertTgChatSql, tgChatId, username, registeredAt);
 
         var url = "http://someurl.com";
+        var state = randomState();
         var lastScannedAt = randomDate();
         var createdAt = OffsetDateTime.now();
-        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, lastScannedAt, createdAt);
+        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, state.asJson(), lastScannedAt, createdAt);
 
         var subCreatedAt = randomDate();
         var request = new AddSubscriptionInput(tgChatId, savedLinkId, subCreatedAt);
@@ -111,9 +113,10 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
         jdbcTemplate.update(insertTgChatSql, tgChatId, username, registeredAt);
 
         var url = "http://someurl.com";
+        var state = randomState();
         var lastScannedAt = randomDate();
         var createdAt = OffsetDateTime.now();
-        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, lastScannedAt, createdAt);
+        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, state.asJson(), lastScannedAt, createdAt);
 
         var subCreatedAt = randomDate();
 
@@ -152,9 +155,10 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
         jdbcTemplate.update(insertTgChatSql, tgChatId, username, registeredAt);
 
         var url = "http://someurl.com";
+        var state = randomState();
         var lastScannedAt = randomDate();
         var createdAt = OffsetDateTime.now();
-        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, lastScannedAt, createdAt);
+        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, state.asJson(), lastScannedAt, createdAt);
 
         var subCreatedAt = randomDate();
 
@@ -210,7 +214,7 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
                     jdbcTemplate.update(insertTgChatSql,
                             tgChat.tgChatId(), tgChat.username(), tgChat.registeredAt());
                     Long linkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class,
-                            link.url(), link.lastScannedAt(), link.createdAt());
+                            link.url(), link.state().asJson(), link.lastScannedAt(), link.createdAt());
 
                     var subCreatedAt = randomDate();
                     jdbcTemplate.update(insertSubscriptionSql, tgChat.tgChatId(), linkId, subCreatedAt);
@@ -292,7 +296,7 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
                     jdbcTemplate.update(insertTgChatSql,
                             tgChat.tgChatId(), tgChat.username(), tgChat.registeredAt());
                     Long linkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class,
-                            link.url(), link.lastScannedAt(), link.createdAt());
+                            link.url(), link.state().asJson(), link.lastScannedAt(), link.createdAt());
 
                     var subCreatedAt = randomDate();
                     jdbcTemplate.update(insertSubscriptionSql, tgChat.tgChatId(), linkId, subCreatedAt);
@@ -333,10 +337,11 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
         var tgChats = TestTgChatData.stabValidResponse();
 
         var url = "http://someurl.com";
+        var state = randomState();
         var lastScannedAt = randomDate();
         var createdAt = OffsetDateTime.now();
 
-        var linkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, lastScannedAt, createdAt);
+        var linkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, state.asJson(), lastScannedAt, createdAt);
 
 
         List<SubscriptionOutput> outputs = tgChats.stream().map((tgChat) -> {
@@ -379,7 +384,7 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
             jdbcTemplate.update(insertTgChatSql,
                     tgChat.tgChatId(), tgChat.username(), tgChat.registeredAt());
             Long linkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class,
-                    link.url(), link.lastScannedAt(), link.createdAt());
+                    link.url(), link.state(), link.lastScannedAt(), link.createdAt());
 
             var subCreatedAt = randomDate();
             jdbcTemplate.update(insertSubscriptionSql, tgChat.tgChatId(), linkId, subCreatedAt);
@@ -421,9 +426,10 @@ public class JdbcSubscriptionRepositoryTest extends IntegrationEnvironment {
         jdbcTemplate.update(insertTgChatSql, tgChatId, username, registeredAt);
 
         var url = "http://someurl.com";
+        var state = randomState();
         var lastScannedAt = randomDate();
         var createdAt = OffsetDateTime.now();
-        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, lastScannedAt, createdAt);
+        var savedLinkId = jdbcTemplate.queryForObject(insertLinkSql, Long.class, url, state.asJson(), lastScannedAt, createdAt);
 
         var subCreatedAt = randomDate();
 

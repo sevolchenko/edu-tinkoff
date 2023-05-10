@@ -10,8 +10,8 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=${POSTGRES_USER:postgres}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
       - POSTGRES_DB=scrapper
     restart: always
     networks:
@@ -26,8 +26,8 @@ services:
       - --changelog-file=master.xml
       - --driver=org.postgresql.Driver
       - --url=jdbc:postgresql://postgresql:5432/scrapper
-      - --username=${POSTGRES_USER:postgres}
-      - --password=${POSTGRES_PASSWORD:postgres}
+      - --username=${POSTGRES_USER:-postgres}
+      - --password=${POSTGRES_PASSWORD:-postgres}
       - update
     volumes:
       - ./migrations:/liquibase/changelog
@@ -38,8 +38,8 @@ services:
     image: rabbitmq:3.10.7-management
     restart: always
     environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:guest}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:guest}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-guest}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-guest}
     volumes:
       - ./rabbitmq_state:/var/lib/rabbitmq
     ports:
