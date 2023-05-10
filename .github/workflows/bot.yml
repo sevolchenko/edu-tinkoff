@@ -3,7 +3,8 @@ name: Bot Module Java CI with Maven
 on:
   push:
     paths:
-      - 'project/bot/**'
+      - 'bot/**'
+      - 'link-parser/**'
       - '.github/workflows/bot.yml'
 
 env:

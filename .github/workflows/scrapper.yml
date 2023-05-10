@@ -3,7 +3,7 @@ name: Scrapper Module Java CI with Maven
 on:
   push:
     paths:
-      - 'project/scrapper/**'
+      - 'scrapper/**'
       - '.github/workflows/scrapper.yml'
 
 env:
