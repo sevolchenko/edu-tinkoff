@@ -28,7 +28,7 @@ jobs:
         run: mvn package -pl bot -am
 
       - name: Build Docker image
-        run: docker build scrapper/ -t $REGISTRY/$USERNAME/scrapper:latest
+        run: docker build scrapper/ -t $REGISTRY/$USERNAME/bot:latest
 
       - name: Docker login
         uses: docker/login-action@v1
