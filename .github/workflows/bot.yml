@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - 'bot/**'
-      - 'link-parser/**'
       - '.github/workflows/bot.yml'
 
 env:
