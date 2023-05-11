@@ -133,7 +133,7 @@ public class JpaTgChatServiceTest extends IntegrationEnvironment {
         assertThat(response, is(notNullValue()));
         assertThat(response.getTgChatId(), is(equalTo(tgChatId)));
         assertThat(response.getUsername(), is(equalTo(username)));
-        assertThat(response.getRegisteredAt().toEpochSecond(), is(lessThanOrEqualTo(OffsetDateTime.now().toEpochSecond())));
+        assertThat(response.getRegisteredAt().toEpochSecond(), is(equalTo(registeredAt.toEpochSecond())));
 
         var rs = jdbcTemplate.query(selectTgChatSql, rowMapper);
 
