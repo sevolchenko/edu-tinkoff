@@ -29,7 +29,8 @@ public record ApplicationConfig(@NotNull String botToken,
         var propertiesMapper = Mappers.getMapper(PropertiesMapper.class);
 
         this.botToken = botToken;
-        this.messageTemplates = propertiesMapper.fillDefaults(Optional.ofNullable(messageTemplates).orElse(new MessageTemplates()));
+        this.messageTemplates = propertiesMapper.fillDefaults(
+            Optional.ofNullable(messageTemplates).orElse(new MessageTemplates()));
         this.client = propertiesMapper.fillDefaults(Optional.ofNullable(client).orElse(new ClientUrlProperties()));
         this.queue = queue;
     }

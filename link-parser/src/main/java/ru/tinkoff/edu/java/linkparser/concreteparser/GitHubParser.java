@@ -23,7 +23,7 @@ public final class GitHubParser extends ConcreteParser<GitHubParseResult> {
     }
 
     @Override
-    public ParseResult parse(final URI url) {
+    public ParseResult parse(URI url) {
         if (supports(url)) {
             String[] parts = url.getPath().split("/");
             String username = parts[1];

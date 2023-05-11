@@ -26,8 +26,8 @@ public class RepositoryConfiguration {
 
     @Bean
     public DataSourceConnectionProvider connectionProvider(DataSource dataSource) {
-        return new DataSourceConnectionProvider
-                (new TransactionAwareDataSourceProxy(dataSource));
+        return new DataSourceConnectionProvider(
+            new TransactionAwareDataSourceProxy(dataSource));
     }
 
     @Bean

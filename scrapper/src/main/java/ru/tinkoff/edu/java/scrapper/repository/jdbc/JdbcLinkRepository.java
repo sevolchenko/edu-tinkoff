@@ -84,7 +84,6 @@ public class JdbcLinkRepository implements ILinkRepository {
         String selectSql = """
                 select * from link
                 where url = ?
-                                
                 """;
 
         var rs = jdbcTemplate.query(selectSql, rowMapper, url);
