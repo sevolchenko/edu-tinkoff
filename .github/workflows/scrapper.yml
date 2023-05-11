@@ -6,6 +6,7 @@ on:
       - 'scrapper/**'
       - 'link-parser/**'
       - '.github/workflows/scrapper.yml'
+      - '*'
 
 env:
   REGISTRY: ghcr.io
