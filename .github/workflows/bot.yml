@@ -28,7 +28,7 @@ jobs:
         run: mvn package -pl bot -am
 
       - name: Build Docker image
-        run: docker build scrapper/ -t $REGISTRY/$USERNAME/bot:latest
+        run: docker build bot/ -t ${{ env.REGISTRY }}/${{ env.USERNAME }}/bot:latest
 
       - name: Docker login
         uses: docker/login-action@v1
@@ -38,4 +38,4 @@ jobs:
           password: ${{ secrets.TOKEN }}
 
       - name: Push image
-        run: docker push $REGISTRY/$USERNAME/bot:latest
+        run: docker push ${{ env.REGISTRY }}/${{ env.USERNAME }}/bot:latest
