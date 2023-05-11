@@ -25,6 +25,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Install maven dependency
+        run: mvn install -pl link-parser -am
+
       - name: Maven package
         run: mvn package -pl scrapper -am
 
