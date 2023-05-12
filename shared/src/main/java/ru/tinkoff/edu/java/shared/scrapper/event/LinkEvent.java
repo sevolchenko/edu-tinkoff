@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.model.dto.request;
+package ru.tinkoff.edu.java.shared.scrapper.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,8 +1,8 @@
 package ru.tinkoff.edu.java.scrapper.client.stackoverflow.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkEvent;
 import ru.tinkoff.edu.java.scrapper.model.linkstate.ILinkState;
+import ru.tinkoff.edu.java.shared.scrapper.event.LinkEvent;
 
 import java.time.OffsetDateTime;
 

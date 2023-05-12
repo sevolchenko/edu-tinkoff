@@ -5,10 +5,10 @@ import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.request.AddLinkRequest;
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.LinkResponse;
 import ru.tinkoff.edu.java.bot.component.textprovider.TrackCommandTextProvider;
 import ru.tinkoff.edu.java.bot.util.UrlUtil;
+import ru.tinkoff.edu.java.shared.scrapper.dto.request.AddLinkRequest;
+import ru.tinkoff.edu.java.shared.scrapper.dto.response.LinkResponse;
 
 import java.net.URI;
 

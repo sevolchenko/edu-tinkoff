@@ -16,9 +16,9 @@ import ru.tinkoff.edu.java.scrapper.IntegrationEnvironment;
 import ru.tinkoff.edu.java.scrapper.client.github.dto.GitHubLinkState;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
 import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
-import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaLinkRepository;
+import ru.tinkoff.edu.java.shared.bot.request.LinkUpdateRequest;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;

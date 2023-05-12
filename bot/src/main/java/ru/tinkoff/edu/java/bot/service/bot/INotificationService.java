@@ -1,6 +1,6 @@
 package ru.tinkoff.edu.java.bot.service.bot;
 
-import ru.tinkoff.edu.java.bot.model.dto.request.LinkEvent;
+import ru.tinkoff.edu.java.shared.scrapper.event.LinkEvent;
 
 import java.net.URI;
 import java.util.List;
