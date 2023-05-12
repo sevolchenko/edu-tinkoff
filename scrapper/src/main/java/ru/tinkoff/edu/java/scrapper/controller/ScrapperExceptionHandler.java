@@ -12,7 +12,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.tinkoff.edu.java.scrapper.exception.*;
+import ru.tinkoff.edu.java.scrapper.exception.AlreadyRegisteredChatException;
+import ru.tinkoff.edu.java.scrapper.exception.AlreadySubscribedLinkException;
+import ru.tinkoff.edu.java.scrapper.exception.InvalidLinkException;
+import ru.tinkoff.edu.java.scrapper.exception.NoSuchChatException;
+import ru.tinkoff.edu.java.scrapper.exception.NoSuchLinkException;
+import ru.tinkoff.edu.java.scrapper.exception.NoSuchSubscriptionException;
+import ru.tinkoff.edu.java.scrapper.exception.NotFoundLinkException;
+import ru.tinkoff.edu.java.scrapper.exception.NotSupportedLinkException;
 import ru.tinkoff.edu.java.shared.scrapper.dto.response.ApiErrorResponse;
 
 import java.util.Arrays;

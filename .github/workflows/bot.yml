@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'bot/**'
+      - 'shared/**'
       - '.github/workflows/bot.yml'
       - '*'
 

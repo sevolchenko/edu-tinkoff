@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'scrapper/**'
+      - 'shared/**'
       - 'link-parser/**'
       - '.github/workflows/scrapper.yml'
       - '*'
