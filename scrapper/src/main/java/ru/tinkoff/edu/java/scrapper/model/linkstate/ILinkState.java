@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import ru.tinkoff.edu.java.scrapper.client.github.dto.GitHubLinkState;
 import ru.tinkoff.edu.java.scrapper.client.stackoverflow.dto.StackOverflowLinkState;
-import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkEvent;
 import ru.tinkoff.edu.java.scrapper.util.ObjectMapperUtil;
+import ru.tinkoff.edu.java.shared.scrapper.event.LinkEvent;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({

@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.request.AddLinkRequest;
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.LinkResponse;
 import ru.tinkoff.edu.java.bot.component.textprovider.TrackCommandTextProvider;
 import ru.tinkoff.edu.java.bot.model.service.TestMessageTemplates;
 import ru.tinkoff.edu.java.bot.model.telegram.TestChat;
@@ -14,6 +12,8 @@ import ru.tinkoff.edu.java.bot.model.telegram.TestMessage;
 import ru.tinkoff.edu.java.bot.model.telegram.TestUpdate;
 import ru.tinkoff.edu.java.bot.service.command.TrackCommand;
 import ru.tinkoff.edu.java.bot.util.UrlUtil;
+import ru.tinkoff.edu.java.shared.scrapper.dto.request.AddLinkRequest;
+import ru.tinkoff.edu.java.shared.scrapper.dto.response.LinkResponse;
 
 import java.net.URI;
 

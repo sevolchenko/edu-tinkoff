@@ -11,7 +11,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.edu.java.bot.configuration.properties.QueueProperties;
-import ru.tinkoff.edu.java.bot.model.dto.request.LinkUpdateRequest;
+import ru.tinkoff.edu.java.shared.bot.request.LinkUpdateRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,10 +35,10 @@ public class RabbitMQConfiguration {
     @Bean
     public ClassMapper classMapper() {
         Map<String, Class<?>> mappings = new HashMap<>();
-        mappings.put("ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest", LinkUpdateRequest.class);
+        mappings.put("ru.tinkoff.edu.java.shared.bot.request.LinkUpdateRequest", LinkUpdateRequest.class);
 
         DefaultClassMapper classMapper = new DefaultClassMapper();
-        classMapper.setTrustedPackages("ru.tinkoff.edu.java.scrapper.component.producer.properties.*");
+        classMapper.setTrustedPackages("ru.tinkoff.edu.java.shared.bot.request.*");
         classMapper.setIdClassMapping(mappings);
         return classMapper;
     }

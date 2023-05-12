@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
 import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
-import ru.tinkoff.edu.java.scrapper.component.producer.dto.LinkUpdateRequest;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaLinkRepository;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkUpdater;
+import ru.tinkoff.edu.java.shared.bot.request.LinkUpdateRequest;
 
 import java.net.URI;
 import java.time.Clock;
@@ -54,7 +54,7 @@ public class JpaLinkUpdater implements ILinkUpdater {
                         .toList();
 
                 var update = new LinkUpdateRequest(link.getLinkId(),
-                        URI.create(link.getUrl()), event.getCode(), tgChatIds);
+                        URI.create(link.getUrl()), event, tgChatIds);
 
                 notificationProducer.sendUpdate(update);
             } else {

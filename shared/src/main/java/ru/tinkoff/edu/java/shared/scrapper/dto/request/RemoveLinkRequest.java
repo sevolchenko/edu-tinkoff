@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.client.scrapper.dto.request;
+package ru.tinkoff.edu.java.shared.scrapper.dto.request;
 
 import java.net.URI;
 

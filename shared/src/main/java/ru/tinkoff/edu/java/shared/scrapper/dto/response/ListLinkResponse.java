@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.bot.client.scrapper.dto.response;
+package ru.tinkoff.edu.java.shared.scrapper.dto.response;
 
 import java.util.List;
 

@@ -21,6 +21,7 @@
         <module>bot</module>
         <module>link-parser</module>
         <module>scrapper</module>
+        <module>shared</module>
     </modules>
 
     <properties>

@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.edu.java.bot.component.textprovider.NotificationTextProvider;
-import ru.tinkoff.edu.java.bot.model.dto.request.LinkEvent;
 import ru.tinkoff.edu.java.bot.service.bot.IBot;
 import ru.tinkoff.edu.java.bot.service.bot.INotificationService;
+import ru.tinkoff.edu.java.shared.scrapper.event.LinkEvent;
 
 import java.net.URI;
 import java.util.List;

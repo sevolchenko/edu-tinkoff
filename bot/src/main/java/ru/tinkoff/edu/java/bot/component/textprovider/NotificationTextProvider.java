@@ -3,7 +3,7 @@ package ru.tinkoff.edu.java.bot.component.textprovider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.configuration.properties.MessageTemplates;
-import ru.tinkoff.edu.java.bot.model.dto.request.LinkEvent;
+import ru.tinkoff.edu.java.shared.scrapper.event.LinkEvent;
 
 @Component
 @RequiredArgsConstructor

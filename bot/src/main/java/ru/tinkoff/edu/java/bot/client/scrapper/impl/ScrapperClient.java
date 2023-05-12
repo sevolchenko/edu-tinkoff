@@ -7,13 +7,13 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import ru.tinkoff.edu.java.bot.client.scrapper.IScrapperClient;
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.request.AddLinkRequest;
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.request.RemoveLinkRequest;
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.ApiErrorResponse;
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.LinkResponse;
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.ListLinkResponse;
 import ru.tinkoff.edu.java.bot.client.scrapper.exception.ScrapperClientException;
 import ru.tinkoff.edu.java.bot.client.scrapper.exception.ScrapperServerException;
+import ru.tinkoff.edu.java.shared.scrapper.dto.request.AddLinkRequest;
+import ru.tinkoff.edu.java.shared.scrapper.dto.request.RemoveLinkRequest;
+import ru.tinkoff.edu.java.shared.scrapper.dto.response.ApiErrorResponse;
+import ru.tinkoff.edu.java.shared.scrapper.dto.response.LinkResponse;
+import ru.tinkoff.edu.java.shared.scrapper.dto.response.ListLinkResponse;
 
 
 @Slf4j

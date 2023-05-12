@@ -1,7 +1,7 @@
 package ru.tinkoff.edu.java.bot.client.scrapper.exception;
 
 import lombok.Getter;
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.ApiErrorResponse;
+import ru.tinkoff.edu.java.shared.scrapper.dto.response.ApiErrorResponse;
 
 public class ScrapperClientException extends RuntimeException {
 

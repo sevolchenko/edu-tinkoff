@@ -1,7 +1,7 @@
 package ru.tinkoff.edu.java.bot.test.data;
 
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.LinkResponse;
-import ru.tinkoff.edu.java.bot.client.scrapper.dto.response.ListLinkResponse;
+import ru.tinkoff.edu.java.shared.scrapper.dto.response.LinkResponse;
+import ru.tinkoff.edu.java.shared.scrapper.dto.response.ListLinkResponse;
 
 import java.net.URI;
 import java.util.Arrays;
