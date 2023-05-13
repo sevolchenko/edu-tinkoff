@@ -7,7 +7,7 @@ import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
 import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaLinkRepository;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkUpdater;
-import ru.tinkoff.edu.java.shared.bot.request.LinkUpdateRequest;
+import ru.tinkoff.edu.java.shared.bot.dto.request.LinkUpdateRequest;
 
 import java.net.URI;
 import java.time.Clock;

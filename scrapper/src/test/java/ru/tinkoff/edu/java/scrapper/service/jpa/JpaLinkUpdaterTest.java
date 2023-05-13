@@ -18,7 +18,7 @@ import ru.tinkoff.edu.java.scrapper.component.processor.LinkProcessor;
 import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
 import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.LinkOutput;
 import ru.tinkoff.edu.java.scrapper.repository.jpa.JpaLinkRepository;
-import ru.tinkoff.edu.java.shared.bot.request.LinkUpdateRequest;
+import ru.tinkoff.edu.java.shared.bot.dto.request.LinkUpdateRequest;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
