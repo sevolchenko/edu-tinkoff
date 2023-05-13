@@ -9,7 +9,7 @@ import ru.tinkoff.edu.java.scrapper.model.dto.internal.output.SubscriptionOutput
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ILinkRepository;
 import ru.tinkoff.edu.java.scrapper.repository.interfaces.ISubscriptionRepository;
 import ru.tinkoff.edu.java.scrapper.service.interfaces.ILinkUpdater;
-import ru.tinkoff.edu.java.shared.bot.request.LinkUpdateRequest;
+import ru.tinkoff.edu.java.shared.bot.dto.request.LinkUpdateRequest;
 
 import java.net.URI;
 import java.time.Duration;
