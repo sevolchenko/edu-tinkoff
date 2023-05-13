@@ -5,6 +5,28 @@ app:
     exchange: scrapper
     routing-key: scrapper
 
+management:
+  server:
+    port: ${BOT_PORT:8081}
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /
+      exposure.include: [ "info", "health", "prometheus" ]
+      path-mapping:
+        prometheus: metrics
+  endpoint:
+    info.enabled: true
+    health:
+      enabled: true
+      probes.enabled: true
+      group:
+        readiness.include: db
+        liveness.include: ping
+    prometheus.enabled: true
+  metrics.tags:
+    application: ${spring.application.name}
+
 springdoc:
   swagger-ui:
     path: '/swagger-ui'

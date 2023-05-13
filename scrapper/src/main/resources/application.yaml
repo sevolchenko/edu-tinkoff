@@ -9,6 +9,29 @@ app:
     exchange: scrapper
     routing-key: scrapper
 
+management:
+  server:
+    port: ${SCRAPPER_PORT:8082}
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /
+      exposure.include: [ "info", "health", "prometheus" ]
+      path-mapping:
+        prometheus: metrics
+  endpoint:
+    info.enabled: true
+    health:
+      enabled: true
+      probes.enabled: true
+      group:
+        readiness.include: db
+        liveness.include: ping
+    prometheus.enabled: true
+  metrics.tags:
+    application: ${spring.application.name}
+
+
 spring:
   jpa:
     show-sql: true
