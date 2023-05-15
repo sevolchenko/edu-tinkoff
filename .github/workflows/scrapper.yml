@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  USERNAME: sevolchenko
+  IMAGE_NAME: ${{ github.repository }}/scrapper
 
 jobs:
   build:
@@ -31,17 +31,17 @@ jobs:
         run: mvn package -pl scrapper -am
 
       - name: Build Docker image
-        run: docker build scrapper/ -t ${{ env.REGISTRY }}/${{ env.USERNAME }}/scrapper:latest
+        run: docker build scrapper/ --build-arg GITHUB_REPO=${{ github.repository }} -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
       - name: Docker login
         uses: docker/login-action@v1
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ env.USERNAME }}
+          username: ${{ github.actor }}
           password: ${{ secrets.TOKEN }}
 
       - name: Push image
-        run: docker push ${{ env.REGISTRY }}/${{ env.USERNAME }}/scrapper:latest
+        run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
   checkstyle:
     runs-on: ubuntu-latest
