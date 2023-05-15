@@ -6,7 +6,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.java.bot.service.bot.INotificationService;
-import ru.tinkoff.edu.java.shared.bot.request.LinkUpdateRequest;
+import ru.tinkoff.edu.java.shared.bot.dto.request.LinkUpdateRequest;
 
 @Slf4j
 @Component

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
 import ru.tinkoff.edu.java.scrapper.configuration.properties.QueueProperties;
-import ru.tinkoff.edu.java.shared.bot.request.LinkUpdateRequest;
+import ru.tinkoff.edu.java.shared.bot.dto.request.LinkUpdateRequest;
 
 @Slf4j
 @RequiredArgsConstructor

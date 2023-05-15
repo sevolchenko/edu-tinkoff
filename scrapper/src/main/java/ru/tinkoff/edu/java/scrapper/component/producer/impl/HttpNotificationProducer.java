@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.tinkoff.edu.java.scrapper.client.tgbot.ITgBotClient;
 import ru.tinkoff.edu.java.scrapper.component.producer.INotificationProducer;
-import ru.tinkoff.edu.java.shared.bot.request.LinkUpdateRequest;
+import ru.tinkoff.edu.java.shared.bot.dto.request.LinkUpdateRequest;
 
 @Slf4j
 @RequiredArgsConstructor

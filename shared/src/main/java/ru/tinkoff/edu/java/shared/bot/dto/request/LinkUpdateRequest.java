@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.java.shared.bot.request;
+package ru.tinkoff.edu.java.shared.bot.dto.request;
 
 import ru.tinkoff.edu.java.shared.scrapper.event.LinkEvent;
 
