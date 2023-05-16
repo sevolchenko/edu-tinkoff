@@ -2,9 +2,12 @@ global:
   scrape_interval: 5s
 
 scrape_configs:
-  - job_name: 'spring_boot_prometheus'
-    metrics_path: '/prometheus'
-    scrape_interval: 5s
+  - job_name: scrapper_metrics
+    metrics_path: /metrics
     static_configs:
-      - targets: ['localhost:8081']
-      - targets: ['localhost:8082']
+      - targets: ['host.docker.internal:8011']
+
+  - job_name: bot_metrics
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['host.docker.internal:8012']

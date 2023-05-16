@@ -5,9 +5,34 @@ app:
     exchange: scrapper
     routing-key: scrapper
 
+springdoc:
+  swagger-ui:
+    path: '/swagger-ui'
+
+spring:
+  application:
+    name: bot
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: 5672
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    listener:
+      simple:
+        default-requeue-rejected: false
+        retry:
+          enabled: true
+          max-attempts: 3
+      direct:
+        default-requeue-rejected: false
+
+server:
+  port: ${BOT_PORT:8081}
+
 management:
   server:
-    port: ${BOT_PORT:8081}
+    port: 8011
   endpoints:
     enabled-by-default: false
     web:
@@ -24,29 +49,7 @@ management:
         readiness.include: db
         liveness.include: ping
     prometheus.enabled: true
-  metrics.tags:
-    application: ${spring.application.name}
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
-springdoc:
-  swagger-ui:
-    path: '/swagger-ui'
-
-spring:
-
-  rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: 5672
-    username: ${RABBITMQ_USER:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
-    listener:
-      simple:
-        default-requeue-rejected: false
-        retry:
-          enabled: true
-          max-attempts: 3
-      direct:
-        default-requeue-rejected: false
-
-
-server:
-  port: ${BOT_PORT:8081}
