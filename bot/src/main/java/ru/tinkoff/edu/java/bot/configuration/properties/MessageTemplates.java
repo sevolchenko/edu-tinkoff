@@ -53,7 +53,7 @@ public record MessageTemplates(
                 Ссылка указана неверно
                 """;
         public static final String DEFAULT_CLIENT_ERROR_TEMPLATE = """
-                Ссылка указана неверно
+                %s
                 """;
         public static final String DEFAULT_ERROR_TEMPLATE = """
                 Произошла ошибка, попробуйте еще раз...
