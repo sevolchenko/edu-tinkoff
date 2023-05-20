@@ -28,7 +28,8 @@ public class JdbcTgChatRepository implements ITgChatRepository {
                 returning tg_chat_id
                 """;
         try {
-            return jdbcTemplate.queryForObject(insertSql, Long.class, tgChat.tgChatId(), tgChat.username(), tgChat.registeredAt());
+            return jdbcTemplate.queryForObject(insertSql, Long.class,
+                tgChat.tgChatId(), tgChat.username(), tgChat.registeredAt());
         } catch (EmptyResultDataAccessException ex) {
             return null;
         }

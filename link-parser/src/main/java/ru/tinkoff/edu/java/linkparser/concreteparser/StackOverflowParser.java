@@ -24,7 +24,7 @@ public final class StackOverflowParser extends ConcreteParser<StackOverflowParse
     }
 
     @Override
-    public ParseResult parse(final URI url) {
+    public ParseResult parse(URI url) {
         if (supports(url)) {
             String[] parts = url.getPath().split("/");
             for (int partIdx = 0; partIdx < REQUIRED_PARTS.length; partIdx++) {

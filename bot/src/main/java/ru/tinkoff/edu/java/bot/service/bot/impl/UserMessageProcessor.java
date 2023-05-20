@@ -34,7 +34,8 @@ public class UserMessageProcessor implements IUserMessageProcessor {
                     .toList();
 
             if (supportsCommands.size() == 0) {
-                log.warn("Processing update {} failed: unknown message: {}", update.updateId(), update.message().text());
+                log.warn("Processing update {} failed: unknown message: {}",
+                    update.updateId(), update.message().text());
 
                 var text = errorTextProvider.getUnknownMessageText();
                 return new SendMessage(update.message().chat().id(), text);
@@ -57,7 +58,8 @@ public class UserMessageProcessor implements IUserMessageProcessor {
             return supportsCommands.get(0).handle(update);
 
         } catch (ScrapperClientException e) {
-            log.warn("Client exception {} thrown: {}", e.getApiErrorResponse().exceptionName(), e.getApiErrorResponse().exceptionMessage());
+            log.warn("Client exception {} thrown: {}",
+                e.getApiErrorResponse().exceptionName(), e.getApiErrorResponse().exceptionMessage());
 
             return new SendMessage(update.message().chat().id(), errorTextProvider.getErrorMessage(e));
 

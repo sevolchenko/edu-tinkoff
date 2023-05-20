@@ -4,7 +4,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 
 import java.net.URI;
 
-public class UrlUtil {
+public final class UrlUtil {
 
     private static final UrlValidator URL_VALIDATOR;
 
@@ -12,8 +12,7 @@ public class UrlUtil {
         URL_VALIDATOR = new UrlValidator();
     }
 
-    private UrlUtil() {
-    }
+    private UrlUtil() {}
 
     public static URI create(String link) {
 

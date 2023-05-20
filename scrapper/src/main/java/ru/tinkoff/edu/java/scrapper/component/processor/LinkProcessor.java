@@ -41,13 +41,15 @@ public class LinkProcessor {
 
         switch (parseResult) {
             case GitHubParseResult gitHub -> {
-                GitHubRepositoryResponse response = gitHubClient.fetchRepository(new GitHubRepositoryRequest(gitHub.username(), gitHub.repository()));
+                var response = gitHubClient.fetchRepository(
+                    new GitHubRepositoryRequest(gitHub.username(), gitHub.repository()));
 
                 clientState = response.state();
 
             }
             case StackOverflowParseResult stackOverflow -> {
-                var response = stackOverflowClient.fetchQuestion(new StackOverflowQuestionRequest(stackOverflow.questionId()));
+                var response = stackOverflowClient.fetchQuestion(
+                    new StackOverflowQuestionRequest(stackOverflow.questionId()));
 
                 clientState = response.state();
             }

@@ -1,6 +1,11 @@
 package ru.tinkoff.edu.java.bot.configuration;
 
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -82,13 +87,17 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public Binding directBinding(QueueProperties queueProperties, Queue directQueue, DirectExchange directExchange) {
-        return BindingBuilder.bind(directQueue).to(directExchange).with(queueProperties.routingKey());
+    public Binding directBinding(QueueProperties queueProperties,
+        Queue directQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(directQueue).to(directExchange)
+            .with(queueProperties.routingKey());
     }
 
     @Bean
-    public Binding dlqBinding(QueueProperties queueProperties, Queue deadLetterQueue, DirectExchange deadLetterExchange) {
-        return BindingBuilder.bind(deadLetterQueue).to(deadLetterExchange).with(deadLetterQueueName(queueProperties.routingKey()));
+    public Binding dlqBinding(QueueProperties queueProperties,
+        Queue deadLetterQueue, DirectExchange deadLetterExchange) {
+        return BindingBuilder.bind(deadLetterQueue).to(deadLetterExchange)
+            .with(deadLetterQueueName(queueProperties.routingKey()));
     }
 
 }
