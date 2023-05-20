@@ -238,7 +238,7 @@ public class JpaLinkServiceTest extends IntegrationEnvironment {
 
 
         // then
-        assertThat(ex.getMessage(), is(equalTo(String.format("There is no chat with id %d", tgChatId))));
+        assertThat(ex.getMessage(), is(equalTo("There is no chat with id %d".formatted(tgChatId))));
 
         var linksRS = jdbcTemplate.query(selectLinkSql, linkRowMapper);
         assertThat(linksRS, is(notNullValue()));
@@ -278,7 +278,7 @@ public class JpaLinkServiceTest extends IntegrationEnvironment {
 
         // then
         assertThat(ex.getMessage(), is(equalTo(
-                String.format("Subscription to link %s for chat id %d already added", url, tgChatId))));
+                "Subscription to link %s for chat id %d already added".formatted(url, tgChatId))));
 
         var linksRS = jdbcTemplate.query(selectLinkSql, linkRowMapper);
         assertThat(linksRS, is(notNullValue()));
@@ -305,7 +305,7 @@ public class JpaLinkServiceTest extends IntegrationEnvironment {
 
 
         // then
-        assertThat(ex.getMessage(), is(equalTo(String.format("There is no chat with id %d", tgChatId))));
+        assertThat(ex.getMessage(), is(equalTo("There is no chat with id %d".formatted(tgChatId))));
 
         var linksRS = jdbcTemplate.query(selectLinkSql, linkRowMapper);
         assertThat(linksRS, is(notNullValue()));
@@ -337,7 +337,7 @@ public class JpaLinkServiceTest extends IntegrationEnvironment {
 
 
         // then
-        assertThat(ex.getMessage(), is(equalTo(String.format("There is no link with url %s", url))));
+        assertThat(ex.getMessage(), is(equalTo("There is no link with url %s".formatted(url))));
 
         var linksRS = jdbcTemplate.query(selectLinkSql, linkRowMapper);
         assertThat(linksRS, is(notNullValue()));
@@ -374,7 +374,7 @@ public class JpaLinkServiceTest extends IntegrationEnvironment {
 
         // then
         assertThat(ex.getMessage(), is(equalTo(
-                String.format("Subscription to link %s for chat id %d is not exists", url.toString(), tgChatId))));
+                "Subscription to link %s for chat id %d is not exists".formatted(url.toString(), tgChatId))));
 
         var linksRS = jdbcTemplate.query(selectLinkSql, linkRowMapper);
         assertThat(linksRS, is(notNullValue()));
@@ -448,7 +448,7 @@ public class JpaLinkServiceTest extends IntegrationEnvironment {
 
 
         // then
-        assertThat(ex.getMessage(), is(equalTo(String.format("There is no chat with id %d", tgChatId))));
+        assertThat(ex.getMessage(), is(equalTo("There is no chat with id %d".formatted(tgChatId))));
     }
 
     @Transactional

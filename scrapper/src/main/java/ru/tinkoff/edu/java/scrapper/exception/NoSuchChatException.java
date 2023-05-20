@@ -7,7 +7,7 @@ public class NoSuchChatException extends RuntimeException {
     }
 
     public NoSuchChatException(Long chatId) {
-        super(String.format("There is no chat with id %d", chatId));
+        super("There is no chat with id %d".formatted(chatId));
     }
 
 }

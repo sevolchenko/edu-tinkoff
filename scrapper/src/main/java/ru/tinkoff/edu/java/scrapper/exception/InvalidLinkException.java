@@ -9,7 +9,7 @@ public class InvalidLinkException extends IllegalArgumentException {
     }
 
     public InvalidLinkException(URI url) {
-        super(String.format("Invalid link format: %s", url));
+        super("Invalid link format: %s".formatted(url));
     }
 
 }

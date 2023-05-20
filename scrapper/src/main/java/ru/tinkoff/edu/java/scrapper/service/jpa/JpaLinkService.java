@@ -93,7 +93,7 @@ public class JpaLinkService implements ILinkService {
     @Transactional(readOnly = true)
     public Collection<LinkOutput> listAllForChat(Long tgChatId) {
         TgChat tgChat = tgChatRepository.findById(tgChatId)
-                .orElseThrow(() -> new NoSuchChatException(String.format("There is no chat with id %d", tgChatId)));
+                .orElseThrow(() -> new NoSuchChatException(tgChatId));
 
         return tgChat.getSubscriptions().stream()
                 .map((subscription -> {

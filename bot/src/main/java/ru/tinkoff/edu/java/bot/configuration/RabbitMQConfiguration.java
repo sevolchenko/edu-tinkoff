@@ -43,7 +43,7 @@ public class RabbitMQConfiguration {
         mappings.put("ru.tinkoff.edu.java.shared.bot.request.LinkUpdateRequest", LinkUpdateRequest.class);
 
         DefaultClassMapper classMapper = new DefaultClassMapper();
-        classMapper.setTrustedPackages("ru.tinkoff.edu.java.shared.bot.request.*");
+        classMapper.setTrustedPackages("ru.tinkoff.edu.java.shared.bot.dto.request.*");
         classMapper.setIdClassMapping(mappings);
         return classMapper;
     }
