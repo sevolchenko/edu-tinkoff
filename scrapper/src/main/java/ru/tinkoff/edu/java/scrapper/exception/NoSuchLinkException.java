@@ -9,7 +9,7 @@ public class NoSuchLinkException extends RuntimeException {
     }
 
     public NoSuchLinkException(URI url) {
-        super(String.format("There is no link with url %s", url));
+        super("There is no link with url %s".formatted(url));
     }
 
 }

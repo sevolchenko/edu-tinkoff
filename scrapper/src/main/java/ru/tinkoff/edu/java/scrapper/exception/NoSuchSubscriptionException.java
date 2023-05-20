@@ -9,7 +9,7 @@ public class NoSuchSubscriptionException extends RuntimeException {
     }
 
     public NoSuchSubscriptionException(Long chatId, URI url) {
-        super(String.format("Subscription to link %s for chat id %d is not exists", url.toString(), chatId));
+        super("Subscription to link %s for chat id %d is not exists".formatted(url.toString(), chatId));
     }
 
 }

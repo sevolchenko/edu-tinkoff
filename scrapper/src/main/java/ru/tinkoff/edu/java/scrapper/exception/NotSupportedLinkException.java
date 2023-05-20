@@ -9,7 +9,7 @@ public class NotSupportedLinkException extends RuntimeException {
     }
 
     public NotSupportedLinkException(URI url) {
-        super(String.format("Domain %s is not supported yet", url.getHost()));
+        super("Domain %s is not supported yet".formatted(url.getHost()));
     }
 
 }

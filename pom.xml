@@ -39,6 +39,7 @@
         <jooq.version>3.18.3</jooq.version>
         <checkstyle-maven-plugin.version>3.2.2</checkstyle-maven-plugin.version>
         <checkstyle.version>7.1.2</checkstyle.version>
+
     </properties>
 
     <dependencies>
@@ -52,6 +53,9 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <!--        Spring          -->
+
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -68,12 +72,7 @@
                 <scope>import</scope>
             </dependency>
 
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
+            <!--        SpringDoc       -->
 
             <dependency>
                 <groupId>org.springdoc</groupId>
@@ -81,42 +80,12 @@
                 <version>${springdoc.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>me.paulschwarz</groupId>
-                <artifactId>spring-dotenv</artifactId>
-                <version>${spring-dotenv.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen</artifactId>
-                <version>${jooq.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jooq</groupId>
-                <artifactId>jooq-meta-extensions-liquibase</artifactId>
-                <version>${jooq.version}</version>
-            </dependency>
+            <!--        Development Tools       -->
 
             <dependency>
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>
                 <version>${commons-validator.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-core</artifactId>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers-bom</artifactId>
-                <version>${testcontainers.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
             </dependency>
 
             <dependency>
@@ -135,6 +104,52 @@
                 <artifactId>lombok-mapstruct-binding</artifactId>
                 <version>${lombok-mapstruct-binding.version}</version>
             </dependency>
+
+            <!--        Environment         -->
+
+            <dependency>
+                <groupId>me.paulschwarz</groupId>
+                <artifactId>spring-dotenv</artifactId>
+                <version>${spring-dotenv.version}</version>
+            </dependency>
+
+            <!--        DB        -->
+
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen</artifactId>
+                <version>${jooq.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-meta-extensions-liquibase</artifactId>
+                <version>${jooq.version}</version>
+            </dependency>
+
+            <!--        Testing         -->
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-core</artifactId>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

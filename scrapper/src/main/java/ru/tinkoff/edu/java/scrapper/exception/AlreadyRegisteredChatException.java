@@ -7,7 +7,7 @@ public class AlreadyRegisteredChatException extends RuntimeException {
     }
 
     public AlreadyRegisteredChatException(Long chatId) {
-        super(String.format("Chat already registered: %d", chatId));
+        super("Chat already registered: %d".formatted(chatId));
     }
 
 }

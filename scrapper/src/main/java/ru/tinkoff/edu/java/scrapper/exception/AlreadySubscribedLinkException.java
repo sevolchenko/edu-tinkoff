@@ -9,7 +9,7 @@ public class AlreadySubscribedLinkException extends RuntimeException {
     }
 
     public AlreadySubscribedLinkException(Long chatId, URI url) {
-        super(String.format("Subscription to link %s for chat id %d already added", url.toString(), chatId));
+        super("Subscription to link %s for chat id %d already added".formatted(url.toString(), chatId));
     }
 
 }

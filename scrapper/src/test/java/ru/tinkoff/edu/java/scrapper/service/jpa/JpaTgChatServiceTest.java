@@ -96,7 +96,7 @@ public class JpaTgChatServiceTest extends IntegrationEnvironment {
 
 
         // then
-        assertThat(ex.getMessage(), is(equalTo(String.format("Chat already registered: %d", tgChatId))));
+        assertThat(ex.getMessage(), is(equalTo("Chat already registered: %d".formatted(tgChatId))));
 
         var rs = jdbcTemplate.query(selectTgChatSql, rowMapper);
 
@@ -155,7 +155,7 @@ public class JpaTgChatServiceTest extends IntegrationEnvironment {
 
 
         // then
-        assertThat(ex.getMessage(), is(equalTo(String.format("There is no chat with id %d", tgChatId))));
+        assertThat(ex.getMessage(), is(equalTo("There is no chat with id %d".formatted(tgChatId))));
 
         var rs = jdbcTemplate.query(selectTgChatSql, rowMapper);
 

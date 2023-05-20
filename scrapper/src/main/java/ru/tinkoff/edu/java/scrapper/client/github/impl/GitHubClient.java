@@ -34,9 +34,10 @@ public class GitHubClient implements IGitHubClient {
                 .onStatus(HttpStatus.NOT_FOUND::equals,
                         (response) -> {
                             throw new NotFoundLinkException(
-                                    String.format("GitHub repo %s not found for user %s",
+                                    "GitHub repo %s not found for user %s".formatted(
                                             gitHubRepositoryRequest.repository(),
-                                            gitHubRepositoryRequest.owner())
+                                            gitHubRepositoryRequest.owner()
+                                    )
                             );
                         })
                 .bodyToMono(GitHubRepositoryAPIResponse.class)

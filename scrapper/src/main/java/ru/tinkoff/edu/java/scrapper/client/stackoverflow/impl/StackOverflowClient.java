@@ -37,7 +37,7 @@ public class StackOverflowClient implements IStackOverflowClient {
                 .flatMap(response -> Mono.justOrEmpty(response.items().stream().findFirst()))
                 .block();
         if (apiResponse == null) {
-            throw new NotFoundLinkException(String.format("Stackoverflow question %d not found",
+            throw new NotFoundLinkException("Stackoverflow question %d not found".formatted(
                     stackOverflowQuestionRequest.id()));
         }
         return mapper.map(apiResponse);
