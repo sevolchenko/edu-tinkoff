@@ -11,3 +11,8 @@
 - Maven
 - [Java Telegram Bot API](https://github.com/pengrad/java-telegram-bot-api)
 - PostgreSQL
+- RabbitMQ
+- GitHub Workflows (CI)
+- CheckStyle
+- Prometheus
+- Grafana
