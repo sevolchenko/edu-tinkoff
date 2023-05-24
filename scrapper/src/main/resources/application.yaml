@@ -3,13 +3,16 @@ app:
     interval: PT10S
   link-check-delay: PT1M
   database-access-type: jpa
-  use-queue: true
+  use-queue: false
   queue:
     name: scrapper
     exchange: scrapper
     routing-key: scrapper
 
 spring:
+  application:
+    name: scrapper
+
   jpa:
     show-sql: true
     database: postgresql
@@ -31,5 +34,29 @@ spring:
 springdoc:
   swagger-ui:
     path: '/swagger-ui'
+
 server:
   port: ${SCRAPPER_PORT:8082}
+
+management:
+  server:
+    port: 8012
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /
+      exposure.include: [ "info", "health", "prometheus" ]
+      path-mapping:
+        prometheus: metrics
+  endpoint:
+    info.enabled: true
+    health:
+      enabled: true
+      probes.enabled: true
+      group:
+        readiness.include: db
+        liveness.include: ping
+    prometheus.enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}

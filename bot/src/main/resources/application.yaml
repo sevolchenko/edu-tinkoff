@@ -10,6 +10,8 @@ springdoc:
     path: '/swagger-ui'
 
 spring:
+  application:
+    name: bot
 
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
@@ -25,6 +27,29 @@ spring:
       direct:
         default-requeue-rejected: false
 
-
 server:
   port: ${BOT_PORT:8081}
+
+management:
+  server:
+    port: 8011
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /
+      exposure.include: [ "info", "health", "prometheus" ]
+      path-mapping:
+        prometheus: metrics
+  endpoint:
+    info.enabled: true
+    health:
+      enabled: true
+      probes.enabled: true
+      group:
+        readiness.include: db
+        liveness.include: ping
+    prometheus.enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+

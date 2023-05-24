@@ -7,6 +7,7 @@ import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ru.tinkoff.edu.java.bot.metric.ProcessedMessagesMetric;
 import ru.tinkoff.edu.java.bot.service.bot.IBot;
 import ru.tinkoff.edu.java.bot.service.bot.IUserMessageProcessor;
 
@@ -33,6 +34,8 @@ public class Bot implements IBot {
                     update.updateId(), update.message().chat().id(), update.message().text());
 
             execute(userMessageProcessor.process(update));
+
+            ProcessedMessagesMetric.incrementProcessedMessagesCounter();
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
